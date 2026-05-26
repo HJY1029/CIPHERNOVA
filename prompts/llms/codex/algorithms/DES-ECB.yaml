@@ -1,0 +1,14 @@
+# Codex / CloseAI — DES-ECB
+# 与 openai 合并时置前；针对批次中手搓 permute 导致 `bit` 未声明等编译失败。
+supplement: |
+  **【置顶 · Codex】本题唯一推荐路径：`EVP_des_ecb()` + legacy + `set_padding(0)` + 单文件完整 `main`。禁止输出数百行 IP/FP/轮函数/S 盒仅到一半。**
+
+c: |
+  **禁止手搓 DES（本批实测）：** 若出现 **`permute`/`PC1`/`S_BOX`/`feistel`/`bit` 在循环中未声明**（典型 GCC：**`'bit' undeclared`**）—— **删除整段手搓实现**，改为 **≤120 行** 仅 **`#include <openssl/evp.h>`** + **`EVP_des_ecb()`** + **`hex_to_bytes`/`getenv`**。
+  **`permute` 内 `output = (output << 1) | bit` 且未写 `int bit = …`** 为高频编译零分；**不要写 `permute`**，**只用 EVP**。
+  **占位/半截表：** **`/* 置换表 */`** 后无闭合 **`};`** → 后续 **`expected '}' before 'int'`**。**交卷前数清每个 `{` 与 `}`。**
+  **禁止 `main` 内嵌 `static` 函数**（非法 C）；**禁止** `#define 8`。
+  顺序：**`OSSL_PROVIDER_load(NULL,"legacy")`** → **`EVP_CIPHER_CTX_set_padding(ctx,0)`** → **`EVP_EncryptInit_ex(..., EVP_des_ecb(), ...)`** → **`EncryptUpdate`/`Final`** → **`printf("密文: ");`** + **`%02x`** + **换行**。
+
+cpp: |
+  与 C 相同：**仅用 `EVP_des_ecb`** + **`int main`**；**禁止**巨型手搓 DES 表。

@@ -1,0 +1,71 @@
+# AES-CTR模式的C语言特定内容
+c_specific: |
+  **【编译】** **禁止** `#define 8 8` 等非法宏名。
+
+  **🚨🚨🚨 重要：CTR模式使用OpenSSL官方测试数据进行测试！🚨🚨🚨**
+  **测试数据已包含在test_data.yaml中，预期输出为32字节密文（与明文长度相同）！**
+  
+  **使用OpenSSL库的实现要求（C语言）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <stdlib.h>`
+     - `#include <stdio.h>`
+     - `#include <string.h>`
+  
+  2. **必须使用OpenSSL EVP函数：**
+     - ✅ **正确：使用 `EVP_aes_128_ctr()`、`EVP_aes_192_ctr()` 或 `EVP_aes_256_ctr()`（根据密钥长度选择）**
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_CIPHER_CTX_new()` 和 `EVP_CIPHER_CTX_free()`**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取明文、密钥和IV（**TEST_PLAINTEXT, TEST_KEY, TEST_IV**）— 评测对 **AES-CTR** 注入的是 **`test_data.yaml` → `AES.modes.CTR`** 的向量，**不是**默认 AES 段的 32 字节明文 / 16 字节 IV。
+     - **CTR 本任务：** 明文 **64 字节**（128 hex）、密钥 **16 字节**（32 hex）、**IV 为 16 字节（32 hex）** — 与 NIST/OpenSSL 示例一致；**禁止**误用 GCM 习惯只取 IV 前 **12** 字节，否则密文与 golden 完全不符。
+     - 将十六进制字符串转换为字节数组；缺失环境变量时可用 test_data 同值硬默认，但须与向量一致。
+     - 根据密钥长度选择 `EVP_aes_128_ctr()` / `192` / `256`。
+     - 使用 OpenSSL EVP 进行 CTR 加密；**只打印密文 hex**。
+     - 释放资源并 `return 0`。
+  4. **🚨 CTR 专用 golden（整行 128 hex = 64 字节密文）：** **`874D6191B620E3261BEF6864990DB6CE9806F66B7970FDFF8617187BB9FFFDFF5AE4DF3EDBD5D35E5B4F09020DB03EAB1E031DDA2FBE03D1792170A0F3009CEE`**
+  
+  **关键实现细节（C语言）：**
+  - **密钥长度检测：**根据密钥字节长度选择对应的EVP函数
+    - 16字节（128位）→ `EVP_aes_128_ctr()`
+    - 24字节（192位）→ `EVP_aes_192_ctr()`
+    - 32字节（256位）→ `EVP_aes_256_ctr()`
+  - **IV处理（本仓库 CTR 向量）：** **16 字节（32 hex）**，来自 **TEST_IV**；与 **AES-GCM 的 12 字节 nonce** 不同，**勿混用长度**。
+  - **CTR模式：**CTR模式将IV和计数器组合成16字节的计数器块
+  - **🚨🚨🚨 输出长度控制（绝对重要！）：**必须只输出实际加密的数据长度，不要输出整个缓冲区或IV！
+    - ✅ **正确做法（C - CTR模式特殊处理）：**
+      ```c
+      int len;
+      unsigned char *ciphertext = malloc(plaintext_len + 16);  // 预留一些空间
+      
+      EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);
+      // CTR模式：Update长度应该等于明文长度（流密码无填充）
+      
+      // CTR模式：必须调用EVP_EncryptFinal_ex()完成加密，但输出长度必须等于明文长度
+      EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
+      // ⚠️ 重要：对于CTR模式，即使Final返回非0值，输出长度也必须等于明文长度！
+      // CTR是流密码模式，输出长度 = 明文长度，与Final返回的值无关！
+      
+      // 🚨🚨🚨 绝对重要：只输出 plaintext_len 长度的数据（CTR模式输出长度 = 明文长度）
+      // 🚨🚨🚨 绝对禁止使用 ciphertext_len 或 len 作为输出长度！
+      printf("密文: ");
+      for (int i = 0; i < plaintext_len; i++) {  // 🚨 必须使用 plaintext_len，绝对不能使用 ciphertext_len！
+          printf("%02x", ciphertext[i]);
+      }
+      printf("\n");
+      free(ciphertext);
+      ```
+    - ❌ **错误做法（绝对禁止）：**
+      - ❌ **绝对禁止：使用 `ciphertext_len` 作为输出长度！**
+      - ❌ **绝对禁止：使用 `for (int i = 0; i < ciphertext_len; i++)`！**
+      - ❌ **绝对禁止：使用 `for (int i = 0; i < len; i++)`（Final返回的len）！**
+      - ❌ **绝对禁止：输出整个缓冲区（`sizeof(ciphertext)`）**
+      - ❌ **绝对禁止：输出IV（IV只用于加密过程，不应该出现在输出中）**
+      - ❌ **绝对禁止：输出额外的填充空间**
+      - ❌ **绝对禁止：使用 `ciphertext_len = len + len`（Final的长度），这会导致输出长度不正确**
+    - **🚨🚨🚨 关键：CTR模式是流密码模式，输出长度必须等于明文长度！**
+      - **🚨🚨🚨 必须使用 `plaintext_len` 作为输出长度，绝对不能使用 `ciphertext_len`！**
+      - **🚨🚨🚨 即使 `EVP_EncryptFinal_ex()` 返回非0值，输出长度也必须等于明文长度！**
+      - **🚨🚨🚨 输出循环必须写成：`for (int i = 0; i < plaintext_len; i++)`，不能使用任何其他变量！**
+

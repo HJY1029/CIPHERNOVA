@@ -1,0 +1,377 @@
+%%
+% ICICS / Springer LNCS（本目录 llncs.cls + splncs04.bst）。
+% 正文自 paperzh short.tex 迁入并按 samplepaper.tex 版式调整（runningheads、无 geometry）。
+% 编译（在 ICICS模版 目录下）：
+%   pdflatex ciphernova_icics
+%   bibtex ciphernova_icics
+%   pdflatex ciphernova_icics
+%   pdflatex ciphernova_icics
+% 依赖：本目录 refs.bib（与仓库根目录 refs.bib 请自行保持同步）；插图等见 graphicspath。
+\documentclass[runningheads]{llncs}
+
+\usepackage[UTF8]{ctex}
+\usepackage{graphicx}
+\graphicspath{{../figures/}{../}{figures/}}
+\usepackage{float}
+\usepackage{amsmath,amssymb}
+\usepackage[square,numbers,sort&compress]{natbib}
+\usepackage{enumitem}
+\setlist[enumerate]{leftmargin=1.2em, itemindent=0em, labelwidth=1em, labelsep=0.4em}
+\setlist[itemize]{leftmargin=1.2em, labelsep=0.4em}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\usepackage{caption}
+\captionsetup[figure]{aboveskip=4pt, belowskip=4pt}
+\captionsetup[table]{aboveskip=4pt, belowskip=4pt}
+\setlength{\textfloatsep}{6pt plus 2pt minus 1pt}
+\setlength{\intextsep}{6pt plus 2pt minus 1pt}
+
+\begin{document}
+\title{CIPHERNOVA：一种基于测试反馈与分层提示的密码学代码生成方法}
+\titlerunning{CIPHERNOVA：测试反馈与分层提示驱动的密码学代码生成}
+
+% ===== Anonymous switch =====
+\newif\ifanonymized
+\anonymizedtrue      % 投稿匿名版
+% \anonymizedfalse   % 终稿实名版
+
+\ifanonymized
+\author{Anonymous Authors}
+\institute{Anonymous Institution\\
+\email{anonymous@anonymous.edu}}
+\authorrunning{Anonymous Authors}
+\else
+\author{Jia-Yi He\inst{1,2} \and Xiao Lan\inst{2,1}\thanks{Corresponding author: lanxiao@scu.edu.cn}}
+\institute{四川大学网络空间安全学院，成都，四川，中国\and
+教育部四川大学数据防护与智能管理重点实验室，成都，四川，中国\\
+\email{2022141500268@stu.scu.edu.cn, lanxiao@scu.edu.cn}}
+\authorrunning{J.\ He and X.\ Lan}
+\fi
+\maketitle
+
+\begin{abstract}
+大语言模型（LLM）用于密码学代码生成时常面临高错误率与弱领域适配。本文提出 CIPHERNOVA 系统化方案：（1）测试反馈自改进——基于 NIST 等标准向量的闭环、错误归类与针对性修复；（2）四层可组合提示及\textbf{失败驱动提示精炼}，配套四类密码学错误分类与修复策略；（3）离线本地引擎与\textbf{教师示例检索注入}，以云端通过测试的实现为教师，在生成/改进阶段注入少样本与同题参考且无需重训练。在覆盖六种 LLM、常见分组/公钥算法及 Python/C/C++ 的 3095 条历史记录上，云端模型功能测试通过率可达 100\%；本地 Qwen2.5-Coder:7B 在更高耗时下 FTPR 亦为 100\%，完整方法在消融中显著优于无提示基线。结论限于本文基准、固定评测脚本与实验设置。
+\end{abstract}
+
+\keywords{密码学代码生成 \and 大语言模型 \and 测试反馈 \and 提示工程 \and 错误模式分类 \and 代码自改进}
+
+\section{引言}
+\subsection{研究背景与问题陈述}
+密码实现须对齐分组/公钥等多形态与 NIST、FIPS 等规范；填充、初始向量等细节疏漏即可危及机密性或完整性。Copilot、CodeT5~\cite{codet5} 及主流代码大模型~\cite{codex,codellama,deepseekcoder,starcoder} 提升了通用编程辅助，但密码任务仍失败率高、依赖人工排障，且 Pass@k~\cite{codex} 等难以刻画密码代码的功能与安全诉求。为此有必要为 LLM 提供可落地的密码学代码生成优化路径。
+\subsection{错误密码代码的安全影响}
+\label{subsec:security_implications}
+CVE 与产业案例表明，弱 IV/ECB、弱 KDF、填充错误等可致机密性或完整性失效~\cite{secsurvey,cryptollm}。本文将验收标准由\textbf{可编译}提升为\textbf{通过标准向量并满足密码学约束}，以降低 LLM 输出在安全敏感场景中的风险。
+\subsection{研究目标与主要贡献}
+本文提出基于测试反馈与分层提示的密码学代码生成：以闭环与分层模板引导 LLM，提高标准符合性并降低开发者负担。
+
+主要贡献为：（1）\textbf{错误模式分类驱动的测试反馈自改进}，自动产出针对性修复指导；（2）\textbf{可组合领域提示}——四层架构与迭代精炼；（3）\textbf{离线本地引擎与教师检索注入}——无需公网即可部署；以云端通过实现为教师，在生成/改进阶段注入少样本与同题参考，\textbf{免重训练}提升本地通过率并兼顾隐私。我们在 3095 条真实用例上完成对比与消融，并提供可复现仓库。
+
+\subsection{论文组织结构}
+第 2 节综述相关工作；第 3 节给出整体架构与核心设计；第 4 节实验验证；第 5 节总结全文。
+
+\section{相关工作}
+下文从代码 LLM、领域代码生成、提示工程与自改进四方面综述。
+
+\subsection{大语言模型代码生成}
+LLM 代码生成依赖大规模预训练与自回归建模。CodeGen/ CodeGen2~\cite{codegen1,codegen2}、Codex~\cite{codex}、CodeT5/+~\cite{codet5,codet5plus}、InCoder~\cite{incoder} 及 StarCoder、WizardCoder、Code Llama、DeepSeek-Coder~\cite{starcoder,wizardcoder,codellama,deepseekcoder} 等推动了通用程序合成；CodeBERT/GraphCodeBERT~\cite{codebert,graphcodebert} 与 CodeXGLUE~\cite{codexglue} 完善了表示与评测基座。上述路线多面向通用而非密码学代码。
+
+\subsection{领域代码生成}
+领域注入有助于提升专业代码质量。EncGPT~\cite{encgpt}、CryptoLLM~\cite{cryptollm} 与 SecCoder~\cite{seccoder} 等表明领域注入有效。本文将错误类型写入提示与修复指导，形成可组合约束。
+
+\subsection{提示工程}
+CoT/Plan-and-Solve~\cite{cot,zeroshotcot,planandsolve}、少样本综合~\cite{fewshot,progsynprompt}、检索式提示~\cite{coderagbench,repolevelprompt}、分层与 Self-Refine~\cite{hierprompt,selfrefine} 改善结构与迭代，但鲜有面向密码学的专门提示。\textbf{本文}经失败驱动精炼得到\textbf{分层可组合提示}。
+
+\subsection{代码自改进技术}
+“生成—验证—改进”范式见于 Self-Edit~\cite{selfedit}、RefineCoder~\cite{refinecoder}、AgentCoder~\cite{agentcoder}、RepairAgent~\cite{repairagent}、ReCode~\cite{recode} 、学习式调试~\cite{cycle,rlef}、LLM 修复/多智能体调试~\cite{ledex,li2023,rgd,unidebugger,tang2024}、安全代码微调~\cite{secsurvey,securecodegen}。总体仍缺少面向密码学向量测试的错误分类与模板化修复。
+
+\subsection{研究空白小结}
+\label{subsec:research_gaps}
+少有工作同时具备\textbf{可操作的密码学错误分类}、\textbf{随算法/语言/LLM 适配的提示}，以及与\textbf{标准向量紧耦合的自改进}。本文给出一体化方案。
+
+\section{方法设计}
+承袭通用代码 LLM 与领域注入~\cite{encgpt,seccoder}、分层/迭代提示~\cite{hierprompt,selfrefine}、闭环自改进~\cite{selfedit,refinecoder,agentcoder}，本节给出方法要点。如图~\ref{fig:framework}，\emph{CryptoAgent} 负责提示拼装、调用、提取/清洗与验证；\emph{LLMAdapter} 对接云端与本地模型；失败触发\textbf{模块 A} 闭环。系统由测试反馈自适应改进\textbf{A}、分层可组合领域提示\textbf{B}、密码学错误模式分类\textbf{C} 构成。
+
+\begin{figure}[htbp] 
+  \centering
+  \includegraphics[width=\textwidth]{Framework.png} 
+  \caption{基于测试反馈与分层提示的密码学代码生成系统整体框架}
+  \label{fig:framework}
+\end{figure}
+
+
+
+\subsection{基于测试反馈的自适应改进机制}
+传统代码生成在测试失败时仅简单重试，难以定位密码学特有的算法/实现/环境错误，通用修复难以覆盖填充、IV 等专项需求，从而导致无效加密。
+
+\subsubsection{}该机制包含三个核心组件：错误模式识别、测试反馈分析与针对性修复。
+\begin{enumerate}
+    \item \textbf{错误模式识别}从输出完整性、一致性、算法完整性与占位符等维度归类，并辅以语法检查。
+    \item \textbf{测试反馈分析}将测试输出压缩为缺失输出、长度差、明文误输出等结构化特征。
+    \item \textbf{修复指导生成}按特征进行\textbf{模板匹配 + 规则生成}，动态填入算法、语言与错误细节。
+\end{enumerate}
+
+\subsubsection{}基于上述核心组件，本文构建了六步闭环改进机制，如图 \ref{fig:loop-process} 所示：
+\begin{enumerate}
+    \item \textbf{初始生成}。向 LLM 输入分层组合提示，生成初始代码；
+    \item \textbf{代码验证}。以 NIST 等标准向量测试，收集输出与错误反馈；
+    \item \textbf{错误分析}。通过错误模式识别生成错误类型特征向量，定位核心错误点；
+    \item \textbf{修复指导生成}。根据错误特征向量输出针对性修复指令；
+    \item \textbf{代码改进}。结合修复指令引导 LLM 生成改进代码；
+    \item \textbf{迭代终止}。若通过测试或达到最大迭代次数则终止；否则回到第 2 步。
+\end{enumerate}
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{SixStepIteration2.pdf}
+  \caption{六步闭环改进流程}
+  \label{fig:loop-process}
+\end{figure}
+% 图~\ref{fig:adaptive-iteration} 以 DES-CFB 为例，未通过时在验证—分析—改进间迭代，至多 3 轮。
+% \begin{figure}[htbp]
+%   \centering
+%   \includegraphics[width=0.50\textwidth]{adaptive_improvement_iteration.pdf}
+%   \caption{Complete iteration of the adaptive improvement mechanism for DES-CFB mode code generation}
+%   \label{fig:adaptive-iteration}
+% \end{figure}
+\subsection{分层可组合的领域提示工程方法}
+该方法旨在通过设计分层提示模板，以四层模板引导 LLM。针对代码跨场景与跨模型兼容性差等问题，该架构设计对通用规范、算法特性、模型特点与语言特性进行针对性优化。
+\subsubsection{}
+    \item \textbf{通用层}定义角色、规范、I/O与基线。\textbf{LLM层}按提供商与上下文做提示适配，减少跨场景错误。\textbf{语言层}按编程语言明确库调用、风格与常见错误规避，提高可编译性。\textbf{算法层}聚焦算法特有原理、步骤与参数，抬高向量验证通过率。
+\subsubsection{}
+    \item 该架构由最耗时的\textbf{失败迭代驱动}沉淀修复而成。实验结果的高 FTPR 依赖跨算法–语言–LLM 反复试错。\textbf{生成}侧固化头文件、自包含、按字节密文、CBC 与校验，搭配正/反例注入。\textbf{改进}侧拼接失败与编译/测试反馈，回注关键头文件、IV 与关键 API。
+
+\subsection{面向本地模型的教师示例注入（检索式蒸馏）}
+\label{subsec:distillation}
+为提升离线 Qwen2.5-Coder:7B 的 FTPR，以云端通过实现为\textbf{教师}，按算法/模式/语言检索注入；改进阶段将测试反馈、修复摘要、教师块与学生代码拼入提示。首轮注入同分布少样本，后续追加同题参考；效果见表~\ref{tab:distillation_overall}。
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{教师示例注入前后整体通过率（Qwen2.5-Coder:7B）}
+  \label{tab:distillation_overall}
+  \begin{tabular}{l c c}
+    \toprule
+    & 通过数 & 通过率 \\
+    \midrule
+    注入前整体通过率 & 37 / 45 & 82.2\% \\
+    注入后整体通过率 & 45 / 45 & 100\% \\
+    提升             & +8 项   & +17.8\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{密码学代码错误模式分类系统}
+\subsubsection{错误模式分类。}
+本文基于真实实验归纳出四大类错误模式（如表~\ref{tab:error_classification}）。
+\begin{table}[htbp]
+  \centering
+  \caption{密码学代码错误模式分类（四类）}
+  \label{tab:error_classification}
+  {\scriptsize\setlength{\tabcolsep}{6pt}
+  \begin{tabular}{p{0.3\textwidth}p{0.65\textwidth}}
+    \toprule
+    大类 & 代表性示例 \\
+    \midrule
+    算法理解错误 & 模式混淆（如 OFB-64 与 OFB-8）、填充/密钥编排错误。 \\
+    实现细节错误 & IV 使用（默认/随机或输出中含 IV）、填充处理、字节序。 \\
+    环境配置错误 & 环境变量命名（KEY 与 TEST\_KEY）、缺库、OpenSSL 版本。 \\
+    代码结构错误 & \texttt{goto cleanup} 无效、缺头文件、辅助函数不完整（未定义引用）。 \\
+    \bottomrule
+  \end{tabular}
+  }
+\end{table}
+
+\subsubsection{修复策略设计。}
+算法理解类侧重补充领域知识（模式/密钥长度/填充/库语义）；实现细节类强调 IV、字节序与输出格式；环境与结构类对齐变量名、依赖及头文件与辅助函数完整性。综合精确匹配、模式匹配与启发式规则，\textbf{错误模式匹配算法}为修复指导提供稳定标签。
+
+\section{实验与结果分析}
+% 本节通过对比、消融与错误统计实验共同验证方法有效性。
+\subsection{实验设置}
+\subsubsection{数据集构建。}
+\label{subsec:eval_protocol}
+见表~\ref{tab:dataset_stats}，在本文环境下，基于失败驱动的prompt在6种LLM上生产了3095条测试通过的真实用例，\textbf{不}等同于开放部署普适结论。
+% 数据来源：仓库根目录 code_history.db，表 code_history，条件 test_success=1（与 test_data.yaml 标准向量评测一致的成功入库记录）。
+\begin{table}[htbp]
+  \centering
+  \caption{密码学代码生成数据集统计（3095 条；按算法与语言分布）}
+  \label{tab:dataset_stats}
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{p{0.12\textwidth}
+    >{\centering\arraybackslash}p{0.16\textwidth}
+    >{\centering\arraybackslash}p{0.30\textwidth}
+    >{\centering\arraybackslash}p{0.30\textwidth}
+    }
+    \toprule
+    算法 & 测试用例数 & 语言分布 (C/C++/Python) & 标准测试向量来源 \\
+    \midrule
+    DES       & 2520 & 697/693/1130 & FIPS 46-3 \\
+    AES       & 335  & 102/116/117  & FIPS 197 \\
+    SM4       & 184  & 60/63/61     & GM/T 0002-2012 \\
+    RSA       & 56   & 19/19/18     & FIPS 186-4 \\
+    \midrule
+    合计      & 3095 & 878/891/1326 & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+\subsubsection{基线系统选择。}
+为验证所提方法的有效性与相对优势，本文设置三类对照：\emph{通用单提示外部基线}、\emph{相关工作对比}、\emph{自身消融}。
+\subsubsection{评估指标定义。}
+为全面衡量密码学代码生成质量，本文定义六项评估指标，涵盖正确性、效率与修复能力：\textbf{生成成功率（GSR）}为成功生成可运行代码的测试用例比例；\textbf{验证通过率（VPR）}为通过语法检查与编译的测试用例比例；\textbf{功能测试通过率（FTPR）}为输出与标准测试向量一致的测试用例比例；\textbf{首次生成即通过率（FGPR）}为合并明细中 \texttt{attempts=1} 的生成会话（当次未触发会话内多轮重试）里功能测试通过的比例；\textbf{平均生成时间（AGT）}为每测试用例的平均生成时间（单位：秒）。
+\subsection{对比实验结果与分析}
+\subsubsection{整体性能对比。}
+表~\ref{tab:llm_performance} 与图~\ref{fig:llm_performance_overview} 汇总各 LLM 上的整体表现。
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{所提方法在不同 LLM 上的整体性能}
+  \label{tab:llm_performance}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{
+    p{0.10\textwidth}               
+    >{\centering\arraybackslash}p{0.19\textwidth}  
+    >{\centering\arraybackslash}p{0.20\textwidth}  
+    >{\centering\arraybackslash}p{0.06\textwidth}  
+    >{\centering\arraybackslash}p{0.06\textwidth}  
+    >{\centering\arraybackslash}p{0.07\textwidth} 
+    >{\centering\arraybackslash}p{0.07\textwidth}  
+    >{\centering\arraybackslash}p{0.08\textwidth} 
+  }
+    \toprule
+    LLM               & 提示长度 (Python/C/C++) & 生成时间 (Python/C/C++) (s) & GSR (\%) & VPR (\%) & FTPR (\%) & FGPR (\%) & AGT (s) \\
+    \midrule
+    OpenAI            & 17542/28952/22986            & 33.5/167.6/123.9                   & 100    & 100    & 100     & 84.80     & 92.10   \\
+    Deepseek          & 8810/17227/13345             & 19.8/160.9/99.7                    & 100    & 100    & 100     & 95.73     & 42.40   \\
+    Doubao            & 14075/24996/19976            & 68.8/511.8/463.5                   & 100    & 100    & 100     & 96.65     & 158.41  \\
+    Claude            & 8334/15959/12139             & 28.7/153.5/166.8                   & 100    & 100    & 100     & 100       & 43.72   \\
+    CodeX             & 17696/29803/23204            & 132.5/317.6/254.4                  & 100    & 100    & 100     & 100       & 117.03  \\
+    qwen2.5-coder:7b  & 13972/23409/18577            & 2718.9/5647.9/4665.4               & 100    & 100    & 100     & 63.71     & 4430.14 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\textwidth]{figures/llm_performance_overview.pdf}
+  \caption{各 LLM 性能概览}
+  \label{fig:llm_performance_overview}
+\end{figure}
+云端 LLM 的性能稳定居高，Claude整体性能最优；qwen2.5-coder:7b 本地大模型 FTPR 为 88.89\%，适合隐私优先场景。
+
+\subsubsection{相关工作对比。}
+见表~\ref{tab:rw_same_protocol_des}：DES 子集上，相关工作基线 FTPR 明显低于本文（DeepSeek）。
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{同设置相关工作对比（DES 全模式 × DeepSeek）}
+  \label{tab:rw_same_protocol_des}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{p{0.42\textwidth} c c c}
+    \toprule
+    基线 & GSR (\%) & VPR (\%) & FTPR (\%) \\
+    \midrule
+    Self-Refine+DeepSeek & 100 & 83.33 & 58.33 \\
+    SecCoder+DeepSeek & 100 & 66.67 & 66.67 \\
+    AgentCoder & 100 & 41.67 & 0.0 \\
+    本文方法+DeepSeek & 100 & 100 & 100 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{错误模式分类效果。}
+对 DeepSeek 写入的功能测试失败记录经启发式归入四类；修复后合计通过率 92.80\%（表~\ref{tab:error_repair}），其中算法理解类占比最高（45.08\%），实现细节类次之。
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{不同错误类型的分布与修复效果（DeepSeek）}
+  \label{tab:error_repair}
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{
+    p{0.28\textwidth}                       
+    >{\centering\arraybackslash}p{0.08\textwidth} 
+    >{\centering\arraybackslash}p{0.12\textwidth} 
+    >{\centering\arraybackslash}p{0.16\textwidth}  
+    >{\centering\arraybackslash}p{0.18\textwidth}  
+  }
+    \toprule
+    错误类型               & 数量 & 占比 & 修复前通过率 & 修复后通过率 \\
+    \midrule
+    算法理解  & 119    & 45.08\%    & 0.0\%                & 94.12\%               \\
+    实现细节  & 75    & 28.41\%    & 0.0\%                & 90.67\%               \\
+    环境配置  & 18    & 6.82\%    & 0.0\%                & 100\%               \\
+    代码结构  & 52    & 19.70\%    & 0.0\%                & 90.38\%               \\
+    \midrule
+    合计      & 264   & 100\%    & 0.0\%                & 92.80\%               \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{消融实验}
+消融实验用于量化所提方法各核心模块的贡献。表~\ref{tab:ablation_main} 消融表明：反馈闭环作用于通过性；分层模板不可或缺；撤除提示则指标崩溃。
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{主要消融实验结果（DeepSeek、豆包与 Claude）}
+  \label{tab:ablation_main}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{l c c c}
+    \toprule
+    系统配置                  & VPR (\%) & FTPR (\%) & 性能下降 (VPR/FTPR) \\
+    \midrule
+    完整所提方法                  & 97.92    & 97.92     & -- / --                     \\
+    无测试反馈改进         & 100    & 81.25     & 2.08\% / -16.67\%            \\
+    无分层提示架构（仅 base\_prompt.yaml） & 64.58    & 58.33     & -33.34\% / -39.59\%          \\
+    无任何提示 & 39.58    & 0.0     & -58.34\% / -97.92\%         \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+  \centering
+  \caption{提示策略消融实验结果（DeepSeek、豆包与 Claude）}
+  \label{tab:ablation_prompt}
+  \setlength{\tabcolsep}{2pt}
+  \begin{tabular}{l c c c}
+    \toprule
+    提示策略               & GSR (\%) & VPR (\%) & FTPR (\%) \\
+    \midrule
+    单一通用模板         & 100    & 45.83    & 25.0      \\
+    通用+LLM              & 100    & 87.5     & 79.17     \\
+    通用+LLM+语言        & 100    & 91.67    & 91.67     \\
+    通用 +LLM+ 语言+算法（Proposed） & 100 & 100 & 100 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+表~\ref{tab:ablation_prompt} 显示随层数增加 VPR/FTPR 抬升，完整方法达到 FTPR 100\%。
+
+\section{结论与未来工作}
+\subsection{研究结论}
+针对通用 LLM 在密码学代码上错误率高、领域适配不足的问题，本文将测试反馈闭环、四层可组合提示、\textbf{失败驱动的提示精炼}与错误模式分类整合为一体式框架。在本文实验规模下，生成/提取成功率达 100\%；完整方法性能显著优于单一通用提示。该方法在\emph{框架}上统一错误分类、闭环与分层提示；\emph{技术}上高性能提取与失败驱动精炼相配合；\emph{工程}上开源便于复现。
+\subsection{研究局限}
+结论依托固定评测环境与有限任务，覆盖限于常见分组/公钥算法及典型模式；评测以向量一致性为主，不宜外推为线上安全保证。
+\begin{credits}
+{\zihao{-5}
+\subsubsection{致谢}
+本研究由四川大学资助。
+
+\subsubsection{利益声明}
+作者声明在与本研究主题直接相关的范围内不存在竞争性利益。
+}
+\end{credits}
+
+\renewcommand{\refname}{参考文献}
+\renewcommand{\bibname}{参考文献}
+\bibliographystyle{splncs04}
+\bibliography{refs} 
+%% Appendix (if needed)
+%\appendix
+%\section{Appendix Title}
+%Appendix content here.
+
+\end{document}

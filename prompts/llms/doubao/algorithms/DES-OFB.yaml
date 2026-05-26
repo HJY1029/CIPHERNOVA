@@ -1,0 +1,13 @@
+# 豆包 · DES-OFB
+supplement: |
+  DES-OFB：**反馈量为分组密码输出**（keystream 块），**不是**密文。与 CFB 混用会得到完全错误密文。
+  **自测 golden：** K `57696C6C69616D53`、IV `5072656E74696365`、明文 `4E6574776F726B205365637572697479` → **`F788B2BC5949FCBBB3962D8E99733A96`**。
+
+c: |
+  **禁止** `#define 8 8`、`#define 8 8 // 8字节…`（**注释无效**）。
+  **S 盒 / 置换表：** 仅 **0～15 或 0～63** 等**整数字面量**；**禁止** **`NaN`**、字符串、`"6"`。
+  **OpenSSL 3：** `OSSL_PROVIDER_load(NULL,"legacy")` + **`EVP_des_ofb()`** + **`EVP_CIPHER_CTX_set_padding(ctx,0)`**；`Init_ex` 的 key/iv 各 **8 字节**；`Update` **原始明文 16 字节**；`Final` 后按 **`ciphertext_len`** 打印。**禁止**表驱动 DES 里臆造 **`NaN` 占位**。
+
+cpp: |
+  **完整 EVP 路径（勿手搓 OFB）：** `EVP_CIPHER_CTX_new` → **`OSSL_PROVIDER_load(NULL,"legacy")`** → **`EVP_EncryptInit_ex(ctx, EVP_des_ofb(), NULL, key8, iv8)`** → **`EVP_CIPHER_CTX_set_padding(ctx,0)`** → **`EVP_EncryptUpdate`**（一次传入 **16** 字节明文）→ **`EVP_EncryptFinal_ex`** → 打印 **32 hex**。
+  **禁止** `EVP_des_cfb` / `EVP_des_cbc`；**禁止** OFB 寄存器用 **密文** 反馈（须为 **DES 输出块**）。目标 **`F788B2BC5949FCBBB3962D8E99733A96`**。

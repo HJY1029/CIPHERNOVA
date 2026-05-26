@@ -1,0 +1,20 @@
+# OpenAI · DES-OFB
+supplement: |
+  OFB 反馈为 **DES 输出块**，非密文。**禁止**输出与明文相同的 hex（见 test_data 明文 32 hex）。golden：**`F788B2BC5949FCBBB3962D8E99733A96`**。
+
+c: |
+  **【链接入口 · 最高优先级】单文件必须包含 `int main(void)` 或 `int main()`**（可放在文件**末尾**，但**不可省略**）。仅有 **`des_encrypt`/`S盒`/置换表**而无 **`main`** → **`undefined reference to main`**（**Codex/gpt-5-codex 多次实测**）。**生成顺序建议：`#include` →（可选）辅助函数 → **`int main(){ getenv… EVP… printf("密文:")… return 0;}`** → 勿反着从数千行表写起导致截断无入口。**
+  **（编译零分）禁止生成 **`des_ofb_encrypt`** / **`des_encrypt_block`** / **`generate_subkeys`** / **`initial_permutation`** / **`feistel`** / **`permute`** 等手搓 DES** —— 会出现 **`implicit declaration of 'des_encrypt_block'`**、链接 **`undefined reference to des_encrypt_block`**，且易截断。**本任务整文件唯一加密路径：`OSSL_PROVIDER_load` + `EVP_des_ofb()` + `set_padding(0)` + `EncryptUpdate`/`Final`。** **禁止** `main` 调 **`des_ofb_encrypt(...)`**（必链接失败）。
+  **禁止** `strcmp(nibble, "1011") is 0` — C 无 **`is`**，须 **`== 0`** 或 **`!strcmp(...)`**。
+  **无输出 = 评测失败：** 评测报「没有产生任何输出」= **stdout 未含 `密文`/`ciphertext`**。**必须：** **`getenv("TEST_*")`** → **`OSSL_PROVIDER_load(NULL,"legacy")`** → **`EVP_des_ofb()`** + **`set_padding(0)`** → **`printf("密文: ");`** + **`%02x`** → **`printf("\\n"); fflush(stdout); return 0;`**。**禁止** `scanf`/`getchar`；**禁止** `Encrypt*` 成功后 **`return` 却不经过 `printf("密文:")`**。**禁止** `getenv` 失败静默退出导致 stdout 空。
+  **禁止** `if (!ctx) return 1;` 等 **早退不打印**；**禁止** 把 **`密文:`** 只写到 **`fprintf(stderr,...)`**（评测只看 **stdout**）。
+  **`main` 内 `len` / `ciphertext_len` 只声明一次（与写盘修补共存）：** 同一 `main` 花括号内**禁止**出现两处 **`int len`** 或两处 **`int … ciphertext_len …`**（典型：**第 34 行已有** **`int len = 0, ciphertext_len = 0;`**，**第 80 行后又写** **`int len, ciphertext_len = 0;`** → GCC **`redeclaration of 'len'`**、**编译零分**）。**`EVP_EncryptUpdate`/`Final`** 两段**共用**首次声明的 **`len`**（传 **`&len`** 累加输出长度），后续循环变量只用 **`int i`** 等，**勿再写** **`int len`** / **`int ciphertext_len`**。
+  **仅用** **`EVP_des_ofb()`** 完成**整段**加密。**禁止**自写 **1 字节 / 逐字节 OFB**（典型错密文 **`1e1711191b1b08450317061b0600171c`**、**`1e1711191b1b08454d72726c69727c3c`** 等，与 golden **`F788B2BC5949FCBBB3962D8E99733A96`** 完全不符）。**全 `0`（32 个 0）** → **与 DES-ECB 同类：`Update` 未写入、`ciphertext_len` 未累加、未 legacy**。**`EncryptInit_ex` 的 IV 为 8 字节**；**`EncryptUpdate` 须覆盖全部 `plaintext_len`（本测 16 字节）**；`Final` 后按 **`ciphertext_len`** 打印。**禁止** `#define 8`。
+  **若输出 = 明文 `4e6574776f726b205365637572697479`：** 为 **未 XOR keystream**（误当 ECB 回显、或 OFB 状态未推进），与 golden **`F788B2BC5949FCBBB3962D8E99733A96`** 不符，须修正为 **`EVP_des_ofb` + Update/Final**。
+  **半块明文+乱码：** 如 **`4e6574776f726b20009e108f19270e2b`**（前 8 字节像明文 ASCII、后 8 字节错）→ **仅 XOR 了首字节/错用 CFB 片段**，**禁止**手写 OFB；**只用 `EVP_des_ofb` 整段 `Update`**。
+  **自检：** golden 以 **`F788B2BC`** 开头。若 **`b176e8936f8c436aac76ff9172975c33`**、**`1e171119…`**、**`4f647576…`** 等与 golden 无关 → **手搓/错用 CBC 或 CFB**；**仅** **`EVP_des_ofb` + 整段 `Update`** 可得到目标前缀。
+
+cpp: |
+  **仅用** **`#include <openssl/evp.h>`** + **`EVP_des_ofb()`** + legacy + **`set_padding(0)`**。**禁止** `DES_ecb_encrypt` 空轮或未 XOR 导致**密文=明文**。
+  **自检：** 若输出 hex = 明文 `4E6574776F726B205365637572697479`，则未加密。目标 **`F788B2BC5949FCBBB3962D8E99733A96`**。
+  `main` **大括号配平**，`EVP_CIPHER_CTX_free` 在 `return` 前。

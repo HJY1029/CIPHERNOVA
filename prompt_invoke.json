@@ -1,0 +1,791 @@
+{
+  "kind": "invoke_batch_des_cloud",
+  "paper_note": "DES 全模式 × 云端 LLM（需各提供商 API 可用）",
+  "config": "config.yaml",
+  "providers": [
+    "deepseek",
+    "doubao"
+  ],
+  "modes": [
+    "ECB",
+    "CBC",
+    "CFB",
+    "OFB"
+  ],
+  "languages": [
+    "python",
+    "c",
+    "cpp"
+  ],
+  "max_cases": null,
+  "runs": [
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        }
+      ]
+    }
+  ]
+}

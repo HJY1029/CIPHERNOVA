@@ -1,0 +1,416 @@
+{
+  "version": 1,
+  "schema": "run_qwen_distillation_ablation",
+  "fingerprint": "9593f5ed8e37b98633fe34bd",
+  "fp_payload": {
+    "schema": "run_qwen_distillation_ablation",
+    "config": "/mnt/d/aicrypto-helper/config.yaml",
+    "provider": "qwen_coder_local",
+    "grid": [
+      {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "RSA",
+        "mode": null,
+        "language": "python"
+      },
+      {
+        "algorithm": "RSA",
+        "mode": null,
+        "language": "c"
+      },
+      {
+        "algorithm": "RSA",
+        "mode": null,
+        "language": "cpp"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "cpp"
+      }
+    ],
+    "limit": 0,
+    "enable_validation": false,
+    "web_batch_single": true,
+    "max_retries": 3,
+    "skip_baseline": false,
+    "skip_distill": false
+  },
+  "results_baseline": [
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.24730611800623592,
+      "filepath": "generated_code/des_ecb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "DES|ECB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.7696804279985372,
+      "filepath": "generated_code/des_ecb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "DES|ECB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1.80472980599734,
+      "filepath": "generated_code/des_ecb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "DES|ECB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.4238085939869052,
+      "filepath": "generated_code/des_cbc.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      "label": "DES|CBC|python"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_86581b19592547399ce06caaaf841997.c: In function ‘des_encrypt’:\n/tmp/aicrypto_tester/test_86581b19592547399ce06caaaf841997.c:34:5: error: unknown type name ‘DES_cblock’\n   34 |     DES_cblock des_key;\n      |     ^~~~~~~~~~\n/tmp/aicrypto_tester/test_86581b19592547399ce06caaaf841997.c:35:5: warning: implicit declaration of function ‘DES_ede3_cfb64_encrypt’ [-Wimplicit-function-declaration]\n   35 |     DES_ede3_cfb64_encrypt(plaintext, ciphertext, DES_BLOCK_SIZE, (DES_key_schedule *)&des_key, NULL, &des_key[8], 0, 1);\n      |     ^~~~~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_86581b19592547399ce06caaaf841997.c:35:68: error: ‘DES_key_schedule’ undeclared (first use in this function)\n   35 |     DES_ede3_cfb64_encrypt(plaintext, ciphertext, DES_BLOCK_SIZE, (DES_key_schedule *)&des_key, NULL, &des_key[8], 0, 1);\n      |                                                                    ^~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_86581b19592547399ce06caaaf841997.c:35:68: note: each undeclared identifier is reported only once for each function it appears in\n/tmp/aicrypto_tester/test_86581b19592547399ce06caaaf841997.c:35:86: error: expected expression before ‘)’ token\n   35 |     DES_ede3_cfb64_encrypt(plaintext, ciphertext, DES_BLOCK_SIZE, (DES_key_schedule *)&des_key, NULL, &des_key[8], 0, 1);\n      |                                                                                      ^\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 14672.675933943989,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_86581b19592547399ce06caaaf841997.c: In function ‘des_encrypt’:\n/tmp/aicrypto_tester/test_86581b19592547399ce06caaaf841997.c:34:5: error: unknown type name ‘DES_cblock’\n   34 |     DES_cblock des_key;\n      |     ^~~~~~~~~~\n/tmp/aicrypto_tester/test_86581b19592547399ce06caaaf841997.c:35:5: warning: implicit declaration of function ‘DES_ede3_cfb64_encrypt’ [-Wimplicit-function-declaration]\n   35 |     DES_ede3_cfb64_encrypt(plaintext, ciphertext, DES_BLOCK_SIZE, (DE",
+      "generation_ok": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "label": "DES|CBC|c"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp: In function ‘void remove_whitespace(char*)’:\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:11:14: error: ‘isspace’ was not declared in this scope\n   11 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp: In function ‘void des_cfb_encrypt(const unsigned char*, const unsigned char*, const unsigned char*, size_t, unsigned char*)’:\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:36:5: error: ‘DES_key_schedule’ was not declared in this scope\n   36 |     DES_key_schedule schedule;\n      |     ^~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:37:28: error: ‘DES_cblock’ was not declared in this scope\n   37 |     DES_set_key_unchecked((DES_cblock *)key, &schedule);\n      |                            ^~~~~~~~~~\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:37:40: error: expected primary-expression before ‘)’ token\n   37 |     DES_set_key_unchecked((DES_cblock *)key, &schedule);\n      |                                        ^\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:37:47: error: ‘schedule’ was not declared in this scope\n   37 |     DES_set_key_unchecked((DES_cblock *)key, &schedule);\n      |                                               ^~~~~~~~\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:37:5: error: ‘DES_set_key_unchecked’ was not declared in this scope\n   37 |     DES_set_key_unchecked((DES_cblock *)key, &schedule);\n      |     ^~~~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:38:85: error: expected primary-expression before ‘)’ token\n   38 |     DES_cfb64_encrypt(plaintext, ciphertext, plaintext_len, &schedule, (DES_cblock *)iv, &DES_cblock_length(iv), DES_ENCRYPT);\n      |                                                                                     ^\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:38:91: error: ‘DES_cblock_length’ was not declared in this scope\n   38 |     DES_cfb64_encrypt(plaintext, ciphertext, plaintext_len, &schedule, (DES_cblock *)iv, &DES_cblock_length(iv), DES_ENCRYPT);\n      |                                                                                           ^~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:38:114: error: ‘DES_ENCRYPT’ was not declared in this scope\n   38 |     DES_cfb64_encrypt(plaintext, ciphertext, plaintext_len, &schedule, (DES_cblock *)iv, &DES_cblock_length(iv), DES_ENCRYPT);\n      |                                                                                                                  ^~~~~~~~~~~\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:38:5: error: ‘DES_cfb64_encrypt’ was not declared in this scope; did you mean ‘des_cfb_encrypt’?\n   38 |     DES_cfb64_encrypt(plaintext, ciphertext, plaintext_len, &schedule, (DES_cblock *)iv, &DES_cblock_length(iv), DES_ENCRYPT);\n      |     ^~~~~~~~~~~~~~~~~\n      |     des_cfb_encrypt\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 27981.653547195005,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp: In function ‘void remove_whitespace(char*)’:\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp:11:14: error: ‘isspace’ was not declared in this scope\n   11 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_d4ac6e01b0cb46e1b72e3ad080f078cd.cpp: In function ‘void des_cfb_encrypt(const unsigned char*, const unsigned char*, const unsigned char*, size_t, unsigned char",
+      "generation_ok": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "label": "DES|CBC|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.3986464619956678,
+      "filepath": "generated_code/des_cfb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      "label": "DES|CFB|python"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_bde05ef0ae534eb299f8f8a048bdb246.c: In function ‘main’:\n/tmp/aicrypto_tester/test_bde05ef0ae534eb299f8f8a048bdb246.c:87:17: error: conflicting types for ‘ciphertext’; have ‘des_block_t’ {aka ‘unsigned char[8]’}\n   87 |     des_block_t ciphertext = {0};\n      |                 ^~~~~~~~~~\n/tmp/aicrypto_tester/test_bde05ef0ae534eb299f8f8a048bdb246.c:33:20: note: previous definition of ‘ciphertext’ with type ‘unsigned char *’\n   33 |     unsigned char *ciphertext = _aicrypto_ct_buf;\n      |                    ^~~~~~~~~~\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 29000.077584062004,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_bde05ef0ae534eb299f8f8a048bdb246.c: In function ‘main’:\n/tmp/aicrypto_tester/test_bde05ef0ae534eb299f8f8a048bdb246.c:87:17: error: conflicting types for ‘ciphertext’; have ‘des_block_t’ {aka ‘unsigned char[8]’}\n   87 |     des_block_t ciphertext = {0};\n      |                 ^~~~~~~~~~\n/tmp/aicrypto_tester/test_bde05ef0ae534eb299f8f8a048bdb246.c:33:20: note: previous definition of ‘ciphertext’ with type ‘unsigned char *’\n   33 |     unsigned char *ciphertext = _a",
+      "generation_ok": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      "label": "DES|CFB|c"
+    },
+    {
+      "ok": false,
+      "error": "输入内容过长，超过了模型的上下文限制。输入tokens (37568) 超过或等于上下文限制 (32768)。请减少prompt长度或使用支持更大上下文的模型（如gpt-4-turbo，支持128K上下文）。",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 12049.87228723301,
+      "filepath": null,
+      "vector_detail": "",
+      "generation_ok": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "label": "DES|CFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.24475563602754846,
+      "filepath": "generated_code/des_ofb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "python"
+      },
+      "label": "DES|OFB|python"
+    }
+  ],
+  "results_distill": []
+}

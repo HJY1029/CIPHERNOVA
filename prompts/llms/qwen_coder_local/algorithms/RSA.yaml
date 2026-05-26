@@ -1,0 +1,35 @@
+# Qwen · RSA（历史 batch 曾 rsa-* 全失败；保持短模板）
+mandatory: |
+  **RSA 按题面 operation**（加密/解密/签名）；**禁止** 手写大整数幂模占满上下文。
+  **仅用 `os.getenv`**；**禁止** stdin。stdout **必须** 含题面要求标签 + hex/Base64。
+
+supplement: |
+  **Python 优先 Cryptodome**；C/C++ 有 OpenSSL 用 **EVP RSA**；无头则 stderr 退出，勿空 `main`。
+
+python: |
+  ```python
+  import os
+  from Crypto.PublicKey import RSA
+  from Crypto.Cipher import PKCS1_OAEP
+  key = RSA.import_key(bytes.fromhex(os.getenv("TEST_KEY","").strip()))
+  pt = bytes.fromhex(os.getenv("TEST_PLAINTEXT","").strip())
+  ct = PKCS1_OAEP.new(key).encrypt(pt)
+  print("密文:", ct.hex().lower())
+  ```
+  （填充/operation 以题面为准）
+
+c: |
+  **`openssl/evp.h`** + **`rsa.h`**（若环境有）；**`getenv`** → hex → **EVP** 加密
+  **`printf("密文: ");`** + hex
+
+cpp: |
+  **`std::getenv`**；有 OpenSSL 用 **EVP**；**`printf("密文: ");`**
+
+test_feedback_improve: |
+  删教学用大整数代码；**print 密文** 到 stdout
+
+test_feedback_improve_c: |
+  勿空 main；**密文:** + hex
+
+test_feedback_improve_cpp: |
+  同 c；勿 **cin** 读密钥

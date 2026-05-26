@@ -1,0 +1,100 @@
+# 批量 9 槽之无 DB：AES|ecb|c、AES|ecb|cpp（须 qwen 落库）
+generate_pin_c: |
+  **AES|ecb|c：** 只提交下方 **c:** fenced 源码（≤70 行）；**`EVP_aes_128_ecb()`** + **iv=NULL** + **h2b**；**`strlen(ph)==64`**；**`printf("密文: ");`**；golden **`db727ac6`**（64 hex，勿 128 hex）。
+
+generate_pin_cpp: |
+  **AES|ecb|cpp：** 与 **c:** 骨架逐字相同（**stdio+evp.h**）；**禁止 iostream/cstring strlen(env)**；golden **`db727ac6`**。
+
+mandatory: |
+  **AES-128-ECB only**：**`EVP_aes_128_ecb()`** + **`set_padding(0)`**（C/C++）或 **`AES.MODE_ECB`**（Python）。
+  key **32 hex→16B**；明文 **64 hex→32B**（`strlen(TEST_PLAINTEXT)==64`）；**ECB 无 IV**（Init 时 iv 传 **NULL**）。
+  **golden 前缀：`db727ac6`**（密文 **64 hex**）。
+  **禁止：** `des.h`、`KEY_SIZE 8`、`isspace` 无 **ctype**、**`memcpy(env)`** 未 h2b、输出 **128 hex**（未 h2b）、仅裸 hex 无 **`密文:`**。
+
+supplement: |
+  **无 DB 落库槽：** 必须照抄下方骨架整文件输出，**≤70 行**。
+  **日志 aes-cfb-cpp（同类错误）：** **`strlen(env)` 当字节** → 密文 **128 hex**（应为 **64**）；本槽须 **h2b** + **`strlen(ph)==64`**。
+
+python: |
+  ```python
+  import os
+  from Crypto.Cipher import AES
+  k=bytes.fromhex(os.getenv("TEST_KEY","").strip())
+  pt=bytes.fromhex(os.getenv("TEST_PLAINTEXT","").strip())
+  print("密文:", AES.new(k,AES.MODE_ECB).encrypt(pt).hex().lower())
+  ```
+
+c: |
+  **【AES|ecb|c】照抄骨架（cipher=`EVP_aes_128_ecb()`，iv=NULL）：**
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY");
+    if(!ph||!kh)return 1;
+    strip(ph);strip(kh);
+    int pl=strlen(ph)/2;
+    unsigned char pt[64],key[16],out[64];
+    if(strlen(kh)!=32||strlen(ph)!=64||h2b(ph,pt,pl)||h2b(kh,key,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!ctx)return 1;
+    if(!EVP_EncryptInit_ex(ctx,EVP_aes_128_ecb(),NULL,key,NULL))return 1;
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;
+    if(!EVP_EncryptUpdate(ctx,out,&o1,pt,pl))return 1;
+    if(!EVP_EncryptFinal_ex(ctx,out+o1,&o2))return 1;
+    printf("密文: ");
+    for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+
+cpp: |
+  **【AES|ecb|cpp】与 c 段逐字相同（禁止 iostream；用 stdio+evp）：**
+  ```cpp
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY");
+    if(!ph||!kh)return 1;
+    strip(ph);strip(kh);
+    int pl=strlen(ph)/2;
+    unsigned char pt[64],key[16],out[64];
+    if(strlen(kh)!=32||strlen(ph)!=64||h2b(ph,pt,pl)||h2b(kh,key,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!ctx)return 1;
+    if(!EVP_EncryptInit_ex(ctx,EVP_aes_128_ecb(),NULL,key,NULL))return 1;
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;
+    if(!EVP_EncryptUpdate(ctx,out,&o1,pt,pl))return 1;
+    if(!EVP_EncryptFinal_ex(ctx,out+o1,&o2))return 1;
+    printf("密文: ");
+    for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+
+test_feedback_improve: |
+  **AES-ECB：** **`EVP_aes_128_ecb`** / **`MODE_ECB`**；**h2b**（**64 hex 明文**）；**iv=NULL**；golden **`db727ac6`**（**64 hex**）；**`密文:`**
+
+test_feedback_improve_c: |
+  **无 DB 落库 · aes-ecb-c：** 整文件照抄 **c:** 骨架；**`strlen(ph)==64`** + **h2b**；**`EVP_aes_128_ecb`** + **set_padding(0)** + **iv=NULL**；golden **`db727ac6`**；**`printf("密文: ");`**
+
+test_feedback_improve_cpp: |
+  **无 DB 落库 · aes-ecb-cpp：** 禁止 **iostream**/`strlen(env)` 当字节；照抄 **cpp:** 骨架；**h2b**；golden **`db727ac6`**（勿 **128 hex**）；**`密文:`** + **%02x**

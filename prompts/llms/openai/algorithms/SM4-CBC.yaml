@@ -1,0 +1,10 @@
+# OpenAI · SM4-CBC（此前无本文件时仅依赖通用模板，易生成截断 CK 表）
+supplement: |
+  **优先 `EVP_sm4_cbc()`**，与仓库 **test_data** 一致时 CBC 密文 golden 常与 ECB 同向量下为 **`681EDF34D206965E86B3E94F536E4246`**（全零 IV）。
+  **手写 SM4 时 `CK[32]`：** 每个元素必须是 **8 位十六进制字面量**，**绝对禁止** `0x50575e65, 0x6c737a81, 0x88...`、`…`、`// 省略`**（会触发 **`too many decimal points`** / 大括号不配平）。
+
+c: |
+  **`EVP_sm4_cbc()`** + **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**；密钥/IV 各 **32 hex → 16 字节**；`Init_ex` → **`EncryptUpdate`** → **`EncryptFinal_ex`**，按 **`ciphertext_len`** 打印 **`密文:`** + hex。
+  **若手写密钥扩展，须完整抄写 `CK[32]`（示例，与 OpenSSL 一致）：**
+  `0x00070E15,0x1C232A31,0x383F464D,0x545B6269,0x70777E85,0x8C939AA1,0xA8AFB6BD,0xC4CBD2D9,0xE0E7EEF5,0xFC030A11,0x181F262D,0x343B4249,0x50575E65,0x6C737A81,0x888F969D,0xA4ABB2B9,0xC0C7CED5,0xDCE3EAF1,0xF8FF060D,0x141B2229,0x30373E45,0x4C535A61,0x686F767D,0x848B9299,0xA0A7AEB5,0xBCC3CAD1,0xD8DFE6ED,0xF4FB0209,0x10171E25,0x2C333A41,0x484F565D,0x646B7279`
+  **`FK[4]`：** `0xa3b1bac6,0x56aa3350,0x677d9197,0xb27022dc`。**禁止** `#define 8`。

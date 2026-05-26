@@ -1,0 +1,260 @@
+# scripts/run_qwen_batch_aes.py — Qwen 批量失败（仅 AES）
+# started_utc: 2026-05-16T10:04:33.016101+00:00
+# provider: qwen_coder_local
+# results_json: /mnt/d/aicrypto-helper/experiments/results/qwen_batch_AES_20260516T100433Z.json
+# configs_count: 18
+# since: 2026-05-04
+# only_pending: False
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-16T19:24:47.191630+00:00
+provider: qwen_coder_local
+case_id: aes-cfb-c
+config: {"algorithm": "AES", "mode": "CFB", "language": "c"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: /tmp/aicrypto_tester/test_6f7795e31c56439eafe44b653a36eace.c: In function ‘main’:
+/tmp/aicrypto_tester/test_6f7795e31c56439eafe44b653a36eace.c:30:14: warning: implicit declaration of function ‘isspace’ [-Wimplicit-function-declaration]
+   30 |         if (!isspace(env_key[i])) {
+      |              ^~~~~~~
+/tmp/aicrypto_tester/test_6f7795e31c56439eafe44b653a36eace.c:4:1: note: include ‘<ctype.h>’ or provide a declaration of ‘isspace’
+    3 | #include <string.h>
+  +++ |+#include <ctype.h>
+
+error:
+编译失败: /tmp/aicrypto_tester/test_6f7795e31c56439eafe44b653a36eace.c: In function ‘main’:
+/tmp/aicrypto_tester/test_6f7795e31c56439eafe44b653a36eace.c:30:14: warning: implicit declaration of function ‘isspace’ [-Wimplicit-function-declaration]
+   30 |         if (!isspace(env_key[i])) {
+      |              ^~~~~~~
+/tmp/aicrypto_tester/test_6f7795e31c56439eafe44b653a36eace.c:4:1: note: include ‘<ctype.h>’ or provide a declaration of ‘isspace’
+    3 | #include <string.h>
+  +++ |+#include <ctype.h>
+    4 | 
+/tmp/aicrypto_tester/test_6f7795e31c56439eafe44b653a36eace.c:34:9: error: ‘j’ undeclared (first use in this function)
+   34 |     key[j] = '\0';
+      |         ^
+/tmp/aicrypto_tester/test_6f7795e31c56439eafe44b653a36eace.c:34:9: note: each undeclared identifier is reported only once for each function it appears in
+
+total_ms: 30369069
+generated_filename: aes_cfb.c
+generated_code:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define DES_KEY_SIZE 8
+#define DES_BLOCK_SIZE 8
+
+void des_encrypt(const unsigned char *key, const unsigned char *plaintext, unsigned char *ciphertext) {
+    // Implement the DES encryption algorithm here
+}
+
+int main() {
+    // Read key and IV from environment variables
+    const char *env_key = getenv("TEST_KEY");
+    const char *env_iv = getenv("TEST_IV");
+
+    if (!env_key || !env_iv) {
+        fprintf(stderr, "Environment variables TEST_KEY and TEST_IV must be set.\n");
+        return 1;
+    }
+
+    // Remove any whitespace from the key and IV
+    size_t key_len = strlen(env_key);
+    size_t iv_len = strlen(env_iv);
+
+    char *key = (char *)malloc(key_len + 1);
+    char *iv = (char *)malloc(iv_len + 1);
+
+    for (size_t i = 0, j = 0; i < key_len; ++i) {
+        if (!isspace(env_key[i])) {
+            key[j++] = env_key[i];
+        }
+    }
+    key[j] = '\0';
+
+    for (size_t i = 0, j = 0; i < iv_len; ++i) {
+        if (!isspace(env_iv[i])) {
+            iv[j++] = env_iv[i];
+        }
+    }
+    iv[j] = '\0';
+
+    // Convert the key and IV from hex to binary
+    unsigned char des_key[DES_KEY_SIZE];
+    unsigned char des_iv[DES_BLOCK_SIZE];
+
+    for (size_t i = 0; i < DES_KEY_SIZE * 2; ++i) {
+        sscanf(&key[i], "%2hhx", &des_key[i / 2]);
+    }
+
+    for (size_t i = 0; i < DES_BLOCK_SIZE * 2; ++i) {
+        sscanf(&iv[i], "%2hhx", &des_iv[i / 2]);
+    }
+
+    // Read the plaintext from stdin
+    unsigned char plaintext[DES_BLOCK_SIZE];
+    size_t bytes_read = fread(plaintext, 1, DES_BLOCK_SIZE, stdin);
+
+    if (bytes_read < DES_BLOCK_SIZE) {
+        fprintf(stderr, "Error reading input.\n");
+        return 1;
+    }
+
+    // Encrypt the plaintext
+    unsigned char ciphertext[DES_BLOCK_SIZE];
+    des_encrypt(des_key, plaintext, ciphertext);
+
+    // Output the ciphertext in hex format
+    printf("密文: ");
+    for (size_t i = 0; i < DES_BLOCK_SIZE; ++i) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+
+    free(key);
+    free(iv);
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-16T20:09:52.452932+00:00
+provider: qwen_coder_local
+case_id: aes-cfb-cpp
+config: {"algorithm": "AES", "mode": "CFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+输入内容过长，超过了模型的上下文限制。输入tokens (35241) 超过或等于上下文限制 (32768)。请减少prompt长度或使用支持更大上下文的模型（如gpt-4-turbo，支持128K上下文）。
+total_ms: 2439036
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-17T05:08:38.691078+00:00
+provider: qwen_coder_local
+case_id: aes-ofb-c
+config: {"algorithm": "AES", "mode": "OFB", "language": "c"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+代码执行失败: Error: Invalid input format
+
+error:
+代码执行失败: Error: Invalid input format
+
+total_ms: 29092860
+generated_filename: aes_ofb.c
+generated_code:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <openssl/des.h>
+
+#define KEY_SIZE 8
+#define IV_SIZE 8
+
+void remove_whitespace(char *str) {
+    int i, j;
+    for (i = 0, j = 0; str[i]; i++) {
+        if (!isspace(str[i])) {
+            str[j++] = str[i];
+        }
+    }
+    str[j] = '\0';
+}
+
+int hex_to_bytes(const char *hex, unsigned char *bytes) {
+    int len = strlen(hex);
+    if (len % 2 != 0) return -1;
+    for (int i = 0; i < len / 2; i++) {
+        sscanf(&hex[i*2], "%2hhx", &bytes[i]);
+    }
+    return len / 2;
+}
+
+void des_cfb_encrypt(const unsigned char *key, const unsigned char *iv, const unsigned char *plaintext, unsigned char *ciphertext, size_t length) {
+    DES_key_schedule key_schedule;
+    DES_set_odd_parity((DES_cblock *)key);
+    DES_set_key_unchecked((DES_cblock *)key, &key_schedule);
+
+    unsigned char feedback[IV_SIZE];
+    memcpy(feedback, iv, IV_SIZE);
+
+    for (size_t i = 0; i < length; i++) {
+        DES_ecb_encrypt((DES_cblock *)feedback, (DES_cblock *)&feedback, &key_schedule, DES_ENCRYPT);
+        ciphertext[i] = plaintext[i] ^ feedback[0];
+        memmove(feedback, feedback + 1, IV_SIZE - 1);
+        feedback[IV_SIZE - 1] = ciphertext[i];
+    }
+}
+
+int main() {
+    char *plaintext_hex = getenv("TEST_PLAINTEXT");
+    char *key_hex = getenv("TEST_KEY");
+    char *iv_hex = getenv("TEST_IV");
+
+    if (!plaintext_hex || !key_hex) {
+        fprintf(stderr, "Error: Missing environment variables\n");
+        return 1;
+    }
+
+    remove_whitespace(plaintext_hex);
+    remove_whitespace(key_hex);
+
+    unsigned char plaintext[KEY_SIZE];
+    unsigned char key[KEY_SIZE];
+    unsigned char iv[IV_SIZE];
+
+    if (hex_to_bytes(plaintext_hex, plaintext) != KEY_SIZE ||
+        hex_to_bytes(key_hex, key) != KEY_SIZE) {
+        fprintf(stderr, "Error: Invalid input format\n");
+        return 1;
+    }
+
+    if (iv_hex) {
+        remove_whitespace(iv_hex);
+        if (hex_to_bytes(iv_hex, iv) != IV_SIZE) {
+            fprintf(stderr, "Error: Invalid IV format\n");
+            return 1;
+        }
+    } else {
+        memset(iv, 0, IV_SIZE);
+    }
+
+    unsigned char ciphertext[KEY_SIZE];
+    des_cfb_encrypt(key, iv, plaintext, ciphertext, KEY_SIZE);
+
+    printf("密文: ");
+    for (int i = 0; i < KEY_SIZE; i++) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-17T08:33:05.818900+00:00
+provider: qwen_coder_local
+case_id: aes-ofb-cpp
+config: {"algorithm": "AES", "mode": "OFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+输入内容过长，超过了模型的上下文限制。输入tokens (37759) 超过或等于上下文限制 (32768)。请减少prompt长度或使用支持更大上下文的模型（如gpt-4-turbo，支持128K上下文）。
+total_ms: 11072499
+--------------------------------------------------------------------------------
+

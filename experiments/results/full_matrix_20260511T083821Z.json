@@ -1,0 +1,597 @@
+{
+  "started_at_utc": "2026-05-11T08:38:21.690099+00:00",
+  "providers": [
+    "openai"
+  ],
+  "configs_count": 45,
+  "results": [
+    {
+      "provider": "openai",
+      "cases": [
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 6429,
+          "case_id": "des-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 6805,
+          "case_id": "des-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 10969,
+          "case_id": "des-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3130,
+          "case_id": "des-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 4308,
+          "case_id": "des-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 7709,
+          "case_id": "des-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 6916,
+          "case_id": "des-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3823,
+          "case_id": "des-cfb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 10028,
+          "case_id": "des-cfb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 11201,
+          "case_id": "des-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 8052,
+          "case_id": "des-ofb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 10077,
+          "case_id": "des-ofb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 5077,
+          "case_id": "aes-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3307,
+          "case_id": "aes-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 9409,
+          "case_id": "aes-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 5705,
+          "case_id": "aes-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 6310,
+          "case_id": "aes-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 7251,
+          "case_id": "aes-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3442,
+          "case_id": "aes-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 7737,
+          "case_id": "aes-cfb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 13899,
+          "case_id": "aes-cfb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 7940,
+          "case_id": "aes-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_5e475538b3f44b769905de341998265e.c:71: error: expected ‘;’, ‘,’ or ‘)’ at end of input\n",
+          "vector_status": "未通过",
+          "total_ms": 1054211,
+          "case_id": "aes-ofb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 27062,
+          "case_id": "aes-ofb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 12201,
+          "case_id": "aes-gcm-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 14782,
+          "case_id": "aes-gcm-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 22674,
+          "case_id": "aes-gcm-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 6529,
+          "case_id": "aes-ctr-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 18824,
+          "case_id": "aes-ctr-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 11460,
+          "case_id": "aes-ctr-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3330,
+          "case_id": "rsa-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 23888,
+          "case_id": "rsa-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 11303,
+          "case_id": "rsa-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 6695,
+          "case_id": "sm4-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 6757,
+          "case_id": "sm4-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 8067,
+          "case_id": "sm4-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3603,
+          "case_id": "sm4-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 7288,
+          "case_id": "sm4-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 8532,
+          "case_id": "sm4-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 4029,
+          "case_id": "sm4-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 5569,
+          "case_id": "sm4-cfb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 8715,
+          "case_id": "sm4-cfb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 12494,
+          "case_id": "sm4-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "测试失败：结果不匹配\n实际结果: 0123456789abcdeffedcba98e5e434b6\n预期结果: 2754B10C806AEF23698989882D80903A\n(规范化后: 实际=0123456789abcdeffedcba98e5e434b6, 预期=2754b10c806aef23698989882d80903a)\n\n匹配度分析：\n  - 匹配字符数: 2/32\n  - 匹配率: 6.2%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 0123456789abcdeffedcba98e5e434b60123456789abcdef6d6cbc3e36e99a32\n",
+          "vector_status": "未通过",
+          "total_ms": 989817,
+          "case_id": "sm4-ofb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 9953,
+          "case_id": "sm4-ofb-cpp",
+          "generation_ok": true
+        }
+      ]
+    }
+  ],
+  "finished_at_utc": "2026-05-11T09:18:59.206300+00:00"
+}

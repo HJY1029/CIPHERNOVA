@@ -1,0 +1,115 @@
+# 批量 9 槽之未过：AES|gcm|cpp（RAND_bytes、size_t*、未 h2b TEST_IV/AAD）
+generate_pin_cpp: |
+  **AES|gcm|cpp（未过 · 当前 45 格仍失败）：** 本题是 **AES-256-GCM**，**禁止** 输出任何 **DES** 代码（**DES_KEY_SIZE/des_encrypt**）。只提交下方 **cpp:** fenced 源码；**stdio+evp.h**；**h2b**（**strlen(kh)==64, ih==24, ph==32, ah==32**）；**`int l,o1,o2`**；golden **`f7264413`**。
+
+mandatory: |
+  **AES-256-GCM only**（**禁止 DES 串题**：无 **`DES_KEY_SIZE`**、无 **`des_encrypt` 占位**、无 **8 字节 key**）。
+  **`EVP_aes_256_gcm()`**；key **64 hex→32B**；nonce **24 hex→12B**（**禁止 RAND_bytes**）；AAD **32 hex→16B**。
+  **必须先 AAD 再明文**；**`EVP_EncryptUpdate` 的 outl 参数类型为 `int*`**（禁止 `size_t*`）。
+  输出 **ct||tag = 64 hex**；前缀 **`f7264413`**。
+  **禁止：** `RAND_bytes`、`openssl/rand.h`、随机 IV、**`memcpy(env)`**、无 **`<openssl/evp.h>`** 的纯手写 AES。
+
+supplement: |
+  **日志 aes-gcm-cpp（2026-05-18）：** 整文件变成 **DES 占位**（**DES_KEY_SIZE 8**）→ **Invalid key format**。
+  **日志 aes-gcm-cpp（2026-05-21）：** **iostream** + **strlen(env)** + 未读 **TEST_IV/AAD**；**RAND_bytes**；**size_t\*** 传 EVP。
+  **禁止：** `std::cout`/`std::cerr`、随机 IV、**EncryptInit(..., key, 随机 iv)**。
+
+cpp: |
+  **【AES|gcm|cpp · 未过】照抄（禁止 iostream/RAND_bytes/strlen(env)；IV 必须来自 TEST_IV+h2b）：**
+  ```cpp
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    char *ah=getenv("TEST_AAD"); if(!ah) ah=(char*)"4D23C3CEC334B49BDB370C437FEC78DE";
+    if(!ph||!kh||!ih)return 1;
+    strip(ph);strip(kh);strip(ih);strip(ah);
+    if(strlen(kh)!=64||strlen(ih)!=24||strlen(ph)!=32||strlen(ah)!=32)return 1;
+    unsigned char pt[16],key[32],nonce[12],aad[16],ct[16],tag[16];
+    if(h2b(ph,pt,16)||h2b(kh,key,32)||h2b(ih,nonce,12)||h2b(ah,aad,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!ctx)return 1;
+    if(!EVP_EncryptInit_ex(ctx,EVP_aes_256_gcm(),NULL,NULL,NULL))return 1;
+    if(!EVP_CIPHER_CTX_ctrl(ctx,EVP_CTRL_GCM_SET_IVLEN,12,NULL))return 1;
+    if(!EVP_EncryptInit_ex(ctx,NULL,NULL,NULL,nonce))return 1;
+    if(!EVP_EncryptInit_ex(ctx,NULL,NULL,key,NULL))return 1;
+    int l=0,o1=0,o2=0;
+    if(!EVP_EncryptUpdate(ctx,NULL,&l,aad,16))return 1;
+    if(!EVP_EncryptUpdate(ctx,ct,&o1,pt,16))return 1;
+    if(!EVP_EncryptFinal_ex(ctx,ct+o1,&o2))return 1;
+    if(!EVP_CIPHER_CTX_ctrl(ctx,EVP_CTRL_GCM_GET_TAG,16,tag))return 1;
+    printf("密文: ");
+    for(int i=0;i<o1;i++)printf("%02x",ct[i]);
+    for(int i=0;i<16;i++)printf("%02x",tag[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+
+c: |
+  **【AES|gcm|c】与 cpp 段逐字相同：**
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    char *ah=getenv("TEST_AAD"); if(!ah) ah=(char*)"4D23C3CEC334B49BDB370C437FEC78DE";
+    if(!ph||!kh||!ih)return 1;
+    strip(ph);strip(kh);strip(ih);strip(ah);
+    if(strlen(kh)!=64||strlen(ih)!=24||strlen(ph)!=32||strlen(ah)!=32)return 1;
+    unsigned char pt[16],key[32],nonce[12],aad[16],ct[16],tag[16];
+    if(h2b(ph,pt,16)||h2b(kh,key,32)||h2b(ih,nonce,12)||h2b(ah,aad,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!EVP_EncryptInit_ex(ctx,EVP_aes_256_gcm(),NULL,NULL,NULL))return 1;
+    EVP_CIPHER_CTX_ctrl(ctx,EVP_CTRL_GCM_SET_IVLEN,12,NULL);
+    EVP_EncryptInit_ex(ctx,NULL,NULL,NULL,nonce);
+    EVP_EncryptInit_ex(ctx,NULL,NULL,key,NULL);
+    int l=0,o1=0,o2=0;
+    EVP_EncryptUpdate(ctx,NULL,&l,aad,16);
+    EVP_EncryptUpdate(ctx,ct,&o1,pt,16);
+    EVP_EncryptFinal_ex(ctx,ct+o1,&o2);
+    EVP_CIPHER_CTX_ctrl(ctx,EVP_CTRL_GCM_GET_TAG,16,tag);
+    printf("密文: ");
+    for(int i=0;i<o1;i++)printf("%02x",ct[i]);
+    for(int i=0;i<16;i++)printf("%02x",tag[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+
+python: |
+  ```python
+  import os
+  from Crypto.Cipher import AES
+  key=bytes.fromhex(os.getenv("TEST_KEY","").strip())
+  nonce=bytes.fromhex(os.getenv("TEST_IV","99AA3E68ED8173A0EED06684").strip())
+  aad=bytes.fromhex(os.getenv("TEST_AAD","4D23C3CEC334B49BDB370C437FEC78DE").strip())
+  pt=bytes.fromhex(os.getenv("TEST_PLAINTEXT","").strip())
+  c=AES.new(key,AES.MODE_GCM,nonce=nonce)
+  c.update(aad)
+  ct,tag=c.encrypt_and_digest(pt)
+  print("密文:", (ct+tag).hex().lower())
+  ```
+
+test_feedback_improve: |
+  **GCM：** **TEST_IV(12B)+TEST_AAD(16B)+h2b**；**int o1,o2,l**；输出 **64 hex**；**f7264413**
+
+test_feedback_improve_c: |
+  **未过 aes-gcm-cpp：** 同 **cpp** 骨架；删 **RAND_bytes**；**int o1,o2,l** 勿 **size_t\***
+
+test_feedback_improve_cpp: |
+  **未过 aes-gcm-cpp · 日志整文件重写：** 若见 **DES_KEY_SIZE/des_encrypt/Invalid key format** → 删光 DES，改 **AES-GCM EVP 骨架**。头文件仅 **stdio/stdlib/string/ctype/evp.h**；**h2b** 且 **strlen(kh)==64, ih==24, ph==32, ah==32**；**`int l,o1,o2`**；**TEST_IV+TEST_AAD** 必读；顺序 **gcm→SET_IVLEN(12)→nonce→key→AAD Update→pt→GET_TAG**；**`printf("密文: ");`+%02x** **64 hex**；golden **`f7264413`**

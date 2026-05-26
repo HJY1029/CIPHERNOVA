@@ -1,0 +1,24 @@
+supplement: |
+  AES-128-CFB（**test_data.yaml**）：密文 golden **`EAC2DD6334E8FA07FDAB477ABA1628A93AFAAAD753B7E05CD59548A2927BDA97`**（64 hex）。密钥/IV 各 32 hex → 16 字节。
+  **本测为 CFB-8（每字节反馈）**，与 OpenSSL **`EVP_aes_128_cfb8()`** / `openssl enc -aes-128-cfb8` 及 PyCryptodome **`AES.MODE_CFB` 默认 `segment_size=8`** 一致。
+  **常见致命错：** 输出以 **`ea0b8fb8`** 开头 → 误用了 **`AES.MODE_OFB`**，或 **`segment_size=128`**（CFB-128 与 **本 golden 不一致**，密文会与 OFB 前缀同型）。
+
+python: |
+  **【DeepSeek · Python · AES-CFB-8 对齐 golden】**
+  1. **PyCryptodome（推荐）：**  
+     `cipher = AES.new(key, AES.MODE_CFB, iv=iv, segment_size=8)`  
+     或 **`segment_size` 省略**（**默认即为 8**）。  
+     **`encrypt = cipher.encrypt(plaintext)`** 一次完成。
+  2. **禁止：** **`segment_size=128`**（会得到 **`ea0b8fb8…`** 类错误密文，**≠** 本题 **`eac2dd63…`**）。  
+     **禁止：** **`AES.MODE_OFB`**（OFB 的 golden 在 test_data 里是另一条，本题 mode 为 **CFB**）。
+  3. **自检：** 密文 hex（小写）前 8 字符应为 **`eac2dd63`**；若为 **`ea0b8fb8`**，立即改为 **`MODE_CFB` + `segment_size=8`（或默认）**。
+  4. `key`/`iv` 各 16 字节；`assert len(key)==16 and len(iv)==16`。
+  5. Self-Refine 若仍输出错前缀：在改进提示中**显式写出** `segment_size=8`，并**删除**任何 `128` 段长或 `MODE_OFB`。
+
+c: |
+  **`EVP_aes_128_cfb8()`**（**CFB-8**）；**`EVP_CIPHER_CTX_set_padding(ctx, 0)`**。  
+  **禁止** 仅用 **`EVP_aes_128_cfb()`** 命名 cipher 却期望本 golden（不少环境中等价于 CFB-128，密文前缀会偏 **`ea0b8fb8`**）。  
+  禁止 DES 话术。
+
+cpp: |
+  同 C：**`EVP_aes_128_cfb8()`** + padding 关闭。

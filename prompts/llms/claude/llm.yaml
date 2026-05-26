@@ -1,0 +1,59 @@
+# Claude特定prompt配置
+# 使用简化版prompt（compact），因为Claude的上下文限制较小
+
+llm_specific:
+  compact: true  # Claude使用简化版prompt
+
+  # 批量评测（与 OpenAI 同级简短）；任务级 golden 见 `llms/claude/algorithms/*.yaml`
+  coder_bootstrap: |
+    **【Claude · 批量评测必守】**
+    - **输入：** 优先 `TEST_PLAINTEXT` / `TEST_KEY` / `TEST_IV` / **`TEST_AAD`**（Python `os.getenv`，C `getenv`）。禁止用 `input()` 当主路径（会阻塞或绕过 env）。
+    - **输出：** 一行 **`密文:`** + 连续 hex，无空格。
+    - **AES-256-GCM（test_data）：** 输出须为 **密文(16B) ∥ tag(16B) = 64 hex**。若**前 32 hex 对、后 32 hex（tag）错**，**几乎总是 AAD 未参与 GHASH**：从 **`TEST_AAD`** 读 hex → 解码为字节 → Python **`cipher.update(aad_bytes)`**；C/C++ OpenSSL 在**明文** `EVP_EncryptUpdate` **之前**必须 **`EVP_EncryptUpdate(ctx, NULL/nullptr, &outl, aad, aad_len)`**。AAD 须与 `test_data.yaml` 一致（**`4D23C3CEC334B49BDB370C437FEC78DE`**）。**正确 tag 以 `67BA0510...` 起**。
+
+  # 参考资源
+  reference_resources: |
+    **重要参考资源（可用于理解算法实现）：**
+    - **OpenSSL官方源代码仓库：https://github.com/openssl/openssl.git**
+    - 可以参考OpenSSL的官方实现来理解算法的正确实现方式
+    - 特别是可以参考以下目录：
+      * DES实现：`crypto/des/` 目录
+      * AES实现：`crypto/aes/` 目录
+      * 各种模式：`crypto/modes/` 目录
+    - **注意：虽然可以参考OpenSSL源代码，但必须将其转换为纯C/C++实现，不能直接使用OpenSSL库！**
+  
+  # C++特定规则（简化版，与OpenAI相同）
+  cpp_rules_compact: |
+    **C++代码规则（严格遵循）：**
+    **1. 头文件（最重要！代码必须从正确的头文件开始！）：**
+      - **必须包含所有使用的类型和函数对应的头文件！**
+      - **如果使用uint8_t/uint16_t/uint32_t/uint64_t，必须包含 `#include <cstdint>`！**
+      - **如果使用std::cout/cin/cerr，必须包含 `#include <iostream>`！**
+      - **如果使用std::string，必须包含 `#include <string>`！**
+      - **如果使用std::vector，必须包含 `#include <vector>`！**
+      - **如果使用std::remove_if/remove/find，必须包含 `#include <algorithm>`！**
+      - **如果使用std::hex/setw/setfill，必须包含 `#include <iomanip>`！**
+      - **如果使用isxdigit/toupper/tolower，必须包含 `#include <cctype>`！**
+      - **每个include必须单独一行，不能连在一起！**
+      - **代码必须从#include开始，不能缺少任何必要的头文件！**
+    **2. 代码完整性：**
+    - 代码必须完整，不能截断
+    - 禁止在数组中使用单独字母（A-F），使用0x前缀表示十六进制
+    - 禁止?数字格式，直接使用数字
+    - 禁止类型名包含问号（如uint3?2_t）
+    - 不要重复定义函数
+    - **函数参数名必须是有效的标识符（如a, b, key等），不能是十六进制值（如0x0A）或数字！**
+    - 函数参数类型必须正确（数组指针vs整数）
+    - 禁止字母A后跟数字（如A30→30）
+    - 禁止中文字符替代数字
+    - 数组定义必须完整（以};结尾）
+    - 所有函数必须有return语句（非void）
+  
+  # 代码不完整重试提示（简化版）
+  incomplete_retry_compact: |
+    **警告：上次代码不完整被截断！**
+    {last_error}
+    **请生成完整的、可编译的代码！**
+    - 代码必须从#include开始，到main函数结束
+    - 所有语句、函数、数组定义必须完整
+    - 所有括号、大括号必须正确匹配

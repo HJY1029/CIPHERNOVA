@@ -1,0 +1,13 @@
+LLM 按算法/模式补充说明（与通用、算法 YAML 叠加）
+
+路径：prompts/llms/<provider>/algorithms/<任务键>.yaml
+任务键与 prompts/algorithms 下对应 YAML 的文件名（不含扩展名）一致，例如：
+  DES-ECB、AES-GCM、SM4-OFB
+RSA 使用：RSA-加密、RSA-解密、RSA-密钥生成 等与算法模板相同的拼法。
+
+可选字段：
+  supplement — 字符串，全语言通用，优先拼接
+  python / c / cpp — 字符串，按当前生成语言追加
+
+主配置仍放在：prompts/llms/<provider>/llm.yaml
+（若仅有 llm.yaml 的平替，也可使用与文件夹同名的 <provider>.yaml，加载器会识别。）

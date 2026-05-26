@@ -1,0 +1,185 @@
+# OpenAI · AES-OFB-128
+supplement: |
+  **（2026-05-11 批量）错密文前缀 `c3e597bb…`：** 典型为 **`AES_EncryptBlock` 空函数体 / `// Placeholder for actual AES encryption logic`**，OFB 循环仍 **`ciphertext[i]^=outputBlock[i%16]`** → **keystream 未定义**。**禁止**；**C/C++ 本题只用 `EVP_aes_128_ofb()` 单路径**（与 **`prompts/algorithms/c/AES-OFB.yaml`** 已对齐）。
+  OFB：**反馈 = AES 输出块**；下一状态 ← 输出，**非**密文。与 CFB 混用会得到错误密文。
+
+python: |
+  **硬性自检（test_data 默认向量）：** 正确 **AES-128-OFB** 密文 hex **必须以 `EA0B8FB8` 开头**（与 PyCryptodome **`AES.MODE_OFB`**、OpenSSL **`EVP_aes_128_ofb`** 一致）。若误用 **CFB**，同一向量下密文会以 **`EAC2DD63`** 开头（与 OFB **完全不同**）。
+  **最短合法骨架：**  
+    `cipher = AES.new(key, AES.MODE_OFB, iv=iv)`  
+    `ct = cipher.encrypt(plain)`  
+    `print("密文: " + ct.hex())`  
+  **禁止** **`MODE_CFB`/`segment_size`** 与 OFB 混用。
+  `import os`；评测注入非空时须**只用** `os.getenv(...).strip()`，**禁止**在 **`print("密文:"...)` 之前**向 stdout 输出提示语。
+  **`from Crypto.Cipher import AES`**（PyCryptodome）。**必须** **`AES.new(key, AES.MODE_OFB, iv=iv)`**，勿用 **`MODE_CFB`** 变量冒充。
+  **`ct = cipher.encrypt(plain)`**；**`len(ct)` 必须等于 `len(plain)`**。**stdout 仅一行** `密文:` + hex + 换行。
+
+c: |
+  **【强制】本任务 C：必须用 OpenSSL EVP（可用 `-lcrypto`），禁止玩具实现冒充 AES-OFB。**
+  **OpenAI 本批死线（`aes-ofb-c`）：** **`main` 禁止** **`"Example plaintext"`** / **`unsigned char* plaintext = "..."`** / **仅 `strlen` 教材串** / **全零 `key`/`iv` 不调 `getenv`** —— **评测零分**。**必须** **`getenv("TEST_PLAINTEXT"|"TEST_KEY"|"TEST_IV")` → `hex_to_bytes` → 加密 → `printf("密文: ");` + hex + `\n`**；stdout **仅此一行**（与前述 **I/O 约定**一致）。
+  **链接错误高频：** 若 **`main` 调用 `remove_whitespace(env_plaintext)`** 等，须在 **`main` 上方**写 **`static void remove_whitespace(char *s) { ... }`** 完整实现，**禁止**只调用不定义（→ **`undefined reference to remove_whitespace`**）。
+  **`#include <openssl/evp.h>`**；**`EVP_CIPHER_CTX_new`** → **`EVP_EncryptInit_ex(ctx, EVP_aes_128_ofb(), NULL, key, iv)`** → **`EVP_CIPHER_CTX_set_padding(ctx, 0)`** → **`EVP_EncryptUpdate`/`EVP_EncryptFinal_ex`** → **`EVP_CIPHER_CTX_free`**。
+  **AES-128-OFB：** **`EVP_aes_128_ofb()`** + **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**；密钥/IV 各 **32 hex → 16 字节**。**禁止**粘贴 **DES** 的 **`IP`/`FP`/`S_BOX`** 或大段 Feistel（与 OFB 无关）。
+  **串题 DES（批量 `60f89201…49740000…` 等）：** 若文件含 **`EVP_des_ofb`**、**`des_ofb_encrypt`**、**`PC1`/`PC2`/`S_BOX[8][4][16]`**、**`unsigned char key[8]`**、**`key_len != 8 || iv_len != 8`** —— **整份是 DES，不是 AES**。**禁止**在 **AES-OFB** 任务使用 **8 字节密钥分支**。**禁止** **`main` 里注释掉 `des_ofb_encrypt`/加密调用**，却对 **`ciphertext` 未初始化就 `%02x` 打印**（→ **未定义行为**，尾部常出现 **`00`** 块）。
+  **DES 表壳 + 零加密（批量 `0000000000000000000000000000000000000000000000000000000000000000`）：** 仅粘贴 **`IP`/`S_BOX`**，`malloc(ciphertext)` 后 **`// 进行OFB加密` 无代码**，从未 **`EVP_Encrypt*`** / 未写入密文缓冲 → **stdout 常成全 `00`**。**禁止**；**须 EVP**。
+  **手搓 KeyExpansion 高频错（批量实测 `34e704ac…` ≠ `EA0B8FB8…`）：** **`Rcon`** 绝非 **`{0x01,0x02,0x03,…,0x0a}`** 连续递增；AES 标准 Rcon 为 **`0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80,0x1b,0x36`** 等。**错 Rcon → 整段密文错** → **禁止手搓，只用 EVP**。
+  **MixColumns 手搓错（批量 `01300cd3…`）：** 若把列混合写成 **四字节简单异或/截断**（**非** **GF(2^8)** 上 **×02/×03** 的 MDS 矩阵）→ **整轮 AES 错**。**须 EVP** 或 **按 FIPS-197 的 xtime/矩阵**；**禁止** 模板里 **“temp[0]^temp[1]^temp[2]^temp[3]” 式假 MixColumns**。
+  **禁止伪 AES（OpenAI 批量实测失败）：** **`static const unsigned char sbox[256]`** + 自写 **`KeyExpansion`/`Cipher`** —— 极易与 golden **不一致**。**除非题目要求完整手写轮函数，否则只用 EVP**。
+  **占位欺骗（批量 `a3929990…`）：** **`s_box[256] = { };` 内仅注释「省略」** → **非法初始化 / 编译失败**；**`key_expansion`/`aes_encrypt_block` 仅写「省略」无代码** → **与 OFB-8 组合仍不可能对上 `EA0B8FB8…`**。**禁止**；**须 EVP** 或 **完整可编译 S 盒与轮函数**。
+  **OFB 链（勿与 CFB 混）：** keystream **`O = E(K,I)`**，**`I ← O`**（整块 16B），**`C=P⊕O`**。**禁止**把密文反馈进移位寄存器（那是 **CFB**）。
+  **OFB-8 vs OFB-128（致命）：** 本评测 golden 与 **OpenSSL `EVP_aes_128_ofb` = OFB-128**（**每次输出完整 16B keystream**，再 **`feedback ← O`**）一致。**禁止** 只写 **OFB-8**：**`memmove(feedback,feedback+1,15)`** + **仅 `output_block[0]` XOR** —— 与 **`EA0B8FB8…`** **永远对不上**（批量 **`48e26113…`**）。
+  **OFB-8 + 占位块函数（批量 `03323930342f2732…`）：** 循环里 **`AES_encrypt_block(feedback,keystream)`** 后 **`ciphertext[i]^=keystream[0]`** + **`memmove(feedback,…)`**，但 **`sbox`/`Rcon`/`KeyExpansion`/`AES_encrypt_block` 仅注释「省略」** —— **假 AES** 或 **未定义**，密文呈 **稀疏可打印型 hex**，**≠ `EA0B8FB8…`**。**须 EVP** 或 **完整 FIPS 轮函数**。
+  **假块加密 + OFB-8（批量 `44574b49575153407e4653423e585a1d703c001a0306110e1b040f193b071757`）：** **`AES_encrypt(feedback,output_block,key,…)` 实为 16 字节内 `out[i]=in[i]^key[i%keysize]`**，循环里 **`ciphertext[i]=plaintext[i]^output_block[0]`** + **`memmove(feedback,…)`** —— **仍是伪 AES + OFB-8**，**须 EVP**。
+  **OFB-8 移位寄存器（OpenAI 批量 `13001c1e…`）：** 若循环里 **`memcpy(output_block, feedback)`** 后 **只对寄存器移位、从不调用 `AES_encrypt`/EVP** —— keystream 变成 **IV 自移位 ⊕ P**，**与 golden `EA0B8FB8…` 无关**。**每产生 1 字节 OFB 输出前须对当前 16B 状态做 AES 块加密**（或 **直接用 `EVP_aes_128_ofb`**）。
+  **空 `AES_encrypt_block`（批量 `42737871…` 等明文状 hex）：** 函数体**仅注释**、**不写 `output`** → **未定义行为**，`output_block` **未初始化** 仍 XOR → 密文异常。**禁止**；须 **EVP** 或 **可编译的完整块加密**。
+  **手搓 OFB 链致命 bug（批量 `00000000…` 前缀 + 尾部乱码）：** **`KeyExpansion`/`AES_Encrypt` 为空** 或 **加密结果未写入 `outputBlock`**，却 **`memcpy(feedback, outputBlock, 16)`** → **`outputBlock` 未初始化**、keystream 异常。**必须** 让块加密 **明确产出 16B 到 `outputBlock`** 再 **`memcpy(feedback, outputBlock, 16)`**，或 **只用 EVP**。
+  **`main`：** **禁止**只有注释 **`// Implement hex …`** 而无 **`hex_to_bytes` 填充** **`malloc` 缓冲**；未初始化即加密 → 密文乱套。
+  **`main` 仅算 `plaintext_len=strlen(env)/2` 却未调用 `hex_to_bytes` 写入 `plaintext`/`key`/`iv`（本批）：** 随后 **`KeyExpansion(key,…)`**、**`plaintext[i]^…`** 使用 **未初始化栈内存** → **编译可能通过但向量必败**，兼 **`Rcon`/`MixColumns` 手搓错**。**必须** 在 **任何加密调用前** 完成 **`hex_to_bytes(env_plaintext,plaintext,…)`**、**`hex_to_bytes(env_key,key,…)`**、**`hex_to_bytes(env_iv,iv,…)`**。
+  **`MixColumns` 写成 `unsigned char i, 0x0A, 0x0B, 0x0C, d`（本批）：** **字面量不能当变量名** → **`expected identifier before numeric constant`**；且 **`a,b,c,d` 未声明**、**`mul` 可能未定义**。**须** 合法声明 **`unsigned char a,b,c,d,i,t`** + **`xtime`**，或 **只用 `EVP_aes_128_ofb`**。
+  **OpenAI 批量：** **`main` 禁止** 写死 **`0x2b,0x7e,0x15…` 教材密钥** + **`unsigned char pt[64]="This is a 64-byte message..."`** 而不读 **`getenv("TEST_*")`** → **密文长度/向量与评测无关**（如 **64B 密文 vs golden 32B**）。**必须** 仅用环境变量 hex 解码后的长度打印密文，**`len(ciphertext)==len(plaintext)`**。
+  **`len` / `ciphertext_len` 只声明一次**；**`Update`/`Final`** 复用 **`outl`**，避免 **`redeclaration`**。
+  **`ciphertext` 指针/数组只声明一次：** **禁止** 先写 **`unsigned char *ciphertext = …`** 再写 **`unsigned char *plaintext, *ciphertext`**（→ **`redeclaration of 'ciphertext'`**）。**禁止** 在源码中**自拟** **`_aicrypto_ct_buf`**、**`_aicrypto_*`**（评测环境占位符，模型勿模仿）；密文缓冲请用 **`unsigned char out[1024]`** / **`malloc`** + 单一命名。
+  **同错再犯（本批 `aes-ofb-c` 编译失败）：** **`unsigned char *ciphertext = _aicrypto_ct_buf`** 后又声明 **`uint8_t ciphertext[64]`**（或 **`unsigned char ciphertext[...]`**）→ **`conflicting types for 'ciphertext'`**。**二选一**：只用指针 **或** 只用栈/数组，**禁止** 混用两名同类符号。
+  **`roundKeys[176]` + `#define AES_KEY_SIZE 32` / `AES_ROUNDS 14` → `*** stack smashing detected ***`（本批 `aes-ofb-c`）：** 手写 **`KeyExpansion`** 若按 **AES-256** 写循环上界 **`i < 16 * (Nr+1)`** 且 **`Nr=14`**，会向 **`roundKeys` 写入约 240 字节**；但 **`AES_OFB_encrypt` 只声明 `unsigned char roundKeys[176]`**（**仅 AES-128 轮密钥大小**）→ **越界写栈**。**评测为 AES-128-OFB**（**16 字节密钥**），**须** **`Nk=4, Nr=10`** 且 **`roundKeys` 至少 `176` 字节并与扩展循环一致**，**禁止** 混用 **256-bit 宏/扩展长度** 与 **176 字节缓冲**；**最稳：只用 `EVP_aes_128_ofb`**。
+  **`Nb` undeclared（本批 `aes-ofb-c` 编译失败）：** 照抄教材出现 **`for (; i < Nb * (Nr + 1); i++)`**、**`unsigned char w[Nb * (Nr + 1)][4][4]`** 却 **未 `#define Nb 4`**（128-bit 分组恒 **Nb=4 列字**）→ **`error: 'Nb' undeclared`**。**须** 在 **`Nk`/`Nr` 旁补 `#define Nb 4`**，或 **删掉对 `Nb` 的依赖改用已知常量**。**半成品手搓仍易错 `Rcon`/OFB 链 —— 禁止依赖；只用 `EVP_aes_128_ofb`**。
+  **输出截断 / EOF（本批 `aes-ofb-c`）：** 先生成 **`mul2[256]`、`mul3[256]`、`sbox`** 占满篇幅，再写 **`void KeyExpansion(unsigned char`** —— 响应在形参处 **被截断** → **`expected ';', ',' or ')' at end of input`**（行末停在未闭合的 **`(`**）。**禁止** 以大段查找表起手；**只用 `EVP_aes_128_ofb`**，**单文件宜 < ~120 行**，保证 **一次输出完整可编译**。
+  **`printf("密文: ");`** 再 **`%02x`** 打印 **全部密文字节**；**禁止**只输出裸 hex、无 **`密文:`** 行首标记（与评测约定一致）；**`fflush(stdout);`**
+  **完整正确参考（EVP AES-128-OFB-128，与 golden `EA0B8FB8…` 同源；链接 `-lcrypto`）：** 下列程序可在装好 OpenSSL 的机器上**单独编译运行**，评测时替换为你的 **`hex_to_bytes`/空白处理** 即可，**禁止**再手写 `AES_encrypt`/OFB-8。
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <openssl/evp.h>
+
+  static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {
+      int n = 0;
+      while (*hex && *(hex + 1) && n < max_out) {
+          unsigned int v;
+          if (sscanf(hex, "%2x", &v) != 1) break;
+          out[n++] = (unsigned char)v;
+          hex += 2;
+      }
+      return n;
+  }
+
+  int main(void) {
+      const char *ep = getenv("TEST_PLAINTEXT");
+      const char *ek = getenv("TEST_KEY");
+      const char *ei = getenv("TEST_IV");
+      if (!ep || !ek || !ei) return 1;
+
+      unsigned char pt[8192], key[16], iv[16];
+      int pt_len = hex_to_bytes(ep, pt, (int)sizeof pt);
+      int k_len = hex_to_bytes(ek, key, (int)sizeof key);
+      int iv_len = hex_to_bytes(ei, iv, (int)sizeof iv);
+      if (pt_len <= 0 || k_len != 16 || iv_len != 16) return 1;
+
+      EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+      if (!ctx) return 1;
+      unsigned char obuf[8192 + 32];
+      int ol = 0, tl = 0;
+
+      if (EVP_EncryptInit_ex(ctx, EVP_aes_128_ofb(), NULL, key, iv) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      EVP_CIPHER_CTX_set_padding(ctx, 0);
+      if (EVP_EncryptUpdate(ctx, obuf, &ol, pt, pt_len) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      if (EVP_EncryptFinal_ex(ctx, obuf + ol, &tl) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      ol += tl;
+      EVP_CIPHER_CTX_free(ctx);
+
+      printf("密文: ");
+      for (int i = 0; i < ol; i++) printf("%02x", obuf[i]);
+      printf("\n");
+      fflush(stdout);
+      return 0;
+  }
+  ```
+
+cpp: |
+  **【强制】本任务 C++：必须用 OpenSSL EVP，禁止手写「AES_encrypt」玩具类。**
+  **`main` 禁止** 示例 **`"Example"`** 串 / **不调 `getenv("TEST_*")`** / **stdout 无 `密文:`**（与 C **OpenAI 本批死线**同）。**手搓循环若写 `Nb * (Nr+1)`**：须 **`constexpr int Nb = 4`**（或等价常量），否则 **`Nb` 未声明** 编译失败。
+  **禁止** 生成 **`std::array`/超大静态表** 占满 token 后 **`KeyExpansion` 半截** —— 与 C 条 **截断** 同戒；**优先 `EVP_aes_128_ofb`**。
+  **`#include <openssl/evp.h>`**；流程同 C：**`EVP_aes_128_ofb()`** + **`EVP_CIPHER_CTX_set_padding(ctx,0)`** + Update/Final。
+  **手搓时：** **`Nk`/`Nr` 必须与密钥长度一致**（**128-bit** → **`Nk=4, Nr=10`**）；**禁止** 照抄 **`Nk=8, Nr=14`（256-bit）** 模板却用 **16 字节** `TEST_KEY` + **空 `KeyExpansion`**（易与 **明文直通** 的 OFB 组合）。
+  **`std::array`/`unsigned char roundKeys[176]` + 256-bit `KeyExpansion` 展开（本批运行时 `stack smashing`）：** 与 C 条相同 —— **`Nr=14` 的扩展写入长度** 不得超过 **`roundKeys` 实际容量**；**评测密钥 128-bit**，**优先 `EVP_aes_128_ofb`**，**禁止** 宏写 **AES-256** 却分配 **176B** 轮密钥数组。
+  **手搓 AES 结构性错误（批量 `b9966a5a561a935972de79632d8cdaa1415023b9ef7f6b9275a83f7edb598e6c`）：** **`Rcon` 写成 `0x00,0x01,…,0x0a` 递增**（非 FIPS **Rcon**）；**`shiftRows` 行列索引乱套**（如 **`temp[r+4*c]=state[r+4*((c+r)%4)]`**）→ **轮函数与 golden 无关**。**禁止依赖半成品手搓；须 `EVP_aes_128_ofb`**。
+  **错 `Rcon` + 类 OFB 壳（批量 `d7142aefb3bcd2a0aa472e85d8da4920555e61bf66c9bd362b5f8924df785f22`）：** **`encrypt` 内逐字节 `Cipher(feedback)`**、**`ciphertext[i]^=output_block[i%16]`**、**每 16 字节才 `feedback=output_block`** —— 外壳似 OFB-128，但 **`Rcon`/`KeyExpansion`/`AddRoundKey` 任一错** → **整块 keystream 错**。**须 EVP**。
+  **OpenAI 典型失败 `13001c1e…`：** **`void aes_encrypt(...){ output = input; }`**、**`memcpy(output, input, 16)`**、**`// Placeholder`**、**`for` 内仅 `output[i]=input[i]`** —— **等于未加密**，密文呈**可打印 ASCII 型 hex**，与 golden **`EA0B8FB8…`** **完全不符** → **禁止**；**必须** `EVP_Encrypt*` 写出真实 keystream。
+  **`std::vector` + 恒等块加密（同前缀 `13001c1e…`）：** 私有 **`aes_encrypt(block)`** 实为 **`encrypted_block[i]=block[i]`**，循环里 **`ciphertext[i]^=keystream[0]`** 且 **`feedback.erase(begin()); feedback.push_back(keystream[0])`** —— **OFB-8 且未做 AES**。**须 EVP**。
+  **类 `AES::encryptBlock` 为 Dummy（`output[i]=input[i]`）+ `AES_OFB` 每 16B 才 `feedback=keystream`：** 等价于 **OFB 链未执行真实 AES**，实测前缀 **`13001c1e…`**。**须 EVP**。
+  **手搓 OFB 若不用 EVP：** 每 **16 字节** 只对 **`feedback` 调用一次**块加密得到 **`O`**，**本块** `c[i]=p[i]^O[i%16]`，**整块结束后再** `feedback=O`；**禁止**在 **`AES_encrypt` 为占位**时继续套 OFB 循环（必错）。
+  **`encrypt()` 内逐字节循环 + `memmove(feedback)+keystream[0]`（OFB-8）** → 见上文 **OFB-128** 要求；**须改为按 16B 块 OFB-128 或改用 EVP**。
+  **类 `AES_OFB::encrypt` 高频错：** 内层 **`for (j)`** 里 **`feedback[j] = block[j]`** / **`feedback[j]=keystream[j]`** —— **逐字节**覆盖寄存器，**不等价于** OFB-128 的 **`feedback ← 整块 O`**（批量与其它「假 AES」组合仍得 **`4469707269676944…`**）。**必须** 在本 **16 字节** XOR **结束后** **`memcpy(feedback, keystream_block, 16)`**，**禁止**在 **j 循环内**逐字节写 **`feedback`**。
+  **禁止** `aes_encrypt_block` / **`block[i] ^= key[i % key.size()]`**、**类成员 `aes_encrypt`：`output[i]=input[i]^key[i%key.size()]`**（→ **假 AES**，批量 **`44574b49…`** 等 **ASCII 状 hex** + **OFB-8**）。
+  **假 keystream（批量 `447e617f55624342122327215634172370152a2c0135010c77617b7a536b5a69`）：** 内层循环 **`keystream[j]=feedback[j]^key_[j%key_.size()]`**、**`feedback[j]^key[j%16]`** —— **不是 AES 块输出**，再套 **OFB-8** `rotate` **永远对不上 `EA0B8FB8…`**。**须 `EVP_aes_128_ofb`** 或 **每字节前对整 16B feedback 做标准 AES 加密得 O**。
+  **演示型假 OFB（批量 `44697072696769445d70687900616a39703c001a0306110e1b040f193b071757` 等）：** **`aes_encrypt_block(key,block)` 实为 `block[i]^=key[i%…]`**，且 **`aes_ofb_encrypt` 每 16B 把 `iv`/`output_block` 当块反复 XOR key**（**非** SubBytes/MixColumns）—— **不是 AES**；另：**`AES_encrypt`/`encryptBlock` 实为 `buf[i]=input[i]^key[i%16]`** 再套错误 **feedback**。**须 EVP**。
+  **「Simulate AES」+ `feedback ⊕ key`（同前缀 `4469707269676944…`）：** 注释写 **模拟块加密**，实为 **`std::copy(feedback→buffer)` 后 `xor_bytes(buffer, key, feedback)`** —— **keystream = 寄存器 ⊕ 密钥**，**完全未调 AES** → **可打印英文短语型 hex**。**须 `EVP_aes_128_ofb`**，**禁止** 用 **密钥字节** 冒充 **Rijndael 轮输出**。
+  **空壳 AES + OFB（批量 `43727970746f67726170687920616e64204e6574776f726b5365637572697479`）：** **`KeyExpansion`/`EncryptBlock` 仅注释无实现**、**输出块全零**，或**显式占位** **`ciphertext[i]=plaintext[i]`** / **`// 模拟`** / 「实际中应加密」却**不调 EVP** → **`ciphertext[i] == plaintext[i]`**，stdout 实为 **明文 ASCII 的 hex**（可读短语）。**须 EVP**。
+  **OFB：** 下一轮 **反馈 = 上一轮 keystream 整块 16B**（**非**密文、**非**逐字节 `feedback[j]`）。
+  **优先单文件 EVP**；**禁止**拆类导致 **`relocation … read-only`**。**勿重复声明** `len` / `ciphertext_len`。**`std::cout.flush()`**
+  **完整正确参考（EVP AES-128-OFB，与 C 同源；勿再手写类 AES）：**
+  ```cpp
+  #include <cstdio>
+  #include <cstdlib>
+  #include <cstring>
+  #include <openssl/evp.h>
+
+  static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {
+      int n = 0;
+      while (*hex && *(hex + 1) && n < max_out) {
+          unsigned int v;
+          if (std::sscanf(hex, "%2x", &v) != 1) break;
+          out[n++] = static_cast<unsigned char>(v);
+          hex += 2;
+      }
+      return n;
+  }
+
+  int main() {
+      const char *ep = std::getenv("TEST_PLAINTEXT");
+      const char *ek = std::getenv("TEST_KEY");
+      const char *ei = std::getenv("TEST_IV");
+      if (!ep || !ek || !ei) return 1;
+
+      unsigned char pt[8192], key[16], iv[16];
+      int pt_len = hex_to_bytes(ep, pt, (int)sizeof pt);
+      int k_len = hex_to_bytes(ek, key, (int)sizeof key);
+      int iv_len = hex_to_bytes(ei, iv, (int)sizeof iv);
+      if (pt_len <= 0 || k_len != 16 || iv_len != 16) return 1;
+
+      EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+      if (!ctx) return 1;
+      unsigned char obuf[8192 + 32];
+      int ol = 0, tl = 0;
+
+      if (EVP_EncryptInit_ex(ctx, EVP_aes_128_ofb(), NULL, key, iv) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      EVP_CIPHER_CTX_set_padding(ctx, 0);
+      if (EVP_EncryptUpdate(ctx, obuf, &ol, pt, pt_len) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      if (EVP_EncryptFinal_ex(ctx, obuf + ol, &tl) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      ol += tl;
+      EVP_CIPHER_CTX_free(ctx);
+
+      std::printf("密文: ");
+      for (int i = 0; i < ol; i++) std::printf("%02x", obuf[i]);
+      std::printf("\n");
+      std::fflush(stdout);
+      return 0;
+  }
+  ```

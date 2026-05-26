@@ -1,0 +1,136 @@
+{
+  "batch": "failing_slots",
+  "distillation_keep": true,
+  "provider": "qwen_coder_local",
+  "started_at_utc": "2026-05-23T07:18:15.546223+00:00",
+  "failing_slots_total": 9,
+  "force_regen_no_db": 7,
+  "configs_count": 8,
+  "since_used": "2026-05-04",
+  "only_pending": true,
+  "pending_filter_stats": {
+    "input": 2,
+    "pending": 1,
+    "no_record": 1,
+    "retest_fail": 0,
+    "retest_pass_skip": 1,
+    "skip_disabled": 0,
+    "force_regen_no_db": 7
+  },
+  "web_batch": true,
+  "cases": [
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1199,
+      "case_id": "aes-ecb-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1766,
+      "case_id": "aes-ecb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1633,
+      "case_id": "des-cbc-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 3341299,
+      "case_id": "des-cfb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1128,
+      "case_id": "des-ecb-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1067,
+      "case_id": "des-ofb-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1735,
+      "case_id": "des-ofb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "success": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:4:22: warning: character constant too long for its type\n    4 |     key = key.encode('utf-8')\n      |                      ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:5:34: warning: character constant too long for its type\n    5 |     plaintext = plaintext.encode('utf-8')\n      |                                  ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:7:7: error: invalid preprocessing directive #Convert\n    7 |     # Convert key and plaintext to bytes\n      |       ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:11:7: error: invalid preprocessing directive #Pad\n   11 |     # Pad plaintext to be a multiple of 16 bytes\n      |       ^~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:17:7: error: invalid preprocessing directive #Initialize\n   17 |     # Initialize the ciphertext\n      |       ^~~~~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:20:7: error: invalid preprocessing directive #Perform; did you mean #error?\n   20 |     # Perform encryption\n      |       ^~~~~~~\n      |       error\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:23:53: warning: multi-character character constant [-Wmultichar]\n   23 |         block_int = int.from_bytes(block, byteorder='big')\n      |                                                     ^~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:25:11: error: invalid preprocessing directive #Add\n   25 |         # Add round keys and perform substitution and permutation\n      |           ^~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:30:56: warning: multi-character character constant [-Wmultichar]\n   30 |         ciphertext += block_int.to_bytes(16, byteorder='big')\n      |                                                        ^~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:32:48: warning: character constant too long for its type\n   32 |     return base64.b64encode(ciphertext).decode('utf-8')\n      |                                                ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:35:22: warning: character constant too long for its type\n   35 |     key = key.encode('utf-8')\n      |                      ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:38:7: error: invalid preprocessing directive #Convert\n   38 |     # Convert key and ciphertext to bytes\n      |       ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:42:7: error: invalid preprocessing directive #Initialize\n   42 |     # Initialize the plaintext\n      |       ^~~~~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:45:7: error: invalid preprocessing directive #Perform; did you mean #error?\n   45 |     # Perform decryption\n      |       ^~~~~~~\n      |       error\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:48:53: warning: multi-character character constant [-Wmultichar]\n   48 |         block_int = int.from_bytes(block, byteorder='big')\n      |                                                     ^~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:50:11: error: invalid preprocessing directive #Add\n   50 |         # Add round keys and perform inverse substitution and permutation\n      |           ^~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:55:55: warning: multi-character character constant [-Wmultichar]\n   55 |         plaintext += block_int.to_bytes(16, byteorder='big')\n      |                                                       ^~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:57:7: error: invalid preprocessing directive #Remove\n   57 |     # Remove padding\n      |       ^~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:61:29: warning: character constant too long for its type\n   61 |     return plaintext.decode('utf-8')\n      |                             ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:63:3: error: invalid preprocessing directive #Helper\n   63 | # Helper functions for substitution and permutation\n      |   ^~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:65:7: error: invalid preprocessing directive #Implement\n   65 |     # Implement the SM4 substitution and permutation logic here\n      |       ^~~~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:69:7: error: invalid preprocessing directive #Implement\n   69 |     # Implement the inverse SM4 substitution and permutation logic here\n      |       ^~~~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:72:3: error: invalid preprocessing directive #Example\n   72 | # Example usage\n      |   ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:1:1: error: ‘import’ does not name a type\n    1 | import base64\n      | ^~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:1:1: note: C++20 ‘import’ only available with ‘-fmodules-ts’\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:135:1: error: jump to label ‘err’\n  135 | err:\n      | ^~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:122:82: note:   from here\n  122 |     if (key_len != 16 && key_len != 32) { fprintf(stderr, \"bad key len\\n\"); goto err; }\n      |                                                                                  ^~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:123:23: note:   crosses initialization of ‘const EVP_CIPHER* cipher’\n  123 |     const EVP_CIPHER *cipher = (key_len == 16) ? EVP_aes_128_ecb() : EVP_aes_256_ecb();\n      |                       ^~~~~~\n",
+      "vector_status": "未通过",
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:4:22: warning: character constant too long for its type\n    4 |     key = key.encode('utf-8')\n      |                      ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:5:34: warning: character constant too long for its type\n    5 |     plaintext = plaintext.encode('utf-8')\n      |                                  ^~~~~~~\n/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:7:7: error: invalid",
+      "total_ms": 8995039,
+      "case_id": "sm4-ofb-cpp",
+      "generation_ok": true
+    }
+  ],
+  "finished_at_utc": "2026-05-23T07:18:15.546247+00:00"
+}

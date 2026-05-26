@@ -1,0 +1,51 @@
+{
+  "algorithm": "RSA",
+  "provider": "qwen_coder_local",
+  "started_at_utc": "2026-05-16T10:06:24.315457+00:00",
+  "configs_count": 3,
+  "since_used": "2026-05-04",
+  "only_pending": false,
+  "web_batch": true,
+  "cases": [
+    {
+      "config": {
+        "algorithm": "RSA",
+        "language": "python"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 2411,
+      "case_id": "rsa-python",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "RSA",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1787,
+      "case_id": "rsa-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "RSA",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1867,
+      "case_id": "rsa-cpp",
+      "generation_ok": true
+    }
+  ],
+  "finished_at_utc": "2026-05-16T10:06:24.315484+00:00"
+}

@@ -1,0 +1,156 @@
+{
+  "protocol": "DES_12_grid_ECB_CBC_CFB_OFB_x_python_c_cpp",
+  "arm": "seccoder_repro",
+  "inputs_dir": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out",
+  "rates_percent": {
+    "GSR": 100.0,
+    "VPR": 66.66666666666666,
+    "FTPR": 66.66666666666666
+  },
+  "rows": [
+    {
+      "task_id": "DES_ECB_python",
+      "mode": "ECB",
+      "language": "python",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_ecb.py",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_4edf009e62e04ff49ddbb5cc77b70f3d.py\", line 7, in <module>\n    from Crypto.Cipher import DES\nModuleNotFoundError: No module named 'Crypto'\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_ECB_c",
+      "mode": "ECB",
+      "language": "c",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_ecb.c",
+      "missing": false,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "validation_hint": null,
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_ECB_cpp",
+      "mode": "ECB",
+      "language": "cpp",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_ecb.cpp",
+      "missing": false,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "validation_hint": null,
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CBC_python",
+      "mode": "CBC",
+      "language": "python",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_cbc.py",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_505adbb454de4b95bbb7fed92a9cd1a1.py\", line 7, in <module>\n    from Crypto.Cipher import DES\nModuleNotFoundError: No module named 'Crypto'\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CBC_c",
+      "mode": "CBC",
+      "language": "c",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_cbc.c",
+      "missing": false,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "validation_hint": null,
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CBC_cpp",
+      "mode": "CBC",
+      "language": "cpp",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_cbc.cpp",
+      "missing": false,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "validation_hint": null,
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CFB_python",
+      "mode": "CFB",
+      "language": "python",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_cfb.py",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_688e798dc2a746f7869dec38bd05bc2d.py\", line 7, in <module>\n    from Crypto.Cipher import DES\nModuleNotFoundError: No module named 'Crypto'\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CFB_c",
+      "mode": "CFB",
+      "language": "c",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_cfb.c",
+      "missing": false,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "validation_hint": null,
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CFB_cpp",
+      "mode": "CFB",
+      "language": "cpp",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_cfb.cpp",
+      "missing": false,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "validation_hint": null,
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_OFB_python",
+      "mode": "OFB",
+      "language": "python",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_ofb.py",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_99835b8676c045229ae5121912f67fe9.py\", line 7, in <module>\n    from Crypto.Cipher import DES\nModuleNotFoundError: No module named 'Crypto'\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_OFB_c",
+      "mode": "OFB",
+      "language": "c",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_ofb.c",
+      "missing": false,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "validation_hint": null,
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_OFB_cpp",
+      "mode": "OFB",
+      "language": "cpp",
+      "file": "/mnt/d/aicrypto-helper/experiments/seccoder_des_out/des_ofb.cpp",
+      "missing": false,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "validation_hint": null,
+      "test_hint": null
+    }
+  ]
+}

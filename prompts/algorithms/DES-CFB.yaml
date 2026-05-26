@@ -1,0 +1,31 @@
+# DES-CFB模式特定prompt
+# 注意：DES算法的共同内容已提取到 prompts/algorithms/DES/common.yaml
+# C和C++语言特定的内容已分离到 prompts/algorithms/c/DES-CFB.yaml 和 prompts/algorithms/cpp/DES-CFB.yaml
+# prompt_loader.py会自动加载这些内容
+
+algorithm_specific: |
+  **DES-CFB模式说明：**
+  - CFB（Cipher Feedback）模式将分组密码转换为流密码
+  - 使用DES加密函数生成密钥流，然后与明文异或
+  - 需要8字节（64位）的IV
+  - 支持CFB-8（每次1字节）和CFB-64（每次8字节）两种变体
+  - **🚨🚨🚨 重要：标准测试数据使用CFB-8模式（每次处理1字节）！🚨🚨🚨**
+  - **必须使用 `EVP_des_cfb8()` 而不是 `EVP_des_cfb()`！**
+  
+  **CFB模式特定实现要求：**
+  - ✅ **必须使用 `EVP_des_cfb8()` 获取DES-CFB-8密码对象（标准测试数据使用CFB-8模式）**
+  - ❌ **错误：不要使用 `EVP_des_cfb()`（这是CFB-64模式，与测试数据不匹配）**
+  - ✅ **必须从环境变量TEST_IV读取IV，如果不存在则使用全零IV（8字节）**
+  - ✅ **输出时只输出密文，绝对不要输出IV！**
+
+mode_specific: |
+  **CFB模式实现细节（必须严格遵循）：**
+  
+  **注意：C和C++语言特定的实现要求已分离到以下文件：**
+  - `prompts/algorithms/c/DES-CFB.yaml` - C语言特定内容
+  - `prompts/algorithms/cpp/DES-CFB.yaml` - C++语言特定内容
+  - prompt_loader.py会自动根据语言加载对应的内容
+  
+  **通用实现要求：**
+  - **CFB模式：**标准测试数据使用CFB-8模式（每次处理1字节），必须使用 `EVP_des_cfb8()` 函数
+  - **IV处理：**IV必须为8字节，从环境变量TEST_IV读取，如果不存在则使用全零

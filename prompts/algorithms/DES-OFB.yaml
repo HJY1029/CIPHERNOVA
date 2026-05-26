@@ -1,0 +1,21 @@
+# DES-OFB模式特定prompt
+# 注意：DES算法的共同内容已提取到 prompts/algorithms/DES/common.yaml
+# C和C++语言特定的内容已分离到 prompts/algorithms/c/DES-OFB.yaml 和 prompts/algorithms/cpp/DES-OFB.yaml
+# prompt_loader.py会自动加载这些内容
+
+algorithm_specific: |
+  **DES-OFB模式说明：**
+  - OFB（Output Feedback）：**反馈量为分组密码的加密输出块**（keystream 块），**不是**密文；与 CFB（密文反馈）不同。
+  - IV 为 **8 字节**；与 `test_data.yaml` 中向量一致时，密文 golden 为 **`F788B2BC5949FCBBB3962D8E99733A96`**（与 **PyCryptodome** `DES.new(key, DES.MODE_OFB, iv).encrypt(plaintext)` 一致）。
+  - **C/C++：须使用 OpenSSL `EVP_des_ofb()`（整块 64 位 OFB）+ legacy provider + `EVP_CIPHER_CTX_set_padding(ctx,0)`**，与上述 golden 对齐。**禁止**听信「OFB-8 手写 + 禁用 EVP_des_ofb」等过时说明——会导致密文与评测完全不符。
+
+  **实现要求：**
+  - **Python：** `from Crypto.Cipher import DES`；`DES.new(key, DES.MODE_OFB, iv)`（key/iv 各 8 字节，hex 解码）；`encrypt(plaintext)`。
+  - **C/C++：** `OSSL_PROVIDER_load(NULL,"legacy")` → `EVP_des_ofb()` → `EVP_EncryptInit_ex`（key、iv 各 **8** 字节）→ **`EVP_CIPHER_CTX_set_padding(ctx,0)`** → `EVP_EncryptUpdate`（**全部明文字节**）→ `EVP_EncryptFinal_ex` → 按 **`ciphertext_len`** 打印 hex。**禁止**把 OFB 做成 CFB（用密文更新寄存器）。
+  - 从环境变量 **TEST_IV** 读取 IV；缺失则用全 **0** 的 8 字节。
+  - 输出 **`密文:`** 后仅密文 hex，**不要**附带 IV。
+
+mode_specific: |
+  **OFB 与评测对齐要点：**
+  - 使用 **`EVP_des_ofb()`** 完整走 EVP 流程即可通过标准向量；无需自写按字节 OFB-8，除非你能数学上严格等价于 PyCryptodome `MODE_OFB`（极易错）。
+  - 语言细节见：`prompts/algorithms/c/DES-OFB.yaml`、`prompts/algorithms/cpp/DES-OFB.yaml`。

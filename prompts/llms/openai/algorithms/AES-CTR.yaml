@@ -1,0 +1,15 @@
+# OpenAI · AES-CTR（modes.CTR 向量）
+supplement: |
+  **必须使用** `test_data.yaml` → `AES.modes.CTR` 的 key/iv/plaintext，**不是**默认 AES 段 32 字节明文。  
+  golden：**`874D6191B620E3261BEF6864990DB6CE9806F66B7970FDFF8617187BB9FFFDFF5AE4DF3EDBD5D35E5B4F09020DB03EAB1E031DDA2FBE03D1792170A0F3009CEE`**。
+
+c: |
+  **`EVP_aes_128_ctr()`** + **`set_padding(0)`**；IV 为 **16 字节（32 hex）**，与 **`EVP_aes_128_ctr`** 的 **128 位初始计数器（大端）** 一致；**禁止** 自造与 OpenSSL 不符的计数器增量导致密文以 **`0a0b6797…`** 等偏离 golden。
+  **golden：** **`874D6191B620E326…`**（**128 hex**）。`Update`/`Final` 后输出长度须等于 **明文长度**。
+  禁止 `#define 8`。
+
+python: |
+  **CTR 向量与 ECB 不同：** key **32 hex**、IV **32 hex（16B）**、明文 **128 hex（64B）**；golden 以 **`874d6191…`** 开头。
+  **禁止** 仅用 IV 前 8 字节当 nonce 且不设置 **`initial_value`**（会得到 **`67ee0554…`** 等错误）。
+  **推荐：** `from Crypto.Util.Counter import Counter` → **`ctr = Counter.new(128, initial_value=int.from_bytes(iv_bytes, 'big'))`** → **`AES.new(key, AES.MODE_CTR, counter=ctr)`**；与 **`EVP_aes_128_ctr`** 一致后再 `encrypt`。
+  **`print("密文: " + ct.hex())`**，stdout **勿**多行提示。

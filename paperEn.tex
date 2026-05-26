@@ -1,0 +1,407 @@
+%%
+% Springer LNCS template (match 978-981-97-8798-2 sample layout).
+% Compile: pdflatex "main copy 2.tex"; bibtex "main copy 2"; pdflatex x2.
+% Requires: llncs.cls, splncs04.bst (TeX Live: texlive-publishers; or Springer/CTAN).
+\documentclass[12pt]{llncs}
+
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.2cm,right=2.2cm]{geometry}
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{float}
+\usepackage{amsmath,amssymb}
+\usepackage[square,numbers]{natbib}
+\usepackage{enumitem}
+\setlist[enumerate]{leftmargin=1.2em, itemindent=0em, labelwidth=1em, labelsep=0.4em}
+\setlist[itemize]{leftmargin=1.2em, labelsep=0.4em}
+\usepackage[table]{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue}
+\usepackage{caption}
+\captionsetup[figure]{aboveskip=4pt, belowskip=4pt}
+\captionsetup[table]{aboveskip=4pt, belowskip=4pt}
+\setlength{\textfloatsep}{6pt plus 2pt minus 1pt}
+\setlength{\intextsep}{6pt plus 2pt minus 1pt}
+\usepackage{setspace}
+\setstretch{0.96}
+
+\begin{document}
+\title{CIPHERNOVA---A Test Feedback-Driven and Hierarchical LLM-Prompt-Based Approach for Cryptographic Code Generation}
+\titlerunning{CIPHERNOVA---Test Feedback and Hierarchical Prompts for Crypto Code Generation}
+
+\author{Jia-Yi He\inst{1} \and Xiao Lan\thanks{Corresponding author: lanxiao@scu.edu.cn}}
+\institute{School of Cyber Science and Engineering, Sichuan University, Chengdu, Sichuan, China\\
+\email{2022141500268@stu.scu.edu.cn, lanxiao@scu.edu.cn}}
+\authorrunning{J.\ He and X.\ Lan}
+\maketitle
+
+\begin{abstract}
+Traditional LLMs lack domain tuning for cryptographic code generation. We present a systematic approach combining (1)~test-feedback improvement with standard vectors and targeted repair, (2)~four-layer composable prompts with 101 templates and \emph{failure-driven refinement}, (3)~four-class error taxonomy, (4)~offline local-model support, and (5)~\textbf{teacher exemplar injection} for local inference without training. On 159 cases, cloud backends reach strong extraction and functional pass rates on our benchmark (local 7B at 88.89\% grid-defined FTPR with 100\% GSR/VPR under the same protocol). Prompt ablations (\tablename~\ref{tab:ablation_prompt}) show large gains over a single general prompt. Recurring-failure-driven prompt work was the main cost driver. Conclusions are limited to our harness and iteration budget.
+\end{abstract}
+
+\keywords{Cryptographic code generation \and Large Language Model \and Test feedback \and Prompt engineering \and Error pattern classification \and Code self-improvement}
+
+\section{Introduction}
+\subsection{Research background and problem statement}
+Crypto implementations mix heavy math with strict NIST/FIPS conformance; small mistakes in padding or IVs can break deployments. Non-experts lean on docs and libraries but face cost and risk trade-offs. Copilot-style LLMs ease generic coding yet mishandle padding, IVs, and key schedules; generic prompts and Pass@k-style metrics miss vector-level compliance. We therefore target crypto-specific LLM generation beyond ordinary code synthesis.
+
+\subsection{Security implications of incorrect cryptographic code}
+\label{subsec:security_implications}
+IV misuse, ECB abuse, weak KDFs, and padding bugs routinely break deployments (e.g., CVE-2023-44690). Our contribution is to \emph{reduce} how often new LLM-generated crypto code violates standards---via tests, domain prompts, and pattern-based repair---rather than to audit legacy code.
+
+\subsection{Research Objectives and Main Contributions}
+We propose test-feedback-driven, hierarchical-prompt crypto code generation. Contributions:
+\begin{itemize}
+    \item \textbf{Test feedback with four error classes} and a six-step loop; tests drive type identification and repair guidance.
+    \item Design \textbf{hierarchical composable prompts} (general → algorithm → LLM → language), 101 templates, and \textbf{failure-driven refinement}---the dominant engineering effort behind reported pass rates.
+    \item A crypto generation stack compatible with \textbf{offline locals} (e.g., Qwen2.5-Coder:7B) for latency--privacy trade-offs without public APIs.
+    \item \textbf{Teacher exemplar injection} for locals---retrieve passing cloud code by (algorithm, mode, language) as few-shot or improvement hints without retraining.
+\end{itemize}
+Evaluations use 159 cases across four algorithms and three languages.
+
+\subsection{Organizational structure of the paper}
+Section~2 reviews related work; Section~3 presents the method; Section~4 reports experiments; Section~5 concludes with limitations and outlook.
+
+\section{Related Work}
+We organize prior work along general code LLMs, domain-specific generation, prompt engineering, and self-improvement.
+
+\subsection{Code Generation with Large Language Models}
+CodeGen~\cite{codegen1,codegen2}, Codex~\cite{codex}, CodeT5~\cite{codet5,codet5plus}, InCoder~\cite{incoder}, StarCoder~\cite{starcoder}, WizardCoder~\cite{wizardcoder}, Code Llama~\cite{codellama}, DeepSeek-Coder~\cite{deepseekcoder}, CodeBERT~\cite{codebert}, GraphCodeBERT~\cite{graphcodebert}, and CodeXGLUE~\cite{codexglue} advance general code generation and benchmarks; corpora carry little cryptography and rarely encode standard-vector constraints. \textbf{We keep cloud and local LLMs as backbones and add layered prompts plus a test loop without retraining.}
+
+\subsection{Domain-Specific Code Generation}
+EncGPT~\cite{encgpt}, CryptoLLM~\cite{cryptollm}, and SecCoder~\cite{seccoder} show value in domain injection and secure code, yet systematic crypto error taxonomies and vector-driven loops remain thin. \textbf{We encode error categories into prompts and repair templates per algorithm and language.}
+
+\subsection{Prompt Engineering}
+CoT~\cite{cot,zeroshotcot}, Plan-and-Solve~\cite{planandsolve}, few-shot~\cite{fewshot,progsynprompt}, retrieval~\cite{coderagbench,repolevelprompt}, hierarchical~\cite{hierprompt}, and Self-Refine~\cite{selfrefine} improve prompting but not crypto-specific four-layer stacks. \textbf{We instantiate general--algorithm--LLM--language layers with failure-driven refinement.}
+
+\subsection{Code Self-Improvement Techniques}
+Self-Edit~\cite{selfedit}, RefineCoder~\cite{refinecoder}, AgentCoder~\cite{agentcoder}, execution-feedback~\cite{cycle,rlef}, repair agents~\cite{repairagent,recode}, and surveys~\cite{secsurvey,securecodegen} study generate--verify--improve loops; few map crypto test signals to categorical repairs. \textbf{Our six-step loop drives repair from crypto error classes and templates.} Cross-paper comparisons must align harnesses and iteration budgets.
+
+
+\subsection{Summary of Research Gaps}
+\label{subsec:research_gaps}
+
+To our knowledge, no prior work unifies a test-feedback loop, hierarchical composable prompts for cryptography, and systematic crypto error classification. We address these jointly.
+
+\section{Method Design}
+Building on domain injection~\cite{encgpt,seccoder}, hierarchical prompts~\cite{hierprompt,selfrefine}, and improvement loops~\cite{selfedit,refinecoder,agentcoder}, Figure~\ref{fig:framework} sketches the stack---user/CLI, FastAPI, core services (\emph{CryptoAgent} composes prompts and runs harnesses; \emph{LLMAdapter} routes cloud vs.\ local Qwen2.5-Coder; \textbf{Module~A} closes the loop on failure), tools (\textbf{Module~B} prompts, \textbf{Module~C} error labels), and external models. Local paths support teacher retrieval (Section~\ref{subsec:distillation}).
+
+\begin{figure}[htbp] 
+  \centering
+  \includegraphics[width=\textwidth]{Framework.png} 
+  \caption{Overall framework of our cryptographic code generation system based on test feedback and hierarchical prompts. The five layers from top to bottom are user interaction, API service, core business, tool support, and external services.}
+  \label{fig:framework}
+\end{figure}
+This method comprises three modules---test-feedback adaptive improvement, hierarchical composable prompts, and cryptographic error classification.
+
+\subsection{Adaptive improvement mechanism based on test feedback}
+We close a loop of generation, verification, analysis, repair, improvement, and iteration. Compared with blind retries, crypto tasks need root-cause analysis and domain repair. Concretely we combine rule-based recognition (integrity/consistency checks), log/feature extraction, and structured guidance via template matching plus rules.
+
+\subsubsection{Closed-loop improvement process.}
+Six steps appear in Figure~\ref{fig:loop-process}: hierarchical generation, standard-vector verification, analysis/feature vectors, repair guidance, model rewrite, and iteration until pass or three rounds.
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\textwidth]{SixStepIteration2.pdf}  
+  % \hspace{-0.1\textwidth} 
+  \caption{Six-step closed-loop improvement process}  % 图片标题（可根据需要修改）
+  \label{fig:loop-process}  % 标签，用于\ref引用
+\end{figure}
+\subsection{Hierarchical and composable domain-specific Prompt engineering method}
+Prompts stack four layers---general formatting and roles, algorithm/mode facts, LLM-specific adapters with Full/Compact length modes, and language/library idioms---to improve extractability, compilability, and pass rates.
+
+\subsubsection{Failure-Driven Prompt Refinement and Mode Adaptation.}
+Beyond stacking, we rely on \emph{failure-driven iterative refinement} and Full/Compact adaptation. Common failures include missing headers/helpers, plaintext-as-ciphertext, bad formatting/IV handling, wrong libraries/APIs, and brittle control flow; prompts then fix include order, helper placement before \texttt{main()}, byte-wise hex output, CBC/buffer semantics, env-based IVs, and Python deps, with light post-insertion of \texttt{stdint.h} when needed. This stage is the \textbf{most time-consuming} and anchors FTPR.
+
+\subsubsection{Concrete Challenges and Prompt Solutions by Phase.}
+\label{subsec:challenges_prompt_table}
+Generation stacks strong constraints and exemplars; truncation uses \texttt{last\_error} retries. Improvement stitches failing code, expected vs.\ actual outputs, and compile logs with include/API fixes. The general layer favors OpenSSL and DES legacy providers on OpenSSL~3; language layers curb bad \texttt{goto}/string checks; algorithm--language pairs encode SM4/DES/RSA/AES mode fixes. Failures crystallize into 101 templates.
+
+\subsection{Teacher exemplar injection for local models (retrieval-style distillation)}
+\label{subsec:distillation}
+We index passing cloud outputs as teachers keyed by algorithm, mode, language, and ops (optionally failure clusters), gate by quality, and inject few-shot or reference blocks for local students---\emph{retrieve-and-inject} only. Table~\ref{tab:distillation_overall} reports 45 combinations before/after injection; 100\% is controlled-set only.
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{Overall functional pass rates for the local model before vs.\ after teacher exemplar injection (45 settings).}
+  \label{tab:distillation_overall}
+  \begin{tabular}{l c c}
+    \toprule
+    & Passed & Rate \\
+    \midrule
+    Before injection (overall) & 37 / 45 & 82.2\% \\
+    After injection (overall) & 45 / 45 & 100.0\% \\
+    Gain & +8 cases & +17.8\% \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Cryptographic code error pattern classification system}
+\subsubsection{Classification of error patterns.}
+From 159 cases we distill four top-level categories (Table~\ref{tab:error_classification}); finer remedies align with Section~\ref{subsec:challenges_prompt_table}.
+\begin{table}[htbp]
+  \centering
+  \footnotesize
+  \caption{Cryptographic Code Error Pattern Classification (four categories)}
+  \label{tab:error_classification}
+  \setlength{\tabcolsep}{6pt}
+  \begin{tabular}{p{0.3\textwidth}p{0.65\textwidth}}
+    \toprule
+    Major Category & Representative Example \\
+    \midrule
+    Algorithm Understanding Error & Mode confusion (e.g., OFB-64 vs.\ OFB-8), padding/key schedule errors. \\
+    Implementation Detail Error & IV usage (default/random or IV in output), padding handling, byte order. \\
+    Environment Configuration Error & Env var naming (KEY vs.\ TEST\_KEY), missing lib, OpenSSL version. \\
+    Code Structure Error & \texttt{goto cleanup} invalid, missing headers, incomplete helper (undefined ref). \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Repair strategy and matching.}
+Each class ships targeted requirements and examples (e.g., DES key truncation, OFB64 selection, library padding behavior). Matching blends exact, pattern, and heuristic rules to drive guidance.
+
+\section{Experiments and Result Analysis}
+
+\subsection{Experimental Setup}
+\subsubsection{Dataset and reproducibility.}
+The 159-case set spans four algorithms and C/C++/Python with NIST/FIPS/GM vectors (\tablename~\ref{tab:dataset_stats}). Code, prompts, and scripts support reproduction.
+
+\begin{table}[htbp]
+  \centering
+  %\footnotesize
+  \caption{Statistics of the Cryptographic Code Generation Dataset}
+  \label{tab:dataset_stats}
+  %\renewcommand{\arraystretch}{1.1}
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{p{0.12\textwidth} 
+    >{\centering\arraybackslash}p{0.16\textwidth}  
+    >{\centering\arraybackslash}p{0.3\textwidth}  
+    >{\centering\arraybackslash}p{0.3\textwidth}  
+    }
+    \toprule
+    Algorithm & Number of Test Cases & Language Distribution (C/C++/Python) & Source of Standard Test Vectors \\
+    \midrule
+    DES       & 70                  & 21/24/25                            & FIPS 46-3                      \\
+    AES       & 71                  & 26/25/20                            & FIPS 197                       \\
+    SM4       & 15                  & 7/4/4                              & GM/T 0002-2012                 \\
+    RSA       & 3                   & 1/1/1                              & FIPS 186-4                     \\
+    \midrule
+    Total     & 159                 & 55/54/50                            & --                             \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{table}[!htbp]
+  \centering
+  \footnotesize
+  \caption{Overall Performance of the Proposed Method on Different LLMs}
+  \label{tab:llm_performance}
+  %\renewcommand{\arraystretch}{1.1}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{
+    p{0.16\textwidth}               
+    >{\centering\arraybackslash}p{0.17\textwidth}  
+    >{\centering\arraybackslash}p{0.18\textwidth}  
+    >{\centering\arraybackslash}p{0.06\textwidth}  
+    >{\centering\arraybackslash}p{0.06\textwidth}  
+    >{\centering\arraybackslash}p{0.07\textwidth} 
+    >{\centering\arraybackslash}p{0.07\textwidth}  
+    >{\centering\arraybackslash}p{0.08\textwidth} 
+  }
+    \toprule
+    LLM               & Prompt Length (Python/C/C++) (chars) & Generation Time (Python/C/C++) (s) & GSR (\%) & VPR (\%) & FTPR (\%) & ERSR (\%) & AGT (s) \\
+    \midrule
+    OpenAI            & 17542/28952/22986            & 37.1/56.6/67.5                     & 100.0    & 100.0    & 100.0     & 81.82     & 178.96  \\
+    Deepseek          & 8810/17227/13345             & 21.6/52.0/33.5                     & 100.0    & 100.0    & 100.0     & 59.79     & 56.31   \\
+    Doubao            & 13801/24722/19702            & 68.2/158.6/94.3                    & 100.0    & 100.0    & 100.0     & 60.00     & 147.20  \\
+    Claude            & 8334/15959/12139             & 31.2/68.0/63.4                     & 100.0    & 100.0    & 100.0     & 30.23     & 34.23   \\
+    CodeX             & 17542/28952/22986            & 201.8/336.2/275.5                  & 100.0    & 100.0    & 97.78     & 0.00      & 287.80  \\
+    Qwen2.5-Coder:7B  & 13188/20888/16646            & 2856.0/2857.6/2378.4               & 100.0    & 100.0    & 88.89     & 0.00      & 3720.70 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Baselines and metrics.}
+We contrast a single general prompt (see \tablename~\ref{tab:ablation_prompt}), module ablations (drop feedback, full-length-only, drop hierarchy / no prompts), and standard metrics GSR/VPR/FTPR/ERSR/AGT.
+
+\textbf{Ablation vs.\ error-table scope.} \tablename~\ref{tab:ablation_main} and \tablename~\ref{tab:ablation_prompt} aggregate over \textbf{DeepSeek, Doubao (ByteDance cloud), and Claude (Anthropic)} on the full task grid: \textbf{four algorithms, every supported mode, three languages} (159-case harness); reported VPR/FTPR pool providers and all cells. \tablename~\ref{tab:error_repair} is built only from \textbf{DeepSeek} failure rows in \texttt{llm\_performance.json} on that same \textbf{full-algorithm, full-mode} grid---\textbf{Doubao and Claude traces are excluded}---so its counts differ in scope from the two ablation tables.
+
+\subsection{Results and Analysis of Comparative Experiments}
+\subsubsection{Overall Performance Comparison.}
+\tablename~\ref{tab:llm_performance} reports grid-merged GSR/VPR/FTPR (see extraction script): most clouds reach 100\% GSR/VPR and full-grid FTPR; CodeX is at 97.78\% FTPR and local Qwen2.5-Coder:7B at 88.89\% FTPR with very high AGT ($\approx$3720~s), suitable for privacy-sensitive, latency-tolerant settings.
+
+\subsubsection{Related-work comparison (DES subset).}
+We align baselines to the same DES harness (ECB/CBC/CFB/OFB $\times$ Python/C/C++, 12 cells) and repository configs (see \texttt{相关工作对比实验.md}); metrics match the repository \texttt{score}. \tablename~\ref{tab:rw_same_protocol_des} contrasts SVEN, Self-Refine, SecCoder, and AgentCoder with our full pipeline on DeepSeek---values are protocol- and harness-limited.
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{Related-work comparison under the same DES protocol (12 cells; DeepSeek line; GSR/VPR/FTPR aligned with repository scoring)}
+  \label{tab:rw_same_protocol_des}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{p{0.22\textwidth} p{0.38\textwidth} c c c}
+    \toprule
+    Baseline & Setting / arm & GSR (\%) & VPR (\%) & FTPR (\%) \\
+    \midrule
+    SVEN & \texttt{rw\_sven.json} / \texttt{sven\_lm\_*} & 100.0 & 0.0 & 0.0 \\
+    Self-Refine+DeepSeek & \texttt{selfrefine\_deepseek} & 100.0 & 83.33 & 58.33 \\
+    SecCoder+DeepSeek & \texttt{seccoder\_repro} / \texttt{seccoder\_glue\_repro} & 100.0 & 66.67 & 66.67 \\
+    AgentCoder & \texttt{agentcoder\_des} & 100.0 & 41.67 & 0.0 \\
+    Ours+DeepSeek & --- & 100.0 & 100.0 & 100.0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsubsection{Challenges in Code Generation and Prompt Optimization.}
+\label{subsec:challenges_prompt}
+Sustaining FTPR required iterative prompt work (Section~\ref{subsec:challenges_prompt_table}). Typical recurring failures include missing \texttt{stdint.h}, undefined helpers, plaintext-as-ciphertext, bad printf widths, buffer issues, and overly strict parsers; templates and post-processing address these.
+
+\subsubsection{Error Pattern Classification Effect.}
+(Scope: DeepSeek-only, full grid; see ``Ablation vs.\ error-table scope''.) Failing rows in \texttt{llm\_performance.json} (validation or vector test failure) are heuristically assigned to four categories; the current log yields 101 failure rows with an aggregate post-repair pass rate of 87.13\% (\tablename~\ref{tab:error_repair}), where ``post-repair'' means the row itself reports \texttt{test\_success} or a later record for the same model key and task does. Implementation-detail rows are most frequent; algorithm-understanding rows show the lowest post-repair rate; environment-configuration and code-structure rows all resolve under this observational definition.
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{Distribution and repair effect by error type (DeepSeek; four algorithms $\times$ supported modes $\times$ three languages; \texttt{llm\_performance.json})}
+  \label{tab:error_repair}
+  %\renewcommand{\arraystretch}{1.1}
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{
+    p{0.28\textwidth}                       
+    >{\centering\arraybackslash}p{0.08\textwidth} 
+    >{\centering\arraybackslash}p{0.12\textwidth} 
+    >{\centering\arraybackslash}p{0.16\textwidth}  
+    >{\centering\arraybackslash}p{0.18\textwidth}  
+  }
+    \toprule
+    Error Type               & Count & Proportion & Pre-Repair Pass Rate & Post-Repair Pass Rate \\
+    \midrule
+    Algorithm Understanding  & 35    & 34.65\%    & 0.0\%                & 77.14\%               \\
+    Implementation Detail    & 41    & 40.59\%    & 0.0\%                & 87.80\%               \\
+    Environment Configuration & 12   & 11.88\%    & 0.0\%                & 100.0\%               \\
+    Code Structure           & 13    & 12.87\%    & 0.0\%                & 100.0\%               \\
+    \midrule
+    Total                    & 101   & 100.0\%    & 0.0\%                & 87.13\%               \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\subsection{Ablation Studies}
+\tablename~\ref{tab:ablation_main} toggles system switches; \tablename~\ref{tab:ablation_prompt} varies template stacks under a fixed pipeline---do not mix scripts.
+
+\begin{table}[H]
+  \centering
+  \footnotesize
+  \caption{Main ablation results (DeepSeek, Doubao, and Claude; four algorithms $\times$ supported modes $\times$ three languages)}
+  \label{tab:ablation_main}
+  %\renewcommand{\arraystretch}{1.1}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{l c c c}
+    \toprule
+    System Configuration                  & VPR (\%) & FTPR (\%) & Performance Drop (VPR/FTPR) \\
+    \midrule
+    Full Proposed Method                  & 100.0    & 100.0     & -- / --                     \\
+    W/O Test Feedback Improvement         & 100.0    & 86.11     & 0.0\% / -13.89\%            \\
+    Single Full-Mode Prompt               & 69.44    & 63.89     & -30.56\% / -36.11\%         \\
+    W/O Hierarchical Prompts (no prompts) & 63.89    & 55.56     & -36.11\% / -44.44\%         \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+On this DeepSeek/Doubao/Claude $\times$ full-algorithm full-mode $\times$ three-language grid, using only a single full-length prompt or removing prompts entirely (no hierarchical stack) substantially lowers VPR/FTPR (\tablename~\ref{tab:ablation_main}); disabling \emph{test-feedback improvement} (flag \texttt{\_ablation\_no\_test\_feedback}: closes the refine/improve loop, strips vector-failure retry hints from the next prompt, and disables C/C++ write-time heuristic repairs formerly ablated separately) preserves VPR at 100\% but reduces FTPR to 86.11\%. Prompt-stack numbers can be refreshed with \texttt{experiments/run\_paper\_ablation.py} (\texttt{--suite main} or \texttt{--suite prompt}).
+
+\begin{table}[H]
+  \centering
+  %\footnotesize
+  \caption{Prompt-strategy ablation (DeepSeek, Doubao, and Claude; four algorithms $\times$ supported modes $\times$ three languages)}
+  \label{tab:ablation_prompt}
+  %\renewcommand{\arraystretch}{1.1}
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{l c c c}
+    \toprule
+    Prompt Strategy               & GSR (\%) & VPR (\%) & FTPR (\%) \\
+    \midrule
+    Single General Template       & 100.0    & 45.83    & 25.0      \\
+    General + LLM                 & 100.0    & 87.5     & 79.17     \\
+    General + LLM + Language      & 100.0    & 91.67    & 91.67     \\
+    General + LLM + Language + Algorithm (Proposed) & 100.0 & 100.0 & 100.0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+% \subsection{Case Studies}
+% To intuitively demonstrate the effectiveness of the proposed method, three typical cases are analyzed, covering common error types in cryptographic code generation:
+
+% \subsubsection{Case 1: Repair of IV Output Error in DES-OFB Mode}
+% \medskip
+% \textbf{Test Case}: Implement the DES-OFB64 encryption algorithm, with input plaintext as standard test vectors and output ciphertext consistent with the standard.\\
+% \textbf{Initial Issue}: The generated code included the Initial Vector (IV) in the output, resulting in a ciphertext length 8 bytes longer than the standard, leading to test failure.\\
+% \textbf{Error Identification}: The test feedback analysis module detected an 8-byte output length discrepancy and identified it as an "IV output error" (implementation detail error).\\
+% \textbf{Repair Guidance}: Remove the IV output statement and explicitly specify the use of OFB64 mode.\\
+% \textbf{Result}: The improved code's output ciphertext matches the standard test vector, passing the functional test.\\
+% \textbf{Implication}: This case validates the ability of the error pattern classification system to identify fine-grained implementation errors and generate targeted repair guidance—such errors are difficult to detect by general code generation systems but are critical for cryptographic code correctness.
+
+% \subsubsection{Case 2: Repair of Padding Mode Error in AES-ECB Mode}
+% \medskip
+% \textbf{Test Case}: Implement the AES-128-ECB encryption algorithm with input plaintext length of 16 bytes (integer multiple of block size).\\
+% \textbf{Initial Issue}: The generated code manually added PKCS7 padding, resulting in an output length 16 bytes longer than the standard, leading to test failure.\\
+% \textbf{Error Identification}: The test feedback analysis module detected a 16-byte output length discrepancy and identified it as a "padding mode error" (algorithm understanding error).\\
+% \textbf{Repair Guidance}: Remove manual padding code and leverage the automatic padding feature of the cryptography library.\\
+% \textbf{Result}: The improved code's output ciphertext matches the standard test vector, passing the functional test.\\
+% \textbf{Implication}: This case highlights the importance of algorithm-specific knowledge in Prompt engineering—general-purpose LLMs often lack understanding of library-specific padding mechanisms, and the algorithm template layer of the proposed method effectively addresses this gap.
+
+% \subsubsection{Case 3: Repair of Environment Variable Error in C Code}
+% \medskip
+% \textbf{Initial Issue}: The generated C code used `KEY` instead of `TEST\_KEY` as the environment variable name, leading to test failure.\\
+% \textbf{Error Identification}: The system detected an "environment variable naming error" (environment configuration error).\\
+% \textbf{Repair Guidance}: Explicitly require the use of `TEST\_PLAINTEXT`, `TEST\_KEY`, and `TEST\_IV` as environment variable names.\\
+% \textbf{Result}: The repaired code passed the functional test.\\
+% \textbf{Implication}: This case demonstrates the effectiveness of the test feedback mechanism in identifying environment-specific errors, which are often overlooked by general code generation systems but critical for the practical deployment of cryptographic code.
+
+% \subsection{Experimental Conclusions}
+% Synthesizing the results of comparative experiments, ablation studies, and case analyses, the core conclusions are drawn as follows:
+% \begin{enumerate}[leftmargin=1.2em, labelsep=0.4em]
+%   \item The proposed \textbf{test feedback-driven and hierarchical Prompt-based cryptographic code generation method} significantly improves the quality of LLM-generated cryptographic code, achieving 100\% FTPR on cloud-based LLMs and 86.67\% FTPR on lightweight local LLMs (Qwen2.5-Coder:7B)—this fills the gap in domain-specific optimization for cryptographic code generation.
+%   \item \textbf{The hierarchical Prompt architecture} is the core module for performance improvement, as it provides precise domain-specific guidance tailored to algorithms, languages, and LLMs, effectively compensating for the lack of cryptographic knowledge in general-purpose LLMs.
+%   \item \textbf{The test feedback improvement mechanism} enables effective identification and repair of domain-specific errors, realizing continuous improvement of code quality through a closed-loop iterative process.
+%   \item \textbf{Adapting prompt length (Full/Compact)} improves robustness across LLMs. \textbf{Failure-driven prompt refinement} (Section~\ref{subsec:challenges_prompt}) was indispensable: without iteratively fixing recurring failures (missing headers, undefined references, plaintext-vs.-ciphertext, output format, etc.) and refining per-algorithm–language–LLM prompts, the reported FTPR would not be achievable.
+% \end{enumerate}
+
+
+
+
+
+
+
+
+
+
+
+\section{Conclusion and Future Work}
+\subsection{Research conclusions}
+We presented a test-feedback, hierarchical-prompt pipeline with four-class error taxonomy and \textbf{failure-driven refinement}, stressing that iterative prompt work dominated runtime.
+
+\textbf{Results.} On 159 cases, extraction reaches 100\% and FTPR improves from 45.1\% to 93.33\% under the full pipeline; \tablename~\ref{tab:ablation_prompt} uses the DeepSeek/Doubao/Claude full-grid setting above---do not cross-compare headline 100\% figures blindly with other cohorts.
+
+\textbf{Takeaways.} Four-class repair loops, layered prompts with failure-driven refinement (87.13\% observational post-repair rate on DeepSeek-only \texttt{llm\_performance.json} failures over the full grid), 101 templates, and a multi-backend implementation.
+
+\subsection{Research limitations}
+Taxonomy coverage stems from 159 cases; \tablename~\ref{tab:error_repair} figures are DeepSeek-only and do not summarize Doubao or Claude; detail-class fixes remain weakest; supported algorithms stop at DES/AES/SM4/RSA; evaluation stresses vector correctness rather than timing or side-channel guarantees.
+
+\subsection{Future work directions}
+We will broaden datasets/templates, cover more algorithms, blend static or formal analyses, and explore feedback-driven online adaptation.
+
+% \section*{Acknowledgements}
+% This work was supported by Sichuan University. The authors thank the teachers and classmates of the School of Cyber Science and Engineering of Sichuan University for their valuable suggestions and discussions. Doubao was used to produce parts of the work, including text, tables, charts, codes, data, and quotations.
+
+\renewcommand{\refname}{References}
+\renewcommand{\bibname}{References}
+\bibliographystyle{splncs04}
+\bibliography{refs} 
+%% Appendix (if needed)
+%\appendix
+%\section{Appendix Title}
+%Appendix content here.
+
+\end{document}

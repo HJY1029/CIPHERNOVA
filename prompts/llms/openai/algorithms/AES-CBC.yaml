@@ -1,0 +1,17 @@
+# OpenAI · AES-128-CBC
+supplement: |
+  **无输出：** 评测「成功但无输出」= **`getenv` 失败即 `return` 无 `密文` 行**、**`if(!key) exit` 在 `printf` 前**、**或 `EncryptInit` 失败仍走到未打印分支**；**须** 任一路径在退出前 **`printf("密文: ");`** + **`%02x`** + **`fflush(stdout)`**（`getenv` 空可用 stderr 说明再 `return 1`，**禁止** stdout 全空）。
+  **全 `0` 密文**（64 hex）= **`EncryptUpdate`/`Final` 未写入缓冲、`ciphertext_len` 未累加、或 `ctx`/密钥初始化失败仍打印零缓冲**；评测必败。CBC golden 示例前缀：**`9B0048990511252F…`**（以 test_data 为准）。**须检查 `EVP_EncryptInit_ex`/`Update`/`Final` 返回值**。
+  **整句英文当密文错例：** **`43727970746f67726170687920616e64204e6574776f726b5365637572697479`** = 把书名 **ASCII 字节再 `.hex()`/`sprintf`** 当密文（**未走 EVP**）；**禁止** `printf` **教材句子**、**禁止**把 **明文 UTF-8/ASCII** 直接转 hex 冒充密文；输出必须 **`EVP_EncryptUpdate`/`Final` 写入缓冲**。
+  **EVP 仍错密文示例：** **`43c8ae8c8a4fa76b6842ee2bb311d0a554b2cdcdf18d2496a2611d47fbf75fd9`** 与 golden **`9B004899…`** 不符 → **IV/key/明文解码长度** 或 **误用 256/AES 变体**。
+
+c: |
+  **仅用 `EVP_aes_128_cbc()`** + **`EVP_CIPHER_CTX_set_padding(ctx,0)`** —— **删除整段 `MixColumns`/`SubBytes`/`xtime` 手搓 AES**（会产生 **`xtime` 隐式声明/`conflicting types`**、**`ciphertext_len` 声明顺序错**）。**在 `main` 之前**写 **`static int hex_to_bytes(...){ ... }` 完整函数体**。**`main` 第一屏：** `int len=0, ciphertext_len=0;` `unsigned char outbuf[512];` `unsigned char *ciphertext=outbuf;` **再** `EVP_*` **再** `for(i=0;i<ciphertext_len;i++)`。
+  **禁止** `EncryptInit_ex` 失败后 **`return 1`** 且未尝试 **`printf("密文: ");`**（评测注入正常时常因 **未 `fflush`** 或 **分支遗漏** 导致「无输出」）；成功路径**必须**到达 **`printf("密文: ");`**。
+  **禁止**在 **`mix_columns`** 中调用 **`rotl8`** / **`key_expansion`** 却**未在文件前部**提供 **`static` 定义**（→ **`undefined reference to rotl8`/`key_expansion`**）；**能 EVP 则不要手搓**。
+  **`Init_ex` → `EncryptUpdate` → `EncryptFinal_ex`**：用 **`len`** 累加 **`ciphertext_len`**，**只打印** `ciphertext[0..ciphertext_len-1]`，**禁止**打印未初始化的 **`malloc` 尾垃圾**或长度恒 **0**。
+  **stdout 仅一行：** **`printf("密文: ");`** + **`for (i=0;i<ciphertext_len;i++) printf("%02x",...);`** + **`printf("\n");`**。**禁止**同一行/无换行再拼接 **第二段 hex**（曾出现主密文后再接 **`060000001e000000…`** 导致无法解析）；**禁止**把调试缓冲当密文附加输出。
+  **「无法提取」：** **`密文:` 后禁止中文说明**（与 DES-CBC 同）。
+  **禁止手搓 AES：** 不要生成 **`MixColumns`/`xtime`**；评测若仍报 **`xtime`/`hex_to_bytes`/`ciphertext_len` undeclared**，说明仍残留手搓段——**整段删除，只保留 `EVP_aes_128_cbc` + `hex_to_bytes`（`main` 前 `static`）**。
+  **禁止**声明写成 **`unsigned char i, 0x0A, 0x0B, ...`**（**非法**：常量不能当变量名）；合法临时变量须用 **`uint8_t a, b, c, d, t;`** 等形式。
+  **`fflush(stdout);`**。**能 EVP 则不要手搓**。

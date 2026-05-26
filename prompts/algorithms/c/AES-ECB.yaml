@@ -1,0 +1,68 @@
+# AES-ECB模式的C语言特定内容
+c_specific: |
+  **使用OpenSSL库的实现要求（C语言）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <stdlib.h>`
+     - `#include <stdio.h>`
+     - `#include <string.h>`
+  
+  2. **必须使用OpenSSL EVP函数：**
+     - ✅ **正确：使用 `EVP_aes_128_ecb()`、`EVP_aes_192_ecb()` 或 `EVP_aes_256_ecb()`（根据密钥长度选择）**
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_CIPHER_CTX_new()` 和 `EVP_CIPHER_CTX_free()`**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取明文和密钥（TEST_PLAINTEXT, TEST_KEY）
+     - 将十六进制字符串转换为字节数组
+     - 根据密钥长度选择正确的EVP函数（128位、192位或256位）
+     - 使用OpenSSL EVP函数进行ECB模式加密
+     - 输出密文（十六进制格式）
+     - 释放资源并返回0
+  
+  **关键实现细节（C语言）：**
+  - **密钥长度检测：**根据密钥字节长度选择对应的EVP函数
+    - 16字节（128位）→ `EVP_aes_128_ecb()`
+    - 24字节（192位）→ `EVP_aes_192_ecb()`
+    - 32字节（256位）→ `EVP_aes_256_ecb()`
+  - **ECB模式不需要IV：**`EVP_EncryptInit_ex()` 的IV参数应设为NULL
+  - **PKCS#7填充：**OpenSSL EVP会自动处理填充
+  - **🚨🚨🚨 输出长度控制（绝对重要！）：**必须只输出实际加密的数据长度，不要输出整个缓冲区！
+    - ✅ **正确做法（C）：**
+      ```c
+      int len;
+      int ciphertext_len = 0;
+      unsigned char *ciphertext = malloc(plaintext_len + 16);  // 预留填充空间
+      
+      EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);
+      ciphertext_len = len;  // 第一次加密的长度
+      
+      // ⚠️⚠️⚠️ 重要：EVP_EncryptFinal_ex 的第二个参数必须使用 ciphertext + ciphertext_len（不是 ciphertext + len）！
+      EVP_EncryptFinal_ex(ctx, ciphertext + ciphertext_len, &len);
+      ciphertext_len += len;  // 总长度 = Update长度 + Final长度
+      
+      // 🚨🚨🚨 输出长度控制（绝对重要！）：只输出 ciphertext_len 长度的数据！
+      // ⚠️⚠️⚠️ 绝对不能使用数组大小或缓冲区大小，必须明确使用 ciphertext_len！
+      printf("密文: ");
+      for (int i = 0; i < ciphertext_len; i++) {  // ✅ 必须使用 ciphertext_len 变量，不是数组大小或malloc的大小！
+          printf("%02x", ciphertext[i]);
+      }
+      printf("\n");
+      free(ciphertext);
+      ```
+    - ❌ **错误做法（C，绝对禁止）：**
+      ```c
+      // ❌ 错误：使用数组大小（会输出整个缓冲区）
+      for (int i = 0; i < sizeof(ciphertext); i++) { ... }
+      
+      // ❌ 错误：使用malloc的大小（会输出整个缓冲区）
+      for (int i = 0; i < plaintext_len + 16; i++) { ... }
+      
+      // ❌ 错误：使用strlen（会输出到null字符，可能不准确）
+      for (int i = 0; i < strlen((char*)ciphertext); i++) { ... }
+      ```
+    - **🚨🚨🚨 关键要求（绝对必须遵守）：**
+      - **必须使用 `ciphertext_len` 变量控制输出循环，不能使用任何其他长度（数组大小、malloc大小等）！**
+      - **`ciphertext_len` 是 `EVP_EncryptUpdate()` 和 `EVP_EncryptFinal_ex()` 返回的长度之和，这是实际加密的数据长度！**
+      - **必须在main函数中直接输出，不要创建辅助函数（如`bytes_to_hex`），确保使用`ciphertext_len`控制输出长度！**
+

@@ -1,0 +1,19 @@
+# OpenAI · SM4-CFB-128
+supplement: |
+  **运行时（一律禁止）：** **`Invalid hex input. Key must be 8 bytes (16 hex chars)`**、**`Key must be 8 bytes (16 hex chars).`**、**`key must be exactly 8 bytes`** —— 均为 **DES** 长度语境。**SM4** 密钥与 IV **各 16 字节 = 各 32 hex**。**禁止**从 DES 模板拷 **`8` 字节**密钥校验；否则评测注入 **32 hex** 必失败。
+  golden（test_data）：**`2754B10C806AEF23698989882D80903A`**。**CFB-128**：每段 keystream = `E_K(寄存器)`，**寄存器 ← 上一密文块**（**非** OFB 的 R←O）。
+  **错例：** **`8b82539389abcdeffedcba9876543210`** 与密钥/向量形态相近、**非** golden → 多为 **OFB 反馈**或 **寄存器更新错**、或未走 **`EVP_sm4_cfb128` Update/Final**。
+  **错例：** **`f49fff510a928fa76e0e1392f5d014b6`**、**`27f3e626f42e4c8cbf29c5160987be6e`**、**`e1ffef0184f6ec465c3731e83e394709`**、**`7d7c7c7c7c1bf2d7058fa765ce710000`**、**`98badcfe7a88953c2e717d3dfd11f6ea`**、**`b3c4841865f80ce5644e39f3b9b150da`**、**`c9eb8daf67573d6fbf9ae56796126a6c`** 与 golden **`2754B10C…`** 不符 → **OFB/非 cfb128/寄存器错**、**`set_padding` 未置 0**、或 **IV/key 解析错误**。
+  **CFB-128（本仓库 test_data）≠ CFB-8：** 须 **按 16 字节分组**：`Y = SM4_encrypt(寄存器)` → 与 **当前明文块（至多 16B）** XOR → **下一寄存器 = 本块密文（整 16B）**。**禁止** `memmove(feedback,feedback+1,15)` + **单字节密文推进**（→ 典型误实现 **`98badcfe…`**，与 golden **`2754B10C…`** 不符）。
+
+c: |
+  **【强制】SM4-CFB C：必须用 OpenSSL `EVP_sm4_cfb128()`（链接 `-lcrypto`），禁止手搓轮函数 + 错误 CFB-8。**
+  **`#include <openssl/evp.h>`** → **`EVP_EncryptInit_ex(..., EVP_sm4_cfb128(), ...)`** → **`EVP_CIPHER_CTX_set_padding(ctx,0)`** → Update/Final → free ctx。
+  **`CK[32]` 手写时绝对禁止** **`0x88...`**、**`…`**、**省略号**（→ **`too many decimal points in number`**，批量实测）。**须写满 32 个完整 `0x........` 字面量，或直接用 EVP 避免 CK。**
+  **`main` 内声明唯一性（与写盘修补共存）：** **同一 `main` 禁止**两次 **`unsigned char *ciphertext`**、两次 **`int ciphertext_len`**。若已存在 **`unsigned char *ciphertext = _aicrypto_ct_buf`**（或任意密文指针），**勿再**写 **`unsigned char key[16], iv[16], *ciphertext`** 一行。**复用**已有 **`len`/`ciphertext_len`/`outl`**。
+  **`EVP_sm4_cfb128()`** + **`EVP_CIPHER_CTX_set_padding(ctx,0)`**；密钥/IV 各 **32 hex → 16 字节**。**`main` 内勿重复声明** **`int len`/`ciphertext_len`**（OpenAI 批次 **`redeclaration`** 高频）。
+  **OpenAI 典型失败 `98badcfe7a88953c…`：** 手写 **`sm4_encrypt_block` + `memmove(feedback+1)` + 逐字节 XOR `output_block[0]`** = **CFB-8 路径**，与评测 **CFB-128** golden **`2754B10C…`** **不一致** → **禁止**；**一律 EVP**。
+  **手写仅当题目要求且写出完整 CFB-128：** 每块 **16 字节** 寄存器；**禁止**「CFB-8」逐字节移位。
+  **校验：** **`hex_to_bytes` 后 `key_len==16` 且 `iv_len==16`**；错则 **`fprintf(stderr, "expect 32 hex key and 32 hex IV for SM4");`**。**禁止** **`if (key_len != 8)`**、**`!= 8`**、**`8 bytes`**、**`16 hex chars`** 与 SM4 密钥错误绑在一起。**禁止** `cfb1`、**`EVP_sm4_ofb128`** 或与 **OFB** 混用（会得到 **`496b0d2f…`/`290b6d4f…`** 等与 golden **`2754b10c…`** 不符）。
+  **`EncryptUpdate`/`Final` 后**只打印**实际密文长度**的 hex。**`fflush(stdout);`**
+  **`hex_to_bytes`：** 文件**顶部**（**`#include` 之后、`main` 之前**）必须 **完整** **`static int hex_to_bytes(...){ … return n; }`**（**禁止**只有前置声明、**禁止** `main` 内首次出现调用却无函数体）→ 否则 **`implicit declaration of 'hex_to_bytes'`** + **`undefined reference to 'hex_to_bytes'`**。

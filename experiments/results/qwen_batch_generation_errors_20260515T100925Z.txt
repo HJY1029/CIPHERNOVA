@@ -1,0 +1,387 @@
+# scripts/run_full_llm_matrix.py — 批量生成失败记录
+# started_utc: 2026-05-15T10:09:25.828032+00:00
+# results_json: /mnt/d/aicrypto-helper/experiments/results/full_matrix_20260515T100925Z.json
+# configs_per_provider: 45
+# providers: ['qwen_coder_local']
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-15T15:34:12.258800+00:00
+provider: qwen_coder_local
+case_id: des-cbc-c
+config: {"algorithm": "DES", "mode": "CBC", "language": "c"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: /tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c: In function ‘des_encrypt’:
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:36:5: error: unknown type name ‘DES_key_schedule’
+   36 |     DES_key_schedule key_schedule;
+      |     ^~~~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:37:5: warning: implicit declaration of function ‘DES_set_odd_parity’ [-Wimplicit-function-declaration]
+   37 |     DES_set_odd_parity(key);
+      |     ^~~~~~~~~
+error:
+编译失败: /tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c: In function ‘des_encrypt’:
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:36:5: error: unknown type name ‘DES_key_schedule’
+   36 |     DES_key_schedule key_schedule;
+      |     ^~~~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:37:5: warning: implicit declaration of function ‘DES_set_odd_parity’ [-Wimplicit-function-declaration]
+   37 |     DES_set_odd_parity(key);
+      |     ^~~~~~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:38:5: warning: implicit declaration of function ‘DES_set_key_unchecked’ [-Wimplicit-function-declaration]
+   38 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);
+      |     ^~~~~~~~~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:38:28: error: ‘DES_cblock’ undeclared (first use in this function)
+   38 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);
+      |                            ^~~~~~~~~~
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:38:28: note: each undeclared identifier is reported only once for each function it appears in
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:38:40: error: expected expression before ‘)’ token
+   38 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);
+      |                                        ^
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:43:9: warning: implicit declaration of function ‘DES_ecb_encrypt’; did you mean ‘des_encrypt’? [-Wimplicit-function-declaration]
+   43 |         DES_ecb_encrypt((DES_cblock *)block, (DES_cblock *)(ciphertext + i), &key_schedule, DES_ENCRYPT);
+      |         ^~~~~~~~~~~~~~~
+      |         des_encrypt
+/tmp/aicrypto_tester/test_49698a9de07e4fe8845ede4538d02596.c:43:38: error: expected expression before ‘)’ token
+   43 |         DES_ecb_encrypt((DES_cblock *)block, (DES_cblock *)(ciphertext + i), &key_schedule, DES_ENCRYPT);
+      |                                      ^
+
+total_ms: 17794244
+generated_filename: des_cbc.c
+generated_code:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define KEY_SIZE 8
+#define IV_SIZE 8
+
+void remove_whitespace(char *str) {
+    char *src = str, *dst = str;
+    while (*src) {
+        if (!isspace((unsigned char)*src)) {
+            *dst++ = *src;
+        }
+        src++;
+    }
+    *dst = '\0';
+}
+
+int hex_to_byte(const char *hex, unsigned char *byte) {
+    if (strlen(hex) != 2)
+        return -1;
+    *byte = (hex[0] >= 'A' && hex[0] <= 'F') ? (hex[0] - 'A' + 10) << 4 :
+           ((hex[0] >= 'a' && hex[0] <= 'f') ? (hex[0] - 'a' + 10) << 4 : (hex[0] - '0') << 4);
+    *byte |= (hex[1] >= 'A' && hex[1] <= 'F') ? (hex[1] - 'A' + 10) :
+           ((hex[1] >= 'a' && hex[1] <= 'f') ? (hex[1] - 'a' + 10) : (hex[1] - '0'));
+    return 0;
+}
+
+void byte_to_hex(unsigned char byte, char *hex) {
+    hex[0] = (byte >> 4) < 10 ? (byte >> 4) + '0' : (byte >> 4) - 10 + 'A';
+    hex[1] = (byte & 0x0F) < 10 ? (byte & 0x0F) + '0' : (byte & 0x0F) - 10 + 'A';
+}
+
+void des_encrypt(const unsigned char *key, const unsigned char *iv, const unsigned char *plaintext, size_t plaintext_len, unsigned char *ciphertext) {
+    DES_key_schedule key_schedule;
+    DES_set_odd_parity(key);
+    DES_set_key_unchecked((DES_cblock *)key, &key_schedule);
+
+    unsigned char block[8];
+    for (size_t i = 0; i < plaintext_len; i += 8) {
+        memcpy(block, iv + i % IV_SIZE, 8);
+        DES_ecb_encrypt((DES_cblock *)block, (DES_cblock *)(ciphertext + i), &key_schedule, DES_ENCRYPT);
+    }
+}
+
+int main() {
+    char *plaintext_hex = getenv("TEST_PLAINTEXT");
+    char *key_hex = getenv("TEST_KEY");
+    char *iv_hex = getenv("TEST_IV");
+
+    if (!plaintext_hex || !key_hex) {
+        fprintf(stderr, "Usage: TEST_PLAINTEXT=<hex> TEST_KEY=<hex> ./program\n");
+        return 1;
+    }
+
+    remove_whitespace(plaintext_hex);
+    remove_whitespace(key_hex);
+
+    size_t plaintext_len = strlen(plaintext_hex) / 2;
+    unsigned char *plaintext = (unsigned char *)malloc(plaintext_len);
+    if (!plaintext) {
+        fprintf(stderr, "Memory allocation failed\n");
+        return 1;
+    }
+
+    for (size_t i = 0; i < plaintext_len; i++) {
+        if (hex_to_byte(plaintext_hex + i * 2, &plaintext[i]) != 0) {
+            fprintf(stderr, "Invalid hex string\n");
+            free(plaintext);
+            return 1;
+        }
+    }
+
+    unsigned char key[KEY_SIZE];
+    for (size_t i = 0; i < KEY_SIZE; i++) {
+        if (hex_to_byte(key_hex + i * 2, &key[i]) != 0) {
+            fprintf(stderr, "Invalid hex string\n");
+            free(plaintext);
+            return 1;
+        }
+    }
+
+    unsigned char iv[IV_SIZE] = {0};
+    if (iv_hex) {
+        remove_whitespace(iv_hex);
+        for (size_t i = 0; i < IV_SIZE; i++) {
+            if (hex_to_byte(iv_hex + i * 2, &iv[i]) != 0) {
+                fprintf(stderr, "Invalid hex string\n");
+                free(plaintext);
+                return 1;
+            }
+        }
+    }
+
+    unsigned char ciphertext[plaintext_len];
+    des_encrypt(key, iv, plaintext, plaintext_len, ciphertext);
+
+    printf("密文: ");
+    for (size_t i = 0; i < plaintext_len; i++) {
+        char hex[3];
+        byte_to_hex(ciphertext[i], hex);
+        printf("%s", hex);
+    }
+    printf("\n");
+
+    free(plaintext);
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-15T20:04:26.122415+00:00
+provider: qwen_coder_local
+case_id: des-cbc-cpp
+config: {"algorithm": "DES", "mode": "CBC", "language": "cpp"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+代码执行失败: 
+error:
+代码执行失败: 
+total_ms: 14855577
+generated_filename: des_cbc.cpp
+generated_code:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define DES_BLOCK_SIZE 8
+
+void des_encrypt(const unsigned char *key, const unsigned char *plaintext, unsigned char *ciphertext) {
+    // Implement DES encryption here
+}
+
+int main() {
+    const char *test_plaintext = getenv("TEST_PLAINTEXT");
+    const char *test_key = getenv("TEST_KEY");
+    const char *test_iv = getenv("TEST_IV");
+
+    if (!test_plaintext || !test_key) {
+        fprintf(stderr, "Error: TEST_PLAINTEXT or TEST_KEY not set\n");
+        return 1;
+    }
+
+    // Remove whitespace from the input strings
+    test_plaintext = strpbrk(test_plaintext, " \t\n\r\f\v");
+    test_key = strpbrk(test_key, " \t\n\r\f\v");
+
+    size_t plaintext_len = strlen(test_plaintext);
+    size_t key_len = strlen(test_key);
+
+    if (plaintext_len % 2 != 0 || key_len != DES_BLOCK_SIZE * 2) {
+        fprintf(stderr, "Error: Invalid input length\n");
+        return 1;
+    }
+
+    unsigned char *key_bytes = (unsigned char *)malloc(key_len / 2);
+    unsigned char *plaintext_bytes = (unsigned char *)malloc(plaintext_len / 2);
+
+    for (size_t i = 0; i < key_len / 2; i++) {
+        sscanf(test_key + i * 2, "%2hhx", &key_bytes[i]);
+    }
+
+    for (size_t i = 0; i < plaintext_len / 2; i++) {
+        sscanf(test_plaintext + i * 2, "%2hhx", &plaintext_bytes[i]);
+    }
+
+    unsigned char ciphertext[DES_BLOCK_SIZE];
+    des_encrypt(key_bytes, plaintext_bytes, ciphertext);
+
+    for (size_t i = 0; i < DES_BLOCK_SIZE; i++) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+
+    free(key_bytes);
+    free(plaintext_bytes);
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-16T00:08:20.777068+00:00
+provider: qwen_coder_local
+case_id: des-cfb-c
+config: {"algorithm": "DES", "mode": "CFB", "language": "c"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: /tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c: In function ‘remove_whitespace’:
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:11:14: warning: implicit declaration of function ‘isspace’ [-Wimplicit-function-declaration]
+   11 |         if (!isspace((unsigned char)*src)) {
+      |              ^~~~~~~
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:4:1: note: include ‘<ctype.h>’ or provide a declaration of ‘isspace’
+    3 | #include <string.h>
+  +++
+error:
+编译失败: /tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c: In function ‘remove_whitespace’:
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:11:14: warning: implicit declaration of function ‘isspace’ [-Wimplicit-function-declaration]
+   11 |         if (!isspace((unsigned char)*src)) {
+      |              ^~~~~~~
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:4:1: note: include ‘<ctype.h>’ or provide a declaration of ‘isspace’
+    3 | #include <string.h>
+  +++ |+#include <ctype.h>
+    4 | 
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c: In function ‘hex_to_byte’:
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:23:16: warning: implicit declaration of function ‘toupper’ [-Wimplicit-function-declaration]
+   23 |     int high = toupper(hex[0]) >= 'A' ? toupper(hex[0]) - 'A' + 10 : toupper(hex[0]) - '0';
+      |                ^~~~~~~
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:23:16: note: include ‘<ctype.h>’ or provide a declaration of ‘toupper’
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c: In function ‘des_cfb64_encrypt’:
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:43:9: warning: implicit declaration of function ‘DES_cfb64_encrypt’; did you mean ‘des_cfb64_encrypt’? [-Wimplicit-function-declaration]
+   43 |         DES_cfb64_encrypt(key, feedback, key_len, iv_len, &feedback, &ciphertext[i], DES_ENCRYPT);
+      |         ^~~~~~~~~~~~~~~~~
+      |         des_cfb64_encrypt
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:43:86: error: ‘DES_ENCRYPT’ undeclared (first use in this function)
+   43 |         DES_cfb64_encrypt(key, feedback, key_len, iv_len, &feedback, &ciphertext[i], DES_ENCRYPT);
+      |                                                                                      ^~~~~~~~~~~
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:43:86: note: each undeclared identifier is reported only once for each function it appears in
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c: In function ‘main’:
+/tmp/aicrypto_tester/test_99bae63a4f9a4a37bd1714b519d1ab13.c:67:55: warning: format ‘%zu’ expects argument of type ‘size_t’, but argument 3 has type ‘int’ [-Wformat=]
+   67 |         fprintf(stderr, "Key and IV must be exactly %zu bytes.\n", DES_KEY_SIZE);
+      |                                                     ~~^
+      |                                                       |
+      |                                                       long unsigned int
+      |                                                     %u
+
+total_ms: 13395996
+generated_filename: des_cfb.c
+generated_code:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define DES_KEY_SIZE 8
+#define IV_SIZE 8
+
+void remove_whitespace(char *str) {
+    char *src = str, *dst = str;
+    while (*src) {
+        if (!isspace((unsigned char)*src)) {
+            *dst++ = *src;
+        }
+        src++;
+    }
+    *dst = '\0';
+}
+
+int hex_to_byte(const char *hex, unsigned char *byte) {
+    if (strlen(hex) != 2)
+        return -1;
+
+    int high = toupper(hex[0]) >= 'A' ? toupper(hex[0]) - 'A' + 10 : toupper(hex[0]) - '0';
+    int low = toupper(hex[1]) >= 'A' ? toupper(hex[1]) - 'A' + 10 : toupper(hex[1]) - '0';
+
+    *byte = (high << 4) | low;
+    return 0;
+}
+
+int hex_to_bytes(const char *hex, unsigned char *bytes, size_t len) {
+    for (size_t i = 0; i < len; i++) {
+        if (hex_to_byte(hex + i * 2, &bytes[i]) != 0)
+            return -1;
+    }
+    return 0;
+}
+
+void des_cfb64_encrypt(const unsigned char *key, const unsigned char *iv, size_t key_len, size_t iv_len, size_t plaintext_len, const unsigned char *plaintext, unsigned char *ciphertext) {
+    unsigned char feedback[IV_SIZE];
+    memcpy(feedback, iv, IV_SIZE);
+
+    for (size_t i = 0; i < plaintext_len; i++) {
+        DES_cfb64_encrypt(key, feedback, key_len, iv_len, &feedback, &ciphertext[i], DES_ENCRYPT);
+        ciphertext[i] ^= feedback[0];
+    }
+}
+
+int main() {
+    char *plaintext_hex = getenv("TEST_PLAINTEXT");
+    char *key_hex = getenv("TEST_KEY");
+    char *iv_hex = getenv("TEST_IV");
+
+    if (!plaintext_hex || !key_hex || !iv_hex) {
+        fprintf(stderr, "Environment variables TEST_PLAINTEXT, TEST_KEY, and TEST_IV must be set.\n");
+        return 1;
+    }
+
+    remove_whitespace(plaintext_hex);
+    remove_whitespace(key_hex);
+    remove_whitespace(iv_hex);
+
+    size_t plaintext_len = strlen(plaintext_hex) / 2;
+    size_t key_len = strlen(key_hex) / 2;
+    size_t iv_len = strlen(iv_hex) / 2;
+
+    if (key_len != DES_KEY_SIZE || iv_len != IV_SIZE) {
+        fprintf(stderr, "Key and IV must be exactly %zu bytes.\n", DES_KEY_SIZE);
+        return 1;
+    }
+
+    unsigned char plaintext[plaintext_len];
+    unsigned char key[DES_KEY_SIZE];
+    unsigned char iv[IV_SIZE];
+
+    if (hex_to_bytes(plaintext_hex, plaintext, plaintext_len) != 0 ||
+        hex_to_bytes(key_hex, key, DES_KEY_SIZE) != 0 ||
+        hex_to_bytes(iv_hex, iv, IV_SIZE) != 0) {
+        fprintf(stderr, "Invalid hexadecimal input.\n");
+        return 1;
+    }
+
+    unsigned char ciphertext[plaintext_len];
+
+    des_cfb64_encrypt(key, iv, DES_KEY_SIZE, IV_SIZE, plaintext_len, plaintext, ciphertext);
+
+    printf("密文: ");
+    for (size_t i = 0; i < plaintext_len; i++) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+

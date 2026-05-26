@@ -1,0 +1,66 @@
+# 未过槽：SM4|cbc|c、SM4|cbc|cpp
+mandatory: |
+  **SM4-CBC only**：**`EVP_sm4_cbc()`** + **`set_padding(0)`**。
+  key/iv 各 **16B**（**32 hex**）；明文 **16B**（**32 hex**）→ 密文 **32 hex**。
+  **golden 前缀：`681edf34`**（**`681edf34d206965e86b3e94f536e4246`**）。
+  **禁止：** **`des.h`、`DES_*`、`KEY_SIZE 8`、`des_cfb64`**。
+
+supplement: |
+  **≤80 行**；**`printf("密文: ");`** + **32 hex**。
+  **日志 sm4-cbc-cpp：** 缺 **`<cstring>`**；**`reinterpret_cast`+`strlen(env)`** 未 hex 解码 → 照抄 **`c:`** 骨架 **h2b**。
+
+c: |
+  **【SM4|cbc|c】照抄骨架：**
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;
+    strip(ph);strip(kh);strip(ih);
+    if(strlen(ph)!=32||strlen(kh)!=32||strlen(ih)!=32)return 1;
+    unsigned char pt[16],key[16],iv[16],out[16];
+    if(h2b(ph,pt,16)||h2b(kh,key,16)||h2b(ih,iv,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!ctx)return 1;
+    if(!EVP_EncryptInit_ex(ctx,EVP_sm4_cbc(),NULL,key,iv))return 1;
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;
+    if(!EVP_EncryptUpdate(ctx,out,&o1,pt,16))return 1;
+    if(!EVP_EncryptFinal_ex(ctx,out+o1,&o2))return 1;
+    printf("密文: ");
+    for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+
+cpp: |
+  **【SM4|cbc|cpp】** 照抄 C；**`EVP_sm4_cbc()`**；禁止 **des_ecb**
+
+python: |
+  ```python
+  import os
+  from gmssl.sm4 import CryptSM4, SM4_ENCRYPT
+  k=bytes.fromhex(os.getenv("TEST_KEY","").strip())
+  iv=bytes.fromhex(os.getenv("TEST_IV","").strip())
+  pt=bytes.fromhex(os.getenv("TEST_PLAINTEXT","").strip())
+  s=CryptSM4(); s.set_key(k,SM4_ENCRYPT)
+  print("密文:", s.crypt_cbc(iv,pt).hex().lower())
+  ```
+
+test_feedback_improve: |
+  **SM4-CBC：** **`EVP_sm4_cbc`** + **padding(0)**；**`681edf34`**
+
+test_feedback_improve_c: |
+  删 **des.h**；key/iv **32 hex**；**`EVP_sm4_cbc`**
+
+test_feedback_improve_cpp: |
+  **日志 sm4-cbc-cpp：** **`#include <cstring>`**；用骨架 **h2b**（32 hex key/iv/pt）；**`EVP_sm4_cbc`** + **set_padding(0)** + **`printf("密文: ");`**

@@ -1,0 +1,2027 @@
+{
+  "version": 1,
+  "schema": "run_prompt_ablation.invoke_batch_des_cloud",
+  "fingerprint": "d4a58d1c0eff11eb7c738049",
+  "fp_payload": {
+    "schema": "run_prompt_ablation.invoke_batch_des_cloud",
+    "config": "config.yaml",
+    "providers": [
+      "deepseek",
+      "doubao",
+      "claude",
+      "openai",
+      "codex"
+    ],
+    "modes": [
+      "ECB",
+      "CBC",
+      "CFB",
+      "OFB"
+    ],
+    "languages": [
+      "python",
+      "c",
+      "cpp"
+    ],
+    "max_cases": null,
+    "ablations": [
+      "common_only",
+      "common_llm",
+      "common_llm_lang",
+      "full"
+    ],
+    "skip_full_invoke": false,
+    "baseline_from_history": true,
+    "fresh_baseline": false,
+    "history_db": "/mnt/d/aicrypto-helper/code_history.db",
+    "validate": true,
+    "max_retries": 3,
+    "requirements": "",
+    "ablation_strict_c": false,
+    "operation": "加密解密"
+  },
+  "runs": [
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "deepseek",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "doubao",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "claude",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": false
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "openai",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": false,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": false,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": false,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": false,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": false,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": false,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": false,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "python",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "c",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": false,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    },
+    {
+      "provider": "codex",
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "cpp",
+      "results": [
+        {
+          "prompt_ablation": "common_only",
+          "gsr": true,
+          "validation_ok": false,
+          "test_ok": null
+        },
+        {
+          "prompt_ablation": "common_llm",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "common_llm_lang",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true
+        },
+        {
+          "prompt_ablation": "full",
+          "gsr": true,
+          "validation_ok": true,
+          "test_ok": true,
+          "_from_code_history": true
+        }
+      ]
+    }
+  ],
+  "next_index": 60,
+  "total_cells": 60
+}

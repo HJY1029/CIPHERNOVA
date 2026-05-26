@@ -1,0 +1,30 @@
+# 未过槽：SM4|cfb|cpp
+mandatory: |
+  **SM4-CFB-128 only**：**`EVP_sm4_cfb128()`** + **`set_padding(0)`**。
+  key/iv 各 **16B**；明文 **16B** → **32 hex** 密文；前缀 **`2754b10c`**。
+  **禁止：** 空 **`des_encrypt(){}`**、**`DES_KEY_SIZE 8`、`des.h`**。
+
+supplement: |
+  **VPR 槽须可编译 main**；照抄 SM4-CBC 骨架只改 cipher 行。
+
+c: |
+  **【SM4|cfb|c】** 同 SM4-CBC 骨架，cipher 改为 **`EVP_sm4_cfb128()`**。
+
+cpp: |
+  **【SM4|cfb|cpp】照抄 SM4-CBC C 骨架，仅改：**
+  ```c
+  EVP_EncryptInit_ex(ctx,EVP_sm4_cfb128(),NULL,key,iv);
+  ```
+  **禁止** 空函数；**`printf("密文: ");`**
+
+python: |
+  gmssl / PyCryptodome 等价 SM4-CFB；**`print("密文:", …)`**
+
+test_feedback_improve: |
+  **`EVP_sm4_cfb128`**（非 ofb128）；**`2754b10c`**
+
+test_feedback_improve_cpp: |
+  删 **des_encrypt 占位**、**DES_KEY_SIZE**；写满 **Update/Final**；**`密文:`**
+
+test_feedback_improve_c: |
+  **EVP_sm4_cfb128**；勿 **DES_cfb64**

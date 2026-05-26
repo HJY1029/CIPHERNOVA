@@ -1,0 +1,20 @@
+# OpenAI · DES-CBC
+supplement: |
+  **禁止** `#define 8`、`#define 8 8`（`macro names must be identifiers`）。用 **`#define DES_BLOCK_BYTES 8`**。
+  **自测 golden：** K `57696C6C69616D53`、IV `5072656E74696365`、明文 `4E6574776F726B205365637572697479` → **`5EB15B91506B9AE7CEB65954AE115E03`**。
+  **错例：** 密文 hex **等于明文** **`4e6574776f726b205365637572697479`**（含大小写变体）→ **完全未加密、直接打印 `TEST_PLAINTEXT` 解码 hex**；须 **EVP_des_cbc** 得到 **`5EB15B91…`**。
+  **错例：** **`1e1711191b1b08454d72726c69727c3c`** 与 golden **`5EB15B91…`** 完全不符 → 多为 **按 OFB/逐字节**手搓，**非** `EVP_des_cbc` 整段 **CBC**；须 **唯一 EVP_des_cbc + 与 PyCryptodome CBC 等价的链式**。
+
+c: |
+  **`main` 书写顺序（防 `'ciphertext_len' undeclared` / `'ciphertext' undeclared`）：** 在 **`main` 开头、任何** `for (i=0;i<ciphertext_len;i++)` **或** `printf("%02x", ciphertext[i])` **之前**，**原样先写**（可改缓冲大小，**顺序不可换**）：  
+    `int len = 0, ciphertext_len = 0;`  
+    `unsigned char outbuf[256];`  
+    `unsigned char *ciphertext = outbuf;`  
+  再 `EVP_CIPHER_CTX_new` → **`EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len); ciphertext_len += len;`** → **`EVP_EncryptFinal_ex(ctx, ciphertext + ciphertext_len, &len); ciphertext_len += len;`**。**禁止** 先 `for`/`printf` 再补声明（即 **`ciphertext_len`/`ciphertext` undeclared** 根因）。
+  **无输出 = 评测失败：** **`TEST_*` 注入正常时**必须在 **`EVP_EncryptUpdate`/`Final` 成功后**执行 **`printf("密文: ");`** + **`%02x`** + **`fflush(stdout)`**。**禁止** `EncryptInit`/`Update` 成功后 **`return`/`exit` 跳过早于 `printf`**；**禁止** `scanf`/`getchar` 阻塞、**禁止**仅 stderr。**`getenv` 失败：** 可 **`fprintf(stderr,...); return 1;`**，但**禁止**静默 `return`（无任何输出）。
+  **「无法提取密文」高频：** 在 **`密文:`** 与 **hex** 之间插入**题面句/长句中文** → 评测只认纯 hex。**正确：** **`printf("密文: ");`** 后**仅** **`%02x`**。
+  **`仅用 EVP_des_cbc()`**；`Update` 传**全部**解码明文（**`plaintext_len` 字节一次或分块均可**），勿手写 CBC。
+  **禁止**函数原型里写 **`the unsigned char *`**（应为 **`unsigned char *`**）；**禁止**自写 **`des_cbc_encrypt`** / **`xor_blocks`** / **`des_encrypt`** 串 CBC —— 须 **`<openssl/evp.h>` + `EVP_des_cbc()` + legacy**。
+  **绝对禁止**自写 **`pc1_permutation`/`PC1`/`PC2`/`key_schedule`** 等 DES 密钥编排（易在 **`((PC`** 等处截断 → **`PC` undeclared` / `expected ')' at end of input`**）。**一律 EVP**，勿手搓。
+  **全 `0` 密文 `0000…`：** 与 DES-ECB 同因：**legacy**、**`Update`/`Final` 返回未检查**、**`ciphertext_len` 未累加**、**`out` 与 `plaintext` 同指针覆盖**；须 **`OSSL_PROVIDER_load` → EVP_des_cbc → 检查返回值`**。
+  **golden：** **`5EB15B91506B9AE7CEB65954AE115E03`**。**绝对禁止**自写 **`des_encrypt_block`**。**禁止** `#define 8`。

@@ -1,0 +1,12 @@
+# scripts/run_qwen_batch_failing_slots.py — Qwen 未过槽（9）
+# started_utc: 2026-05-22T05:46:48.639992+00:00
+# provider: qwen_coder_local
+# results_json: /mnt/d/aicrypto-helper/experiments/results/qwen_batch_failing_slots_20260522T054648Z.json
+# failing_slots_total: 9
+# force_regen_no_db: 7
+# configs_count: 9
+# since: 2026-05-04
+# only_pending: True
+# pending_stats: {'input': 2, 'pending': 2, 'no_record': 2, 'retest_fail': 0, 'retest_pass_skip': 0, 'skip_disabled': 0, 'force_regen_no_db': 7}
+# 以下仅包含 success=False 的条目。
+

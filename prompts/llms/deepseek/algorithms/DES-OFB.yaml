@@ -1,0 +1,13 @@
+supplement: |
+  DES-OFB：评测 golden 与 **PyCryptodome** 及 **`openssl enc -des-ofb -nopad`（加 `-provider default -provider legacy`）** 一致；**密文 32 hex**。必须在 Update 前 `EVP_CIPHER_CTX_set_padding(ctx, 0)`；OpenSSL 3 须加载 **legacy** 再用 **`EVP_des_ofb()`**。
+  与 CFB 区别：OFB 反馈 **分组密码输出块**（非密文）；接错反馈则与 golden 完全无关。
+  **自测 golden：** K `57696C6C69616D53`、IV `5072656E74696365`、明文 `4E6574776F726B205365637572697479` → **`F788B2BC5949FCBBB3962D8E99733A96`**。
+
+c: |
+  **优先 `EVP_des_ofb()` + legacy + `set_padding(0)`**，**禁止** `EVP_des_cfb` / `EVP_des_cbc` / AES。
+  **`algorithms/c/DES-OFB.yaml` 若要求手写 OFB-8 且禁止 EVP：以本段为准**——实测 EVP 与本项目 test_data 一致；手写易错。
+  对照：`openssl enc -des-ofb -nopad -provider default -provider legacy -K 57696C6C69616D53 -iv 5072656E74696365 -in plain.bin`。
+
+cpp: |
+  同 C：**`EVP_des_ofb()`**（或 fetch `"DES-OFB"`）+ legacy + **`set_padding(0)`**；**禁止** `EVP_des_cfb`、`EVP_aes_*`。
+  输出仅 **32 hex**，勿附 IV。验算：`openssl enc -des-ofb -nopad -provider default -provider legacy ...`

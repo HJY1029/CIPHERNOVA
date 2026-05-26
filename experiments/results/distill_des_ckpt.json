@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "schema": "run_qwen_distillation_ablation",
+  "fingerprint": "ab5c56cd7b448d93ed950421",
+  "fp_payload": {
+    "schema": "run_qwen_distillation_ablation",
+    "config": "/mnt/d/aicrypto-helper/config.yaml",
+    "provider": "qwen_coder_local",
+    "algorithm": "DES",
+    "grid": [
+      {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "cpp"
+      }
+    ],
+    "limit": 0,
+    "enable_validation": false,
+    "web_batch_single": true,
+    "max_retries": 3,
+    "skip_baseline": false,
+    "skip_distill": false
+  },
+  "results_baseline": [
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.2423420889999761,
+      "filepath": "generated_code/des_ecb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "DES|ECB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.8558948959999952,
+      "filepath": "generated_code/des_ecb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "DES|ECB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1.8439829380000106,
+      "filepath": "generated_code/des_ecb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "DES|ECB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.24160956299999725,
+      "filepath": "generated_code/des_cbc.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      "label": "DES|CBC|python"
+    }
+  ],
+  "results_distill": []
+}

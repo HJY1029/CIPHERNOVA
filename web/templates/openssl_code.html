@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+
+{% block title %}OpenSSL标准代码库 - 织密新星 (CipherNova){% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>📚 OpenSSL标准代码库</h1>
+        <p>浏览OpenSSL官方源代码，学习标准加解密算法实现</p>
+    </div>
+
+    <div class="content">
+        <div id="status" class="status"></div>
+
+        <div class="info-box" style="margin-bottom: 30px;">
+            <h3>📝 使用说明</h3>
+            <p>
+                此页面允许您浏览OpenSSL官方源代码库中的各种算法实现。
+                您可以查看AES、DES、RSA等算法的标准实现代码，以及各种加密模式（ECB、CBC、CFB、OFB等）的源代码。
+                <br><br>
+                <strong>主要目录：</strong>
+                <ul style="margin-top: 10px; padding-left: 20px;">
+                    <li><code>crypto/aes/</code> - AES算法实现</li>
+                    <li><code>crypto/des/</code> - DES算法实现</li>
+                    <li><code>crypto/evp/</code> - EVP高级加密接口</li>
+                    <li><code>crypto/modes/</code> - 加密模式实现（CBC、CFB、OFB等）</li>
+                    <li><code>crypto/rsa/</code> - RSA算法实现</li>
+                </ul>
+            </p>
+        </div>
+
+        <div class="file-browser-container">
+            <div class="file-tree-panel">
+                <div class="file-tree-header">
+                    <h3>📁 文件树</h3>
+                    <div class="search-box">
+                        <input type="text" id="fileSearch" placeholder="搜索文件..." class="form-control" style="width: 100%; margin-top: 10px;">
+                    </div>
+                </div>
+                <div id="fileTree" class="file-tree">
+                    <div class="loading">加载中...</div>
+                </div>
+            </div>
+
+            <div class="code-viewer-panel">
+                <div class="code-viewer-header">
+                    <h3 id="currentFile">请选择一个文件</h3>
+                    <div class="code-actions">
+                        <button class="btn btn-small" onclick="copyCode()">📋 复制代码</button>
+                        <button class="btn btn-small" onclick="downloadFile()">💾 下载文件</button>
+                    </div>
+                </div>
+                <div id="codeViewer" class="code-viewer">
+                    <div class="empty-state">
+                        <p>👈 请从左侧文件树中选择一个文件查看源代码</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .info-box {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    .info-box h3 {
+        margin-bottom: 10px;
+        color: #0066aa;
+    }
+
+    .info-box ul {
+        margin-top: 10px;
+    }
+
+    .info-box code {
+        background: #e9ecef;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: 'Consolas', 'Monaco', monospace;
+    }
+
+    .file-browser-container {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 20px;
+        margin-top: 20px;
+        height: calc(100vh - 400px);
+        min-height: 600px;
+    }
+
+    @media (max-width: 768px) {
+        .file-browser-container {
+            grid-template-columns: 1fr;
+            height: auto;
+        }
+    }
+
+    .file-tree-panel {
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 15px;
+        overflow-y: auto;
+        max-height: 100%;
+    }
+
+    .file-tree-header h3 {
+        margin-bottom: 10px;
+        color: #0066aa;
+    }
+
+    .file-tree {
+        margin-top: 10px;
+    }
+
+    .file-tree-item {
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+        margin: 2px 0;
+        transition: background 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .file-tree-item:hover {
+        background: #e9ecef;
+    }
+
+    .file-tree-item.active {
+        background: #0066aa;
+        color: white;
+    }
+
+    .file-tree-item.directory {
+        font-weight: 600;
+    }
+
+    .file-tree-item.file {
+        padding-left: 24px;
+    }
+
+    .file-tree-item .icon {
+        width: 16px;
+        text-align: center;
+    }
+
+    .code-viewer-panel {
+        background: #ffffff;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .code-viewer-header {
+        background: #f8f9fa;
+        border-bottom: 1px solid #e9ecef;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .code-viewer-header h3 {
+        margin: 0;
+        color: #0066aa;
+        font-size: 1.1em;
+    }
+
+    .code-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-small {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+
+    .code-viewer {
+        flex: 1;
+        overflow: auto;
+        padding: 20px;
+        background: #1e1e1e;
+    }
+
+    .code-viewer pre {
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        color: #d4d4d4;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9em;
+        line-height: 1.6;
+    }
+
+    .code-viewer code {
+        background: transparent;
+        padding: 0;
+        color: inherit;
+    }
+
+    .empty-state {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #6c757d;
+        font-size: 1.1em;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 20px;
+        color: #6c757d;
+    }
+
+    .file-path {
+        font-size: 0.85em;
+        color: #6c757d;
+        margin-top: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let currentFilePath = '';
+    let fileTreeData = null;
+
+    // 加载文件树
+    async function loadFileTree() {
+        try {
+            const response = await fetch('/api/openssl-code/tree');
+            const data = await response.json();
+            
+            if (data.success) {
+                fileTreeData = data.tree;
+                renderFileTree(data.tree);
+            } else {
+                showStatus('加载文件树失败: ' + (data.error || '未知错误'), 'error');
+            }
+        } catch (error) {
+            console.error('加载文件树失败:', error);
+            showStatus('加载文件树失败: ' + error.message, 'error');
+        }
+    }
+
+    // 渲染文件树
+    function renderFileTree(tree, container = null, level = 0) {
+        if (!container) {
+            container = document.getElementById('fileTree');
+            container.innerHTML = '';
+        }
+
+        // 按类型和名称排序
+        const sortedItems = [...tree].sort((a, b) => {
+            if (a.type !== b.type) {
+                return a.type === 'directory' ? -1 : 1;
+            }
+            return a.name.localeCompare(b.name);
+        });
+
+        sortedItems.forEach(item => {
+            const div = document.createElement('div');
+            div.className = `file-tree-item ${item.type}`;
+            div.style.paddingLeft = `${level * 20 + 12}px`;
+            
+            const icon = item.type === 'directory' ? '📁' : getFileIcon(item.name);
+            div.innerHTML = `<span class="icon">${icon}</span><span>${escapeHtml(item.name)}</span>`;
+            
+            if (item.type === 'file') {
+                div.onclick = () => loadFile(item.path);
+            } else {
+                div.onclick = () => toggleDirectory(div, item);
+            }
+            
+            container.appendChild(div);
+            
+            // 存储数据
+            div.dataset.path = item.path;
+            div.dataset.type = item.type;
+        });
+    }
+
+    // 切换目录展开/折叠
+    function toggleDirectory(element, item) {
+        const children = element.nextElementSibling;
+        
+        if (children && children.classList.contains('file-tree-children')) {
+            // 已展开，折叠
+            children.remove();
+            element.classList.remove('expanded');
+        } else {
+            // 未展开，展开
+            if (item.children && item.children.length > 0) {
+                const childrenDiv = document.createElement('div');
+                childrenDiv.className = 'file-tree-children';
+                renderFileTree(item.children, childrenDiv, item.path.split('/').length);
+                element.after(childrenDiv);
+                element.classList.add('expanded');
+            }
+        }
+    }
+
+    // 获取文件图标
+    function getFileIcon(filename) {
+        const ext = filename.split('.').pop().toLowerCase();
+        const icons = {
+            'c': '📄',
+            'h': '📋',
+            'cpp': '📄',
+            'hpp': '📋',
+            'py': '🐍',
+            'md': '📝',
+            'txt': '📄',
+            'yaml': '⚙️',
+            'yml': '⚙️'
+        };
+        return icons[ext] || '📄';
+    }
+
+    // 加载文件内容
+    async function loadFile(filePath) {
+        try {
+            // 更新当前文件路径
+            currentFilePath = filePath;
+            
+            // 更新UI
+            document.getElementById('currentFile').textContent = filePath.split('/').pop();
+            document.getElementById('codeViewer').innerHTML = '<div class="loading">加载中...</div>';
+            
+            // 高亮选中的文件
+            document.querySelectorAll('.file-tree-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.path === filePath) {
+                    item.classList.add('active');
+                }
+            });
+            
+            // 加载文件内容
+            const response = await fetch(`/api/openssl-code/file?path=${encodeURIComponent(filePath)}`);
+            const data = await response.json();
+            
+            if (data.success) {
+                displayCode(data.content, filePath);
+            } else {
+                showStatus('加载文件失败: ' + (data.error || '未知错误'), 'error');
+                document.getElementById('codeViewer').innerHTML = 
+                    '<div class="empty-state"><p>❌ 加载文件失败</p></div>';
+            }
+        } catch (error) {
+            console.error('加载文件失败:', error);
+            showStatus('加载文件失败: ' + error.message, 'error');
+            document.getElementById('codeViewer').innerHTML = 
+                '<div class="empty-state"><p>❌ 加载文件失败</p></div>';
+        }
+    }
+
+    // 显示代码
+    function displayCode(content, filePath) {
+        const codeViewer = document.getElementById('codeViewer');
+        const ext = filePath.split('.').pop().toLowerCase();
+        const language = getLanguage(ext);
+        
+        // 创建代码块
+        const pre = document.createElement('pre');
+        const code = document.createElement('code');
+        code.className = `language-${language}`;
+        code.textContent = content;
+        pre.appendChild(code);
+        
+        codeViewer.innerHTML = '';
+        codeViewer.appendChild(pre);
+        
+        // 添加文件路径信息
+        const pathDiv = document.createElement('div');
+        pathDiv.className = 'file-path';
+        pathDiv.textContent = filePath;
+        codeViewer.appendChild(pathDiv);
+        
+        // 高亮代码
+        hljs.highlightElement(code);
+    }
+
+    // 获取语言类型
+    function getLanguage(ext) {
+        const langMap = {
+            'c': 'c',
+            'h': 'c',
+            'cpp': 'cpp',
+            'hpp': 'cpp',
+            'py': 'python',
+            'js': 'javascript',
+            'html': 'html',
+            'css': 'css',
+            'md': 'markdown',
+            'yaml': 'yaml',
+            'yml': 'yaml'
+        };
+        return langMap[ext] || 'plaintext';
+    }
+
+    // 复制代码
+    function copyCode() {
+        const codeViewer = document.getElementById('codeViewer');
+        const code = codeViewer.querySelector('code');
+        
+        if (code) {
+            navigator.clipboard.writeText(code.textContent).then(() => {
+                showStatus('代码已复制到剪贴板', 'success');
+            }).catch(err => {
+                showStatus('复制失败: ' + err.message, 'error');
+            });
+        }
+    }
+
+    // 下载文件
+    function downloadFile() {
+        if (!currentFilePath) {
+            showStatus('请先选择一个文件', 'error');
+            return;
+        }
+        
+        const codeViewer = document.getElementById('codeViewer');
+        const code = codeViewer.querySelector('code');
+        
+        if (code) {
+            const blob = new Blob([code.textContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = currentFilePath.split('/').pop();
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+    }
+
+    // 文件搜索
+    document.getElementById('fileSearch').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const items = document.querySelectorAll('.file-tree-item');
+        
+        items.forEach(item => {
+            const name = item.textContent.toLowerCase();
+            if (name.includes(searchTerm)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+
+    // HTML转义
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // 显示状态消息
+    function showStatus(message, type) {
+        const statusDiv = document.getElementById('status');
+        if (statusDiv) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type || 'info'}`;
+            statusDiv.style.display = 'block';
+            
+            if (type === 'success' || type === 'info') {
+                setTimeout(() => {
+                    statusDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+    }
+
+    // 页面加载时初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        loadFileTree();
+    });
+</script>
+{% endblock %}
+

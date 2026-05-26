@@ -1,0 +1,6 @@
+supplement: |
+  AES-OFB：生成与明文等长的 keystream 后 XOR；输出 hex 长度须与明文 hex 长度相同（本项目为 64 字符）。关闭块填充以免多出一整块。
+  与 test_data.yaml 中 AES OFB 向量对齐。
+
+python: |
+  注释与字符串中避免全角标点导致 SyntaxError；仅用 `#` 与半角 ASCII 标点编写注释。

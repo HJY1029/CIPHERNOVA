@@ -1,0 +1,13 @@
+# Qwen 批量未过槽索引（与 scripts/qwen_batch_common.py 同步）
+# 2026-05-23：9 槽批量 7/8 成功，仅剩 SM4-OFB-cpp
+# 初次生成：generate_pin_<lang> + mandatory + <lang> 骨架
+# 改进轮：test_feedback_improve_<lang> + mandatory + <lang> 骨架；code_generator 强制块
+log_patterns:
+  sm4-ofb-cpp:
+    - EVP_sm4_ofb128不存在须EVP_sm4_ofb
+    - 缺string.h
+    - strlen(env)未h2b
+    - iostream
+    - Python串题
+slots:
+  - { algorithm: SM4, mode: OFB, language: cpp, golden: 2754b10c, yaml: SM4-OFB.yaml, status: failing }

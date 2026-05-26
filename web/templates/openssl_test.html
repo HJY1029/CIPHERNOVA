@@ -1,0 +1,495 @@
+{% extends "base.html" %}
+
+{% block title %}OpenSSL标准测试 - 织密新星 (CipherNova){% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>🔐 OpenSSL标准测试</h1>
+        <p>使用OpenSSL标准库验证生成的C/C++代码</p>
+    </div>
+
+    <div class="content">
+        <div id="status" class="status"></div>
+
+        <div class="info-box" style="margin-bottom: 30px;">
+            <h3>📝 使用说明</h3>
+            <p>
+                此页面允许您测试生成的C/C++代码与OpenSSL标准库的兼容性。
+                请粘贴您的C/C++代码，并提供测试所需的明文、密钥和IV。
+                系统将尝试编译并运行您的代码，然后将其输出与OpenSSL的预期输出进行比较。
+                <br><br>
+                <strong>注意：</strong>此功能主要用于验证C/C++代码。Python代码通常直接使用标准库，无需OpenSSL测试。
+            </p>
+        </div>
+
+        <form id="opensslTestForm">
+            <div class="form-group">
+                <label for="testCode">C/C++代码 *</label>
+                <textarea id="testCode" name="testCode" rows="15" class="form-control" placeholder="粘贴您的C/C++代码..."></textarea>
+            </div>
+
+            <div class="test-form-grid">
+                <div class="form-group">
+                    <label for="testAlgorithm">算法 *</label>
+                    <select id="testAlgorithm" name="testAlgorithm" class="form-control" required>
+                        <option value="">加载中...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="testMode">模式</label>
+                    <select id="testMode" name="testMode" class="form-control">
+                        <option value="">不适用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="testPlaintext">明文 (Hex) *</label>
+                <input type="text" id="testPlaintext" name="testPlaintext" class="form-control" placeholder="请输入十六进制明文..." required>
+            </div>
+            
+            <!-- 对称加密算法字段（DES/AES） -->
+            <div id="symmetricKeyGroup">
+                <div class="form-group">
+                    <label for="testKey">密钥 (Hex) *</label>
+                    <input type="text" id="testKey" name="testKey" class="form-control" placeholder="请输入十六进制密钥...">
+                </div>
+                <div class="form-group" id="testIVGroup">
+                    <label for="testIV">初始化向量 IV (Hex)</label>
+                    <input type="text" id="testIV" name="testIV" class="form-control" placeholder="请输入十六进制IV...">
+                </div>
+            </div>
+            
+            <!-- RSA公钥字段 -->
+            <div id="rsaPublicKeyGroup" style="display: none;">
+                <div class="form-group">
+                    <label for="testPublicKeyN">公钥模数 n (Hex) *</label>
+                    <input type="text" id="testPublicKeyN" name="testPublicKeyN" class="form-control" placeholder="请输入公钥模数n（十六进制）...">
+                </div>
+                <div class="form-group">
+                    <label for="testPublicKeyE">公钥指数 e (Hex) *</label>
+                    <input type="text" id="testPublicKeyE" name="testPublicKeyE" class="form-control" placeholder="请输入公钥指数e（十六进制，通常为10001）...">
+                </div>
+            </div>
+            
+            <!-- RSA私钥字段 -->
+            <div id="rsaPrivateKeyGroup" style="display: none;">
+                <div class="form-group">
+                    <label for="testPrivateKeyN">私钥模数 n (Hex) *</label>
+                    <input type="text" id="testPrivateKeyN" name="testPrivateKeyN" class="form-control" placeholder="请输入私钥模数n（十六进制）...">
+                </div>
+                <div class="form-group">
+                    <label for="testPrivateKeyD">私钥指数 d (Hex) *</label>
+                    <input type="text" id="testPrivateKeyD" name="testPrivateKeyD" class="form-control" placeholder="请输入私钥指数d（十六进制）...">
+                </div>
+            </div>
+            
+            <!-- RSA预期签名字段 -->
+            <div id="rsaExpectedSignatureGroup" style="display: none;">
+                <div class="form-group">
+                    <label for="testExpectedSignature">预期数字签名 (Hex)（可选）</label>
+                    <input type="text" id="testExpectedSignature" name="testExpectedSignature" class="form-control" placeholder="请输入预期的数字签名（十六进制，可选）...">
+                    <small style="color: #666; display: block; margin-top: 5px;">如果提供，系统将验证生成的签名是否与预期一致</small>
+                </div>
+            </div>
+
+            <button type="submit" class="btn" id="runOpenSSLTestBtn">运行OpenSSL测试</button>
+        </form>
+
+        <div id="opensslTestResult" class="test-result-section" style="display: none;">
+            <h4>测试结果</h4>
+            <div id="opensslTestStatus" class="status-openssl"></div>
+            <div style="margin-top: 15px;">
+                <strong>您的代码输出:</strong>
+                <pre class="code-display" id="yourCodeOutput"></pre>
+            </div>
+            <div style="margin-top: 15px;">
+                <strong>OpenSSL标准输出:</strong>
+                <pre class="code-display" id="opensslStandardOutput"></pre>
+            </div>
+            <div style="margin-top: 15px;">
+                <strong>详细信息:</strong>
+                <pre class="code-display" id="opensslTestDetails"></pre>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Specific styles for openssl_test.html */
+    .test-form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+    }
+    .test-result-section {
+        margin-top: 30px;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        padding: 20px;
+    }
+    .test-result-section h4 {
+        margin-bottom: 15px;
+        color: #333;
+    }
+    .code-display {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        padding: 15px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+        font-size: 0.9em;
+        line-height: 1.6;
+        max-height: 400px;
+        white-space: pre-wrap;
+        word-break: break-all;
+    }
+    .status-openssl {
+        padding: 10px 15px;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    .status-openssl.success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .status-openssl.error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .status-openssl.info { background-color: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+</style>
+{% endblock %}
+
+{% block extra_js %}
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+    let opensslAvailable = false;
+
+    // 检查OpenSSL是否可用
+    async function checkOpensslAvailable() {
+        try {
+            const response = await fetch('/api/openssl-check');
+            const data = await response.json();
+            opensslAvailable = data.available;
+            
+            if (!opensslAvailable) {
+                showInfo('OpenSSL未安装或不在PATH中，无法使用OpenSSL测试功能。请先安装OpenSSL。', 'warning');
+                document.getElementById('opensslTestBtn').disabled = true;
+            }
+        } catch (error) {
+            console.error('检查OpenSSL状态失败:', error);
+        }
+    }
+
+    // 算法选择变化时，更新UI
+    document.getElementById('testAlgorithm').addEventListener('change', function() {
+        const algorithm = this.value;
+        const symmetricKeyGroup = document.getElementById('symmetricKeyGroup');
+        const rsaPublicKeyGroup = document.getElementById('rsaPublicKeyGroup');
+        const rsaPrivateKeyGroup = document.getElementById('rsaPrivateKeyGroup');
+        const modeGroup = document.querySelector('.test-form-grid .form-group:last-child');
+        const testIVGroup = document.getElementById('testIVGroup');
+        
+        const rsaExpectedSignatureGroup = document.getElementById('rsaExpectedSignatureGroup');
+        
+        if (algorithm === 'RSA') {
+            // RSA算法：显示RSA密钥字段，隐藏对称加密字段
+            symmetricKeyGroup.style.display = 'none';
+            rsaPublicKeyGroup.style.display = 'block';
+            rsaPrivateKeyGroup.style.display = 'block';
+            rsaExpectedSignatureGroup.style.display = 'block';
+            if (modeGroup) modeGroup.style.display = 'none'; // 隐藏模式选择
+        } else {
+            // 对称加密算法：显示对称加密字段，隐藏RSA字段
+            symmetricKeyGroup.style.display = 'block';
+            rsaPublicKeyGroup.style.display = 'none';
+            rsaPrivateKeyGroup.style.display = 'none';
+            rsaExpectedSignatureGroup.style.display = 'none';
+            if (modeGroup) modeGroup.style.display = 'block'; // 显示模式选择
+            // 更新IV显示（ECB不需要IV）
+            updateIvVisibility();
+        }
+    });
+
+    // 模式选择变化时，更新IV显示
+    document.getElementById('testMode').addEventListener('change', function() {
+        updateIvVisibility();
+    });
+
+    function updateIvVisibility() {
+        const mode = document.getElementById('testMode').value;
+        const testIVGroup = document.getElementById('testIVGroup');
+        if (mode === 'ECB' || !mode) {
+            testIVGroup.style.display = 'none';
+        } else {
+            testIVGroup.style.display = 'block';
+        }
+    }
+
+    // 表单提交
+    document.getElementById('opensslTestForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        if (!opensslAvailable) {
+            showInfo('OpenSSL不可用，无法进行测试', 'error');
+            return;
+        }
+
+        const algorithm = document.getElementById('testAlgorithm').value;
+        const mode = document.getElementById('testMode').value;
+        const plaintext = document.getElementById('testPlaintext').value.trim();
+        
+        // 根据算法类型收集不同的参数
+        let requestData = {
+            algorithm,
+            mode: mode || null,
+            plaintext
+        };
+        
+        if (algorithm === 'RSA') {
+            // RSA参数
+            const publicKeyN = document.getElementById('testPublicKeyN').value.trim();
+            const publicKeyE = document.getElementById('testPublicKeyE').value.trim();
+            const privateKeyN = document.getElementById('testPrivateKeyN').value.trim();
+            const privateKeyD = document.getElementById('testPrivateKeyD').value.trim();
+            const expectedSignature = document.getElementById('testExpectedSignature').value.trim();
+            
+            if (!plaintext || !publicKeyN || !publicKeyE || !privateKeyN || !privateKeyD) {
+                showInfo('请填写所有必填项（明文、公钥n/e、私钥n/d）', 'error');
+                return;
+            }
+            
+            requestData.public_key_n = publicKeyN;
+            requestData.public_key_e = publicKeyE;
+            requestData.private_key_n = privateKeyN;
+            requestData.private_key_d = privateKeyD;
+            if (expectedSignature) {
+                requestData.expected_signature = expectedSignature;
+            }
+        } else {
+            // 对称加密参数
+            const key = document.getElementById('testKey').value.trim();
+            const iv = document.getElementById('testIV').value.trim();
+            
+            if (!plaintext || !key) {
+                showInfo('请填写所有必填项（明文、密钥）', 'error');
+                return;
+            }
+            
+            requestData.key = key;
+            requestData.iv = iv || null;
+            
+            // AES密钥长度
+            if (algorithm === 'AES') {
+                const keySize = parseInt(document.getElementById('aesKeySize')?.value || '128');
+                requestData.key_size = keySize;
+            }
+        }
+
+        const btn = document.getElementById('runOpenSSLTestBtn');
+        btn.disabled = true;
+        btn.textContent = '测试中...';
+
+        try {
+            const response = await fetch('/api/openssl-test', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                displayOpensslResult(data);
+                document.getElementById('opensslCompareSection').style.display = 'block';
+            } else {
+                showInfo(data.error || 'OpenSSL测试失败', 'error');
+                document.getElementById('opensslResult').style.display = 'none';
+            }
+        } catch (error) {
+            showInfo('测试失败: ' + error.message, 'error');
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '运行OpenSSL测试';
+        }
+    });
+
+    function displayOpensslResult(data) {
+        const resultDiv = document.getElementById('opensslResult');
+        const contentDiv = document.getElementById('opensslResultContent');
+        
+        const details = data.details || {};
+        const ciphertext = details.ciphertext || '';
+        const signature = details.signature || '';
+        const signature_match = details.signature_match;
+        const expected_signature = details.expected_signature || '';
+        
+        let html = `
+            <div style="background: #f0f7ff; padding: 20px; border-radius: 8px;">
+                <div style="margin-bottom: 15px;">
+                    <strong style="color: #0066aa;">✓ ${data.message}</strong>
+                </div>
+                <div style="margin-bottom: 10px;">
+                    <strong>算法:</strong> ${details.algorithm || 'N/A'}<br>
+                    <strong>模式:</strong> ${details.mode || 'N/A'}<br>
+                    ${details.key_size ? `<strong>密钥长度:</strong> ${details.key_size}位<br>` : ''}
+                </div>
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <strong>明文:</strong> <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 4px;">${details.plaintext || 'N/A'}</code><br>
+                    ${details.key ? `<strong>密钥:</strong> <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 4px;">${details.key || 'N/A'}</code><br>` : ''}
+                    ${details.iv ? `<strong>IV:</strong> <code style="background: #f5f5f5; padding: 2px 6px; border-radius: 4px;">${details.iv}</code><br>` : ''}
+                </div>
+                ${ciphertext ? `
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <strong style="color: #009977; font-size: 1.1em;">OpenSSL标准密文:</strong><br>
+                    <code style="background: #e8f5e9; padding: 10px; border-radius: 4px; display: block; margin-top: 5px; word-break: break-all; font-size: 0.95em;">${ciphertext}</code>
+                </div>
+                ` : ''}
+                ${signature ? `
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                    <strong style="color: #ff9800; font-size: 1.1em;">数字签名:</strong><br>
+                    <code style="background: #fff3e0; padding: 10px; border-radius: 4px; display: block; margin-top: 5px; word-break: break-all; font-size: 0.95em;">${signature}</code>
+                    ${expected_signature ? `
+                        <div style="margin-top: 10px;">
+                            <strong>预期签名:</strong><br>
+                            <code style="background: #f5f5f5; padding: 10px; border-radius: 4px; display: block; margin-top: 5px; word-break: break-all; font-size: 0.95em;">${expected_signature}</code>
+                        </div>
+                    ` : ''}
+                    ${signature_match !== undefined ? `
+                        <div style="margin-top: 10px; padding: 10px; border-radius: 4px; ${signature_match ? 'background: #e8f5e9; color: #2e7d32;' : 'background: #ffebee; color: #c62828;'}">
+                            <strong>${signature_match ? '✓ 签名验证通过' : '✗ 签名验证失败'}</strong>
+                        </div>
+                    ` : ''}
+                </div>
+                ` : ''}
+            </div>
+        `;
+        
+        contentDiv.innerHTML = html;
+        resultDiv.style.display = 'block';
+        
+        // 保存结果到全局变量，供对比使用
+        window.lastOpensslResult = {
+            ciphertext: ciphertext,
+            signature: signature,
+            details: details
+        };
+    }
+
+    // 对比功能
+    document.getElementById('compareWithOpensslBtn').addEventListener('click', async function() {
+        const generatedCiphertext = document.getElementById('generatedCiphertext').value.trim();
+        
+        if (!generatedCiphertext) {
+            showInfo('请先输入生成的密文', 'error');
+            return;
+        }
+
+        if (!window.lastOpensslResult) {
+            showInfo('请先运行OpenSSL测试', 'error');
+            return;
+        }
+
+        const opensslCiphertext = window.lastOpensslResult.ciphertext;
+        const generatedNormalized = generatedCiphertext.replace(/\s+/g, '').toLowerCase();
+        const opensslNormalized = opensslCiphertext.replace(/\s+/g, '').toLowerCase();
+
+        const compareDiv = document.getElementById('compareResult');
+        let html = '';
+
+        if (generatedNormalized === opensslNormalized) {
+            html = `
+                <div style="background: #e8f5e9; padding: 20px; border-radius: 8px; border: 2px solid #4caf50;">
+                    <div style="color: #2e7d32; font-weight: bold; margin-bottom: 10px;">✓ 完全匹配！</div>
+                    <div>生成的密文与OpenSSL标准结果完全一致。</div>
+                </div>
+            `;
+        } else {
+            html = `
+                <div style="background: #ffebee; padding: 20px; border-radius: 8px; border: 2px solid #f44336;">
+                    <div style="color: #c62828; font-weight: bold; margin-bottom: 15px;">✗ 不匹配</div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>生成的密文:</strong><br>
+                        <code style="background: #fff; padding: 8px; border-radius: 4px; display: block; margin-top: 5px; word-break: break-all;">${generatedCiphertext}</code>
+                        <small style="color: #666;">长度: ${generatedNormalized.length} 字符</small>
+                    </div>
+                    <div>
+                        <strong>OpenSSL标准密文:</strong><br>
+                        <code style="background: #fff; padding: 8px; border-radius: 4px; display: block; margin-top: 5px; word-break: break-all;">${opensslCiphertext}</code>
+                        <small style="color: #666;">长度: ${opensslNormalized.length} 字符</small>
+                    </div>
+                </div>
+            `;
+        }
+
+        compareDiv.innerHTML = html;
+        compareDiv.style.display = 'block';
+    });
+
+    // 加载算法列表
+    async function loadAlgorithms() {
+        try {
+            const response = await fetch('/api/algorithms');
+            const data = await response.json();
+            
+            if (data.success) {
+                const select = document.getElementById('testAlgorithm');
+                select.innerHTML = '<option value="">请选择算法</option>';
+                
+                Object.keys(data.algorithms).forEach(algorithm => {
+                    const option = document.createElement('option');
+                    option.value = algorithm;
+                    option.textContent = algorithm;
+                    select.appendChild(option);
+                });
+                
+                // 添加RSA选项（如果API没有返回）
+                if (!Array.from(select.options).some(opt => opt.value === 'RSA')) {
+                    const rsaOption = document.createElement('option');
+                    rsaOption.value = 'RSA';
+                    rsaOption.textContent = 'RSA';
+                    select.appendChild(rsaOption);
+                }
+            }
+        } catch (error) {
+            console.error('加载算法列表失败:', error);
+            // 如果API失败，至少添加基本选项
+            const select = document.getElementById('testAlgorithm');
+            select.innerHTML = `
+                <option value="">请选择算法</option>
+                <option value="DES">DES</option>
+                <option value="AES">AES</option>
+                <option value="RSA">RSA</option>
+            `;
+        }
+    }
+
+    // 显示信息函数（如果不存在）
+    function showInfo(message, type) {
+        const statusDiv = document.getElementById('status');
+        if (statusDiv) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type || 'info'}`;
+            statusDiv.style.display = 'block';
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 5000);
+        } else {
+            alert(message);
+        }
+    }
+
+    // 页面加载时检查OpenSSL和加载算法列表
+    document.addEventListener('DOMContentLoaded', function() {
+        checkOpensslAvailable();
+        loadAlgorithms();
+        updateIvVisibility();
+    });
+</script>
+{% endblock %}
+

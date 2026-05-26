@@ -1,0 +1,218 @@
+# scripts/run_qwen_batch_failing_slots.py — Qwen 仅 15 未过槽
+# started_utc: 2026-05-20T12:32:01.619160+00:00
+# provider: qwen_coder_local
+# results_json: D:\aicrypto-helper\experiments\results\qwen_batch_failing15_20260520T123201Z.json
+# failing_slots_total: 15
+# configs_count: 15
+# since: 2026-05-04
+# only_pending: True
+# pending_stats: {'input': 15, 'pending': 15, 'no_record': 15, 'retest_fail': 0, 'retest_pass_skip': 0, 'skip_disabled': 0}
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-20T21:29:08.257663+00:00
+provider: qwen_coder_local
+case_id: aes-cbc-c
+config: {"algorithm": "AES", "mode": "CBC", "language": "c"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: C:\Users\28233\AppData\Local\Temp\aicrypto_tester\test_00872adc8b924593af59c49138472681.c:4:10: fatal error: openssl/evp.h: No such file or directory
+    4 | #include <openssl/evp.h>
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+
+
+提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。
+解决方案：
+1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）
+2. 或者要求LLM生成不依赖OpenSSL的纯C实现代码
+error:
+编译失败: C:\Users\28233\AppData\Local\Temp\aicrypto_tester\test_00872adc8b924593af59c49138472681.c:4:10: fatal error: openssl/evp.h: No such file or directory
+    4 | #include <openssl/evp.h>
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+
+
+提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。
+解决方案：
+1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）
+2. 或者要求LLM生成不依赖OpenSSL的纯C实现代码
+total_ms: 32226613
+generated_filename: aes_cbc.c
+generated_code:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <openssl/evp.h>
+
+
+int main() {
+    const char* plaintext_env = getenv("TEST_PLAINTEXT");
+    const char* key_env = getenv("TEST_KEY");
+    const char* iv_env = getenv("TEST_IV");
+
+    if (plaintext_env == NULL || key_env == NULL || iv_env == NULL) {
+        fprintf(stderr, "Environment variables TEST_PLAINTEXT, TEST_KEY, and TEST_IV must be set.\n");
+        return 1;
+    }
+
+    size_t plaintext_len = strlen(plaintext_env);
+    size_t key_len = strlen(key_env);
+    size_t iv_len = strlen(iv_env);
+
+    if (key_len != 32 || iv_len != 32) {
+        fprintf(stderr, "Key and IV must be 32 characters long.\n");
+        return 1;
+    }
+
+    unsigned char plaintext[plaintext_len];
+    unsigned char key[key_len];
+    unsigned char iv[iv_len];
+
+    memcpy(plaintext, plaintext_env, plaintext_len);
+    memcpy(key, key_env, key_len);
+    memcpy(iv, iv_env, iv_len);
+
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    if (ctx == NULL) {
+        fprintf(stderr, "Failed to create cipher context.\n");
+        return 1;
+    }
+
+    if (!EVP_EncryptInit_ex(ctx, EVP_aes_128_cbc(), NULL, key, iv)) {
+        fprintf(stderr, "Failed to initialize encryption.\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+
+    unsigned char ciphertext[plaintext_len + EVP_CIPHER_block_size(EVP_aes_128_cbc())];
+    int len = 0;
+    if (!EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len)) {
+        fprintf(stderr, "Failed to encrypt data.\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+    int ciphertext_len = len;
+
+    len = 0;
+    if (!EVP_EncryptFinal_ex(ctx, ciphertext + len, &len)) {
+        fprintf(stderr, "Failed to finalize encryption.\n");
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+    ciphertext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    printf("密文: ");
+    for (int i = 0; i < ciphertext_len; i++) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-21T07:07:20.692340+00:00
+provider: qwen_coder_local
+case_id: aes-cbc-cpp
+config: {"algorithm": "AES", "mode": "CBC", "language": "cpp"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: C:\Users\28233\AppData\Local\Temp\aicrypto_tester\test_b230632d9b7f4e2c9863c493b6eb8b7b.cpp:3:10: fatal error: openssl/evp.h: No such file or directory
+    3 | #include <openssl/evp.h>
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+
+
+提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。
+解决方案：
+1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）
+2. 或者要求LLM生成不依赖OpenSSL的纯C++实现代码
+error:
+编译失败: C:\Users\28233\AppData\Local\Temp\aicrypto_tester\test_b230632d9b7f4e2c9863c493b6eb8b7b.cpp:3:10: fatal error: openssl/evp.h: No such file or directory
+    3 | #include <openssl/evp.h>
+      |          ^~~~~~~~~~~~~~~
+compilation terminated.
+
+
+提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。
+解决方案：
+1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）
+2. 或者要求LLM生成不依赖OpenSSL的纯C++实现代码
+total_ms: 34692430
+generated_filename: aes_cbc.cpp
+generated_code:
+```
+#include <iostream>
+#include <cstring>
+#include <openssl/evp.h>
+
+
+int main() {
+    const char* plaintext_env = std::getenv("TEST_PLAINTEXT");
+    const char* key_env = std::getenv("TEST_KEY");
+    const char* iv_env = std::getenv("TEST_IV");
+
+    if (!plaintext_env || !key_env || !iv_env) {
+        std::cerr << "Environment variables not set." << std::endl;
+        return 1;
+    }
+
+    unsigned char plaintext[256];
+    unsigned char key[32];
+    unsigned char iv[16];
+
+    std::memcpy(plaintext, plaintext_env, strlen(plaintext_env));
+    std::memcpy(key, key_env, strlen(key_env));
+    std::memcpy(iv, iv_env, strlen(iv_env));
+
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) {
+        std::cerr << "Failed to create cipher context." << std::endl;
+        return 1;
+    }
+
+    if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_128_cbc(), NULL, key, iv)) {
+        std::cerr << "Encryption initialization failed." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+
+    unsigned char ciphertext[256];
+    int len = 0;
+    if (1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, strlen(plaintext))) {
+        std::cerr << "Encryption update failed." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+    int ciphertext_len = len;
+
+    len = 0;
+    if (1 != EVP_EncryptFinal_ex(ctx, ciphertext + len, &len)) {
+        std::cerr << "Encryption finalization failed." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+    ciphertext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    for (int i = 0; i < ciphertext_len; ++i) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+

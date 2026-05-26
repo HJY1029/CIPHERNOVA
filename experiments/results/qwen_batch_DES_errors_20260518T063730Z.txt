@@ -1,0 +1,9 @@
+# scripts/run_qwen_batch_des.py — Qwen 批量失败（仅 DES）
+# started_utc: 2026-05-18T06:37:30.942415+00:00
+# provider: qwen_coder_local
+# results_json: /mnt/d/aicrypto-helper/experiments/results/qwen_batch_DES_20260518T063730Z.json
+# configs_count: 12
+# since: 2026-05-04
+# only_pending: False
+# 以下仅包含 success=False 的条目。
+

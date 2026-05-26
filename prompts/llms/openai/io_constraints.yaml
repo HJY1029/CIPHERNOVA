@@ -1,0 +1,206 @@
+code_requirements:
+  python: '请提供完整的代码，包括：
+
+    1. 必要的导入语句
+
+    2. 加密函数
+
+    3. 解密函数
+
+    4. 使用示例和测试代码（包含main函数）
+
+    5. 详细的注释说明
+
+    6. 确保代码可以直接编译/运行并测试
+
+    '
+  c: '**C 预处理：** 宏名须为合法标识符。**禁止** `#define 8`、`#define 8 8`（含行尾注释的变体），否则编译报错 `macro
+    names must be identifiers`；请用 **`#define DES_BLOCK_BYTES 8`** 等有意义的名称。
+
+
+    请提供完整的代码，包括：
+
+    1. 必要的头文件包含
+
+    2. 加密函数
+
+    3. 解密函数
+
+    4. 使用示例和测试代码（包含main函数）
+
+    5. 详细的注释说明
+
+    6. 确保代码可以直接编译/运行并测试
+
+    '
+  cpp: '**C++：** 三元运算符必须含 **`?`**，形如 **`a ? b : c`**；禁止 `x % 16 : 16` 等缺问号的片段。
+
+
+    请提供完整的代码，包括：
+
+    1. 必要的头文件包含
+
+    2. 加密函数
+
+    3. 解密函数
+
+    4. 使用示例和测试代码（包含main函数）
+
+    5. 详细的注释说明
+
+    6. 确保代码可以直接编译/运行并测试
+
+    '
+input_requirements:
+  python: "输入读取要求（非常重要）：\n- 代码必须优先从环境变量读取输入（os.environ.get('TEST_PLAINTEXT')等）\n-\
+    \ **重要：从环境变量读取的字符串可能包含换行符、空格等空白字符，必须去除！**\n  - 使用 `.strip()` 方法去除首尾空白字符\n  - 或者使用\
+    \ `''.join(hex_str.split())` 去除所有空白字符\n- **关键：如果环境变量不存在或为空字符串（去除空白后），必须从stdin读取或使用默认值！**\n\
+    \  - 检查方式：`value = os.environ.get('TEST_PLAINTEXT'); value = clean_hex_string(value)\
+    \ if value else None`\n  - 如果`value`为`None`或空字符串，则从stdin读取\n- 如果环境变量不存在或为空，可以从stdin读取（input()或sys.stdin）\n\
+    - 也可以提供交互式输入功能\n- 不要硬编码任何测试数据到代码中\n- **绝对不要对空字符串调用bytes.fromhex()，这会抛出ValueError！**\n\
+    - 代码必须能够处理任意输入，而不仅仅是测试数据\n"
+  c: "输入读取要求（非常重要）：\n- 代码必须优先从环境变量读取输入（getenv('TEST_PLAINTEXT')等）\n- **重要：从环境变量读取的字符串可能包含换行符、空格等空白字符，必须去除！**\n\
+    \  - 必须实现一个函数来去除字符串中的所有空白字符（包括空格、制表符、换行符等）\n  - 可以使用 `isspace()` 函数检查字符是否为空白字符\n\
+    \  - 在解析十六进制字符串之前，必须先去除所有空白字符\n- **关键：如果环境变量不存在或为空字符串（去除空白后），必须从stdin读取或使用默认值！**\n\
+    \  - 检查方式：`char *value = getenv(\"TEST_PLAINTEXT\"); if (value) { remove_whitespace(value);\
+    \ if (strlen(value) == 0) value = NULL; }`\n  - 如果`value`为`NULL`或空字符串，则从stdin读取\n\
+    - 如果环境变量不存在或为空，可以从stdin读取（scanf或getchar等）\n- 也可以提供交互式输入功能\n- 不要硬编码任何测试数据到代码中\n\
+    - 代码必须能够处理任意输入，而不仅仅是测试数据\n"
+  cpp: "输入读取要求（非常重要）：\n- 代码必须优先从环境变量读取输入（getenv('TEST_PLAINTEXT')等）\n- **重要：从环境变量读取的字符串可能包含换行符、空格等空白字符，必须去除！**\n\
+    \  - 必须实现一个函数来去除字符串中的所有空白字符（包括空格、制表符、换行符等）\n  - 可以使用 `isspace()` 函数检查字符是否为空白字符\n\
+    \  - 在解析十六进制字符串之前，必须先去除所有空白字符\n- **关键：如果环境变量不存在或为空字符串（去除空白后），必须从stdin读取或使用默认值！**\n\
+    \  - 检查方式：`char *value = getenv(\"TEST_PLAINTEXT\"); if (value) { remove_whitespace(value);\
+    \ if (strlen(value) == 0) value = NULL; }`\n  - 如果`value`为`NULL`或空字符串，则从stdin读取\n\
+    - 如果环境变量不存在或为空，可以从stdin读取（scanf或getchar等）\n- 也可以提供交互式输入功能\n- 不要硬编码任何测试数据到代码中\n\
+    - 代码必须能够处理任意输入，而不仅仅是测试数据\n"
+failure_driven_constraints:
+  python: '**【失败驱动 · Python 语法与注释（极高频）】**
+
+    - **严禁使用 `//` 写注释。** 在 Python 中 `//` 是**整除运算符**，写成 `// 函数：...` 会在解析时被当成表达式，极易触发
+    `SyntaxError: invalid character`。
+
+    - **注释一律只用 `#`**；中文说明写在 `#` 之后即可。
+
+    - **批量评测：** 运行时会设置 `TEST_PLAINTEXT` / `TEST_KEY` / `TEST_IV`。请**先** `os.getenv`（strip
+    后判断非空）再考虑 `input`；不要一上来多轮 `input("请输入…")` 导致未用环境数据、输出空密文或仅提示语。
+
+    - **AES-GCM：** 不要用 `input()` 询问 AAD。若 `test_data` 含 **aad**（如 `4D23C3CEC334B49BDB370C437FEC78DE`），必须
+    **`cipher.update(binascii.unhexlify(...))` 传入相同字节**，否则密文仍可能对但 **tag 全错**。输出 hex
+    长度须与评测期望一致（**密文+tag**，常见 **64 hex**）。
+
+    - 使用 `os.getenv` / `os.environ` 前必须 **`import os`**。
+
+    - **SM4 + gmssl（API 事实约束）：** `CryptSM4.set_key` 的第二参数**只能是** `sm4.SM4_ENCRYPT`
+    或 `sm4.SM4_DECRYPT`，**禁止**臆造 `sm4.SM4_CBC` 等不存在的常量。
+
+    - **SM4-CBC：** 使用 `crypt_sm4.crypt_cbc(iv, plaintext)`（方法名是 **`crypt_cbc`**，不是
+    `encrypt_cbc`）。
+
+    - **SM4-CFB / SM4-OFB：** 标准 `gmssl` 的 `CryptSM4` **没有** `crypt_cfb` / `encrypt_ofb`
+    等接口；须用 `from gmssl.sm4 import bytes_to_list, list_to_bytes` 与 **`crypt_sm4.one_round(crypt_sm4.sk,
+    bytes_to_list(寄存器))`** 得到 16 字节分组输出，再按模式做异或（CFB 反馈用**密文块**，OFB 反馈用**分组密码输出块**）。详见对应算法
+    YAML 中「Python 手动模式」小节。
+
+    '
+  c: '**【失败驱动 · C 语言 main 与 OpenSSL 清理（极高频）】**
+
+    - **`#define` 宏名必须是合法 C 标识符**（字母或下划线开头）。**禁止** `#define 8`、`#define 8 8`、`#define
+    8 8 // DES块大小为8字节(64位)` 等——**注释不能**让数字变成合法宏名；否则会报 `macro names must be identifiers`。块长请写
+    **`#define DES_BLOCK_BYTES 8`**。
+
+    - 使用 **`EVP_CIPHER`、`EVP_EncryptInit_ex` 等**时，必须 **`#include <openssl/evp.h>`**（及所需头），先声明
+    **`EVP_CIPHER_CTX *ctx`**（或正确初始化）再调用，禁止未包含头文件或未声明就用，导致 `unknown type name` / `undeclared`。
+
+    - 在本文件内调用的 **`hex_to_bytes`、`AES_Encrypt`** 等必须有**实现或前置声明**，避免 `implicit declaration`
+    / `undefined reference`。
+
+    - **三元运算符**须为 **`cond ? a : b`**，**禁止** `(cond) a : b`（缺 **`?`** 会报 `expected
+    '','' or '';'' before '':''`）。
+
+    - **CFB/OFB/CTR：** 输出缓冲、`malloc` 长度须 ≥ 实际写入字节数；避免越界导致 **`stack smashing detected`**
+    或 **`malloc(): corrupted top size`**。
+
+    - **`memset`/`memcpy`：** 目标缓冲区须**先声明**（如局部数组或已分配指针），禁止对未声明标识符操作（如 `memset(x,0,16)`
+    而无 `x`）。
+
+    - **所有** `EVP_CIPHER_CTX_free`、`EVP_CIPHER_CTX_cleanup`、`OSSL_PROVIDER_unload`、`free`、`BIO_free`
+    等调用，**必须**出现在 **`int main(void) { ... }` 的花括号对内**，且**早于** `return 0;`。
+
+    - **严禁**在 `main` 的闭合 `}` **之后**再写上述调用；否则编译器会报 `data definition has no type`、`conflicting
+    types for ''EVP_CIPHER_CTX_free''` 等（**并非**未安装 OpenSSL，而是**结构错误**）。
+
+    - **禁止 `goto cleanup`**（论文约束）；错误分支在 `return` 前**就地**释放资源，或拆分函数但保持单函数内配对释放。
+
+    - 生成后自检：从 `int main` 起**括号配对**，确保最后一组清理与 `return 0` 仍在 `main` 内。
+
+    - **算法与密钥长度一致：** 当前题为 **AES-128** 或 **SM4** 时，密钥 hex 须为 **32 字符**（16 字节）；**DES**
+    为 **16 字符**（8 字节）。禁止把 DES 的 `hex_to_key_8` /「密钥长度必须为 8 字节」逻辑套到 AES/SM4；也禁止在 SM4/AES
+    程序里打印 **"DES key"** 或「DES 密钥」类英文/中文错误信息。
+
+    - **CBC 与填充：** 若评测期望密文长度与明文等长（明文长度已为块大小整数倍），须在 **`EVP_EncryptInit_ex` 之后、`EVP_EncryptUpdate`
+    之前** `EVP_CIPHER_CTX_set_padding(ctx, 0)`；默认 PKCS 填充会多出整块密文导致 golden 永远不一致。
+
+    - **CFB 变体：** DES-CFB 题为 **CFB-8** → **`EVP_des_cfb8`**；AES-CFB 题为 **CFB-8** →
+    **`EVP_aes_*_cfb8`**；与 **`EVP_des_cfb`/`EVP_aes_*_cfb128`** 混用会得到完全不同的 hex。
+
+    '
+  cpp: '**【失败驱动 · C++ main 与 OpenSSL 清理（极高频）】**
+
+    - **三元运算符：** 必须为 **`condition ? true_expr : false_expr`**。**禁止** `plaintext.size()
+    % 16 : 16` 这类**缺少 `?`** 的写法（典型报错：`expected '','' or '';'' before ''plaintext''`）。
+
+    - **`main` 必须括号配平**：编译器报 `expected ''}'' at end of input` 时多为**文件在循环内被截断**，勿在
+    `for`/`while` 仅写 `{` 而不闭合。
+
+    - 与 C 相同：**所有** OpenSSL / `free` 清理必须在 **`main` 函数体内**、`return 0;` **之前**；**禁止**在
+    `main` 的 `}` 之后写可执行语句。
+
+    - **禁止 `goto cleanup`；** `std::string` 空判断用 `.empty()`，勿对 string 使用 `!s`。
+
+    - 与 C 相同：**AES-128 / SM4** 用 **32 hex 密钥**；**DES** 用 **16 hex 密钥**。禁止复用仅支持 8 字节密钥的
+    DES 工具函数校验 AES/SM4；报错文案不得出现 DES 专用描述。
+
+    '
+key_requirements:
+  content: "关键要求（非常重要）：\n1. **绝对禁止使用占位符、TODO、FIXME或空函数体！**\n   - **绝对不能有 `return plaintext;\
+    \ // placeholder` 这样的代码！**\n   - **绝对不能有 `// Placeholder for actual encryption\
+    \ logic` 这样的注释！**\n   - **绝对不能有 `// Placeholder for the encryption process` 这样的注释！**\n\
+    \   - **绝对不能有 `// This should include all the rounds of DES encryption` 这样的注释！**\n\
+    \   - **绝对不能有 `// TODO: implement encryption` 这样的注释！**\n   - **所有函数必须有完整的实现，不能只是返回输入！**\n\
+    \   - **加密函数必须真正执行加密算法，不能只是 `return input;` 或 `return plaintext;`！**\n   - **代码必须真正执行加密/解密操作，不能只输出输入数据的hex表示！**\n\
+    \   - **如果输出的是明文的hex而不是密文，说明代码没有真正执行加密，这是严重错误！**\n   - **严重警告：绝对不能只有IP置换和FP置换！**\n\
+    \     * **IP置换和FP置换是互逆的，如果中间没有16轮Feistel网络，输出就是明文本身！**\n     * **必须实现完整的16轮Feistel网络，包括密钥调度、扩展置换、S盒替换、P置换等！**\n\
+    2. **绝对禁止硬编码示例文本或测试数据！**\n   - **绝对不能有 `std::string plaintext = \"Your plaintext\
+    \ here\";` 这样的硬编码！**\n   - **绝对不能有 `std::string key = \"Your key here\";` 这样的硬编码！**\n\
+    \   - **绝对不能有 `std::string plaintext = \"example\";` 或任何硬编码的字符串！**\n   - **必须从环境变量读取输入：**\n\
+    \     - Python: `os.environ.get('TEST_PLAINTEXT')` 和 `os.environ.get('TEST_KEY')`\n\
+    \     - C/C++: `std::getenv(\"TEST_PLAINTEXT\")` 和 `std::getenv(\"TEST_KEY\")`\n\
+    \   - **如果环境变量不存在，可以从stdin读取，但绝对不能硬编码示例文本！**\n   - **代码必须能够处理任意输入，而不仅仅是特定的测试数据！**\n\
+    3. **绝对禁止使用随机数！**\n   - **绝对不要使用 `rand()`、`random()`、`srand()`、`time()` 等函数生成随机IV或随机密钥！**\n\
+    \   - **绝对不要使用 `os.urandom()`、`random.randint()`、`secrets.token_bytes()` 等Python随机函数！**\n\
+    \   - 对于需要IV的模式（CBC、CFB、OFB等），**必须从环境变量TEST_IV读取固定的IV**，确保相同输入每次产生相同输出\n   - 如果环境变量TEST_IV不存在，可以使用全零字节作为默认IV，但**绝对不能使用随机IV！**\n\
+    \   - 密钥必须从环境变量TEST_KEY读取，**绝对不能使用随机密钥！**\n   - **代码必须是确定性的：相同的明文、密钥、IV必须产生完全相同的密文！**\n\
+    4. **输出格式要求（绝对重要）：**\n   - **输出必须是十六进制格式的密文，不能是明文文本！**\n   - **绝对不能输出 \"Your plaintext\
+    \ here\"、\"example\" 或任何示例文本！**\n   - **输出格式：`密文: xxxxxx` 或 `ciphertext: xxxxxx`，其中xxxxxx是十六进制字符串**\n\
+    \   - **十六进制字符串必须：**\n     * 所有字符小写（a-f, 0-9）\n     * 没有空格、换行或其他分隔符\n     * 长度正确（对于DES-ECB，密文长度应该是8字节的倍数，即16的倍数个hex字符）\n\
+    \   - **示例正确输出：`密文: 958920b1358ef1972b9ee4548dc08e8a`**\n   - **示例错误输出：`Ciphertext:\
+    \ Your plaintext here`（这是明文，不是密文！）**\n5. 密文输出必须完整，不要截断或只输出部分内容\n6. 输出密文时，要明确标注'密文'或'ciphertext'等关键词，格式如：'密文:\
+    \ xxxxxx' 或 'ciphertext: xxxxxx'\n7. **绝对不要输出IV（初始化向量）！**IV只用于加密过程，不应该出现在输出中\n\
+    8. **绝对不要输出密钥！**密钥只用于加密过程，不应该出现在输出中\n9. **只输出密文本身**，不要输出IV、密钥、明文或其他任何附加信息\n10.\
+    \ **验证要求：生成的代码必须能够产生与预期密文完全匹配的结果！**\n    - 如果实际输出是明文的hex或明文文本，说明代码没有执行加密，必须修复！\n\
+    \    - 如果实际输出与预期不匹配，说明加密算法实现有误，必须修复！\n"
+output_requirements:
+  content: '输出格式要求：
+
+    - 输出格式必须包含''密文''或''ciphertext''关键词，例如：`print("密文:", hex_string)` 或 `printf("密文:
+    %s\n", hex_string)`
+
+    - 代码必须能够处理完整的输入数据，不能只处理部分数据
+
+    - 代码执行时间应该在合理范围内（几秒内完成），不能有死循环或无限等待
+
+    '
+ending:
+  content: '重要：只输出纯代码，不要使用markdown代码块标记（如```python、```c、```cpp等），不要输出任何说明文字、介绍或解释，只输出代码本身！
+
+    '

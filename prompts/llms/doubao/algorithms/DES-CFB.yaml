@@ -1,0 +1,13 @@
+# 豆包 · DES-CFB
+supplement: |
+  **（编译）禁止输出：** `#define 8 8 // 64位块`、`#define 8 8 // 8字节(64位)块大小`、`#define 8 8 /* DES块大小为8字节(64位) */` **等（必报 `macro names must be identifiers`；`/* */` 同样无效）。** 请改用 **`#define DES_BLOCK_BYTES 8`** 或 **`enum`**；置换表里禁止 **`l0`** 当 **`10`**。
+  DES-CFB（test_data）：golden = **`F70F01584ACF4D966ADC143EB240C962`**，与 **PyCryptodome** `DES.new(key, DES.MODE_CFB, iv)` **默认 `segment_size=8`（CFB-8）** 一致。
+  **`EVP_des_cfb()` / 64 位 CFB** 与上述 golden **不一致**，**禁止**作为唯一实现。
+  **CFB-8 要点：** 寄存器 8 字节；每处理 **1 明文字节**：取寄存器经 DES 加密后的**最高 1 字节**与明文异或得密文字节；再按 CFB-8 规则左移寄存器并填入新密文字节（与 PyCryptodome 状态一致）。
+  **错例密文：** **`eed4eeead7e4f8ba8e8dbea099b1800c`**（与 golden **`F70F01584ACF4D966ADC143EB240C962`** 完全不同）→ 多为 **`EVP_des_cfb` / 64 位 CFB** 或 **OFB/ECB 误当 CFB-8**；须对齐 **PyCryptodome CFB segment_size=8** 或等价状态机。
+
+c: |
+  **【编译 · 豆包高频】** 源码中**不得出现** `#define 8`、`#define 8 8`、`#define 8 8 // …`、`#define 8 8 /* … */` ——**必报** `macro names must be identifiers`。需要常量时只用 **`#define DES_BLOCK_BYTES 8`** 或 **`enum { DES_BLK = 8 };`**，**不要用数字当宏名**。
+  **「8 字节」说明：** **单独一行** **`/* DES 块 8 字节 */`**；**禁止**与 `#define 8` 写在同一行（无论 **`//`** 还是 **`/* */`**）。
+  **IP/PC/置换表：** 元素只能是 **十进制整数**（如 **`10`**) 或 **`0x0A`**。**禁止**写成 **`l0`、`l1`**（小写 **L** 与数字 **0** 组合）——编译器当作未声明标识符 **`'l0' undeclared`**。生成后自检：表中**不得**出现字母 **`l`** 紧邻数字 **`0`** 的 token。
+  S 盒/置换表：**整数 + `0x`**；**禁止** `"6"`、**`NaN`**。缓冲区长度 ≥ 明文长度。须产出 **32 hex** 与 golden **`F70F01584ACF4D966ADC143EB240C962`** 完全一致；若得到 **`eed4eeead7e4f8ba8e8dbea099b1800c`** 或 `EVP_des_cfb` 结果不符，**改 CFB-8 手搓** 对齐 PyCryptodome **`segment_size=8`**。

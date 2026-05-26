@@ -1,0 +1,36 @@
+# AES-GCM模式的C++语言特定内容
+cpp_specific: |
+  **【C++】** 三元运算须为 **`a ? b : c`**，禁止 **`expr : expr`** 缺问号。**`EVP_CIPHER_CTX_set_padding(ctx, 0)`**（本向量明文 16B 整块）。
+
+  **🚨🚨🚨 重要：GCM模式使用OpenSSL官方测试数据进行测试！🚨🚨🚨**
+  **本仓库向量（`test_data.yaml` → `AES.modes.GCM`）：明文 16 字节 → 密文 16 字节 + tag 16 字节 = **32 字节 = 64 个 hex**（一行 `密文:` 后连续打印，无空格）。**
+
+  **🚨 AAD（附加认证数据）— 缺了必错：** 评测注入 **`TEST_AAD`**（hex 字符串）。必须在加密**明文之前**把 AAD 喂给 OpenSSL，否则会出现 **密文 hex 前 32 字符对、后 32 字符（tag）错**。
+  - 从环境变量读取：`const char *aad_hex = std::getenv("TEST_AAD");`，转字节数组 `aad[]`，长度 `aad_len`（本向量 AAD 为 **16 字节**）。
+  - **OpenSSL 喂 AAD：** `EVP_EncryptUpdate(ctx, nullptr, &len, aad, aad_len);`（**输出缓冲区必须为 nullptr/NULL**，与 C 的 `NULL` 相同）。
+
+  **使用OpenSSL库的实现要求（C++语言）：**
+  1. **必须包含头文件：** `#include <openssl/evp.h>`、`#include <openssl/err.h>`（按需）、`#include <cstdlib>`、`#include <cstring>`、`#include <iostream>`、`#include <iomanip>`、`#include <string>`、`#include <vector>`（若用 vector）。
+  2. **密钥长度：** 16 / 24 / 32 字节分别对应 `EVP_aes_128_gcm` / `EVP_aes_192_gcm` / `EVP_aes_256_gcm()`（本测试为 **32 字节** → **256-bit**）。
+  3. **IV/nonce：** `TEST_IV` 在本向量中为 **12 字节**（24 个 hex 字符）。`EVP_EncryptInit_ex` 传入的 IV 指针长度为 12；若使用 `EVP_CIPHER_CTX_ctrl`，在 Init 密钥/IV 前设置 **`EVP_CTRL_GCM_IVLEN` 为 12**（与 OpenSSL 文档一致）。
+  4. **推荐调用顺序（与 OpenSSL GCM 一致）：**
+     - `EVP_CIPHER_CTX_new` → 选 `EVP_aes_*_gcm()` → `EncryptInit_ex`（可先 key=NULL 再 ctrl IV 长，再第二次 Init 带 key+iv，按你使用的 OpenSSL 习惯，但 **IV 长度须为 12**）
+     - **`EVP_EncryptUpdate(ctx, nullptr, &len, aad, aad_len);` ← AAD，缺一不可**
+     - `EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);`
+     - `EVP_EncryptFinal_ex(ctx, ciphertext + ciphertext_len, &len);`（GCM 下附加输出多为 0，但仍需调用）
+     - `EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, 16, tag);`
+  5. **输出：** `std::cout << "密文: ";` 然后 **仅** `ciphertext` 实际长度（通常等于明文长度）的 hex，再 **16 字节 tag** 的 hex；**不要**输出 IV/nonce。
+
+  **❌ 旧错误模板（禁止照抄）：** 在 `EncryptInit` 之后**直接**对明文做 `EVP_EncryptUpdate`，**没有**对 AAD 做 `Update(nullptr, ...)` —— 这会导致 **tag 与标准向量不一致**（密文仍可能对）。
+
+  **✅ 最小正确片段（逻辑示意，变量名自定）：**
+  ```cpp
+  int len = 0, chunk = 0;
+  if (1 != EVP_EncryptUpdate(ctx, nullptr, &len, aad_bytes.data(), static_cast<int>(aad_bytes.size()))) { /* fail */ }
+  if (1 != EVP_EncryptUpdate(ctx, ciphertext_buf, &len, plaintext_bytes.data(), static_cast<int>(plaintext_bytes.size()))) { /* fail */ }
+  int ct_total = len;
+  if (1 != EVP_EncryptFinal_ex(ctx, ciphertext_buf + ct_total, &chunk)) { /* fail */ }
+  ct_total += chunk;
+  if (1 != EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, 16, tag_buf)) { /* fail */ }
+  // 打印 hex：ciphertext_buf[0..ct_total) 与 tag_buf[0..16)
+  ```

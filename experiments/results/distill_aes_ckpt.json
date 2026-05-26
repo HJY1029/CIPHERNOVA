@@ -1,0 +1,238 @@
+{
+  "version": 1,
+  "schema": "run_qwen_distillation_ablation",
+  "fingerprint": "02618ca0ec09c9938d593d98",
+  "fp_payload": {
+    "schema": "run_qwen_distillation_ablation",
+    "config": "/mnt/d/aicrypto-helper/config.yaml",
+    "provider": "qwen_coder_local",
+    "algorithm": "AES",
+    "grid": [
+      {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "python"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "c"
+      },
+      {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "cpp"
+      }
+    ],
+    "limit": 0,
+    "enable_validation": false,
+    "web_batch_single": true,
+    "max_retries": 3,
+    "skip_baseline": false,
+    "skip_distill": false
+  },
+  "results_baseline": [
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.22283463900001266,
+      "filepath": "generated_code/aes_ecb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "AES|ECB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.7495848730000034,
+      "filepath": "generated_code/aes_ecb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "AES|ECB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1.622489999999999,
+      "filepath": "generated_code/aes_ecb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "AES|ECB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.23032152000001815,
+      "filepath": "generated_code/aes_cbc.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      "label": "AES|CBC|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.7212132180000026,
+      "filepath": "generated_code/aes_cbc.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "label": "AES|CBC|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1.8776965940000139,
+      "filepath": "generated_code/aes_cbc.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "label": "AES|CBC|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.25097249999998894,
+      "filepath": "generated_code/aes_cfb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      "label": "AES|CFB|python"
+    }
+  ],
+  "results_distill": []
+}

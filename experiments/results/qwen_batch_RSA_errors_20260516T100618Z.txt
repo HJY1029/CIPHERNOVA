@@ -1,0 +1,9 @@
+# scripts/run_qwen_batch_rsa.py — Qwen 批量失败（仅 RSA）
+# started_utc: 2026-05-16T10:06:18.248519+00:00
+# provider: qwen_coder_local
+# results_json: /mnt/d/aicrypto-helper/experiments/results/qwen_batch_RSA_20260516T100618Z.json
+# configs_count: 3
+# since: 2026-05-04
+# only_pending: False
+# 以下仅包含 success=False 的条目。
+

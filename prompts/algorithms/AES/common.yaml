@@ -1,0 +1,33 @@
+# AES算法共同内容
+# 这些内容在所有AES模式中都会使用
+
+algorithm_common: |
+  **🚨🚨🚨 必须优先使用OpenSSL库，保持代码简洁！🚨🚨🚨**
+  - **代码长度限制导致纯实现经常截断，必须优先使用OpenSSL库！**
+  - **使用OpenSSL库可以大大减少代码长度，避免因token限制导致的截断问题！**
+  - **必须包含头文件：`#include <openssl/evp.h>`**
+  - **必须使用OpenSSL EVP函数进行加密，不要实现完整的AES算法！**
+  - **编译命令：C语言 `gcc -o program program.c -lssl -lcrypto`，C++ `g++ -o program program.cpp -lssl -lcrypto`**
+  - **绝对不要实现完整的AES算法（密钥扩展、S盒替换、轮函数等）！**
+  
+  **实现要求：**
+  - 对于Python：使用 `cryptography` 或 `pycryptodome` 库的 `AES.MODE_*`
+  - 对于C/C++：**🚨🚨🚨 必须优先使用OpenSSL库！🚨🚨🚨**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+    - ❌ **绝对不要实现完整的AES算法（密钥扩展、S盒替换、轮函数等）！**
+    - ❌ **绝对不要使用纯C/C++实现！代码会太长，一定会截断！只有在OpenSSL完全不可用时才使用纯实现！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出密文！🚨🚨🚨**
+    - **必须使用 `printf("密文: ");` 或 `std::cout << "密文: ";` 输出密文！**
+    - **必须输出完整的密文，不要截断！**
+    - **重要：只输出实际加密的数据长度（使用 `ciphertext_len`），不要输出整个缓冲区或IV！**
+    - **绝对不能没有输出！程序必须输出密文！**
+  
+  **关键实现细节：**
+  - **密钥长度检测：**根据密钥字节长度选择对应的EVP函数
+    - 16字节（128位）→ `EVP_aes_128_*()`
+    - 24字节（192位）→ `EVP_aes_192_*()`
+    - 32字节（256位）→ `EVP_aes_256_*()`
+  - **对于AES，每个块大小为16字节（128位）**
+  - **AES支持128位、192位、256位密钥长度**
+

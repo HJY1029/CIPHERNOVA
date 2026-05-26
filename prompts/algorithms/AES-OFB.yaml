@@ -1,0 +1,15 @@
+# AES-OFB 模式（与 test_data.yaml、OpenSSL EVP_aes_128_ofb、PyCryptodome AES.MODE_OFB 对齐）
+# 历史错误：曾误写为「OFB-8 + 禁止 EVP_aes_128_ofb」，与仓库 golden（EA0B8FB8…）矛盾，勿再恢复。
+
+algorithm_specific: |
+  **AES-OFB 说明（本仓库基准）：**
+  - 反馈为 **整块 AES 输出**（16 字节），再与明文按字节异或；下一轮对 **上一轮输出块** 再做 AES（**非** CFB、**非**把密文反馈进寄存器）。
+  - **test_data.yaml** 中 AES-128-OFB 密文 golden 以 **`EA0B8FB8`** 开头，与 **`openssl enc -aes-128-ofb`**、**`EVP_aes_128_ofb()`**、**PyCryptodome `AES.new(key, AES.MODE_OFB, iv=iv).encrypt(plain)`** 一致。
+  - **Python：** **`from Crypto.Cipher import AES`** → **`AES.new(key, AES.MODE_OFB, iv=iv)`** → **`ciphertext = cipher.encrypt(plaintext)`**；**禁止**误用 **`MODE_CFB`**（CFB 同向量下前缀为 **`EAC2DD63`**）。
+  - **C/C++：** **`#include <openssl/evp.h>`** → **`EVP_EncryptInit_ex(ctx, EVP_aes_128_ofb(), NULL, key, iv)`** → **`EVP_CIPHER_CTX_set_padding(ctx, 0)`** → **`EVP_EncryptUpdate` / `EVP_EncryptFinal_ex`**。**禁止**整文件手搓 S 盒 / **`AES_EncryptBlock` 空函数体** / **`// Placeholder`** 冒充 OFB。
+  - 密钥/IV 各 **32 hex → 16 字节**；从 **`getenv` / `os.getenv("TEST_*")`** 读取。
+
+mode_specific: |
+  **实现要点：**
+  - 密文长度等于明文长度；**`printf("密文: ");`** 后仅输出 **hex**，**`fflush(stdout)`**。
+  - 语言级细则见 **`prompts/algorithms/c/AES-OFB.yaml`**、**`prompts/algorithms/cpp/AES-OFB.yaml`**。

@@ -1,0 +1,7 @@
+# scripts/run_full_llm_matrix.py — 批量生成失败记录
+# started_utc: 2026-05-13T13:13:09.808591+00:00
+# results_json: /mnt/d/aicrypto-helper/experiments/results/full_matrix_20260513T131309Z.json
+# configs_per_provider: 45
+# providers: ['openai']
+# 以下仅包含 success=False 的条目。
+

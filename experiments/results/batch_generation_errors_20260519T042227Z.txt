@@ -1,0 +1,7 @@
+# scripts/run_full_llm_matrix.py — 批量生成失败记录
+# started_utc: 2026-05-19T04:22:27.455415+00:00
+# results_json: /mnt/d/aicrypto-helper/experiments/results/full_matrix_20260519T042227Z.json
+# configs_per_provider: 45
+# providers: ['doubao']
+# 以下仅包含 success=False 的条目。
+

@@ -1,0 +1,7 @@
+# OpenAI · SM4-ECB
+supplement: |
+  test_data：明文与密钥均为 `0123456789ABCDEFFEDCBA9876543210` → ECB 密文 **`681EDF34D206965E86B3E94F536E4246`**。
+
+c: |
+  **`EVP_sm4_ecb()`**（若运行环境支持）+ **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**；`Init_ex` → **`EncryptUpdate`** → **`EncryptFinal_ex`**，按累加长度打印 hex。**禁止** 简化为 S 盒直出、少轮、或错序轮函数（会得到 **`6bd68aa5…`/`6de720a7…`/`843bc296f390816a787bb75f0991409c`** 等与 golden **`681edf34…`** 不符）。
+  **能 EVP 就不要手写 SM4**（CK/FK/S 表极易抄错）。**`fflush(stdout);`**。**禁止** `#define 8`。

@@ -1,0 +1,83 @@
+# API密钥文件
+.api_keys.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 虚拟环境
+venv/
+env/
+ENV/
+.venv
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 环境变量
+.env
+.env.local
+
+# 生成的代码
+generated_code/
+*.pyc
+*.pyo
+
+# 日志
+*.log
+
+# 临时文件
+*.tmp
+*.temp
+.DS_Store
+
+# 本地环境与大数据（勿提交；用 clone_baselines.sh 等拉取）
+.venv/
+external/
+
+# 可选：系统 OpenSSL 源码树（评测用系统 libssl-dev，非仓库必需）
+openssl/
+
+# 本地实验数据与密钥
+code_history.db
+code_history.json
+code_history.json.backup
+*.db
+llm_performance.json
+**/extraction_from_history.json
+evaluation_results/
+
+# LaTeX 编译产物
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+
+# Cursor / 本地 IDE
+.cursor/

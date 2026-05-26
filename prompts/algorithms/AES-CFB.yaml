@@ -1,0 +1,47 @@
+# AES-CFB模式特定prompt
+# 注意：AES算法的共同内容已提取到 prompts/algorithms/AES/common.yaml
+# C和C++语言特定的内容已分离到 prompts/algorithms/c/AES-CFB.yaml 和 prompts/algorithms/cpp/AES-CFB.yaml
+# prompt_loader.py会自动加载这些内容
+
+algorithm_specific: |
+  **AES-CFB模式说明：**
+  - CFB（Cipher Feedback）模式是流密码模式
+  - 将分组密码转换为流密码
+  - 需要初始化向量（IV），长度为16字节（128位）
+  - **🚨🚨🚨 重要：标准测试数据使用CFB-8模式（每次处理1字节），不是CFB-128模式！🚨🚨🚨**
+  - **必须使用 `EVP_aes_128_cfb8()`、`EVP_aes_192_cfb8()` 或 `EVP_aes_256_cfb8()`，而不是 `EVP_aes_128_cfb128()`！**
+  - 对于AES，每个块大小为16字节（128位）
+  - AES支持128位、192位、256位密钥长度
+  
+  **实现要求：**
+  - 对于Python：使用 `pycryptodome` 库的 `AES.MODE_CFB`，可以指定segment_size（CFB-128或CFB-8）
+  - 对于C/C++：**🚨🚨🚨 必须优先使用OpenSSL库！🚨🚨🚨**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+    - ✅ **必须使用 `EVP_aes_128_cfb8()`、`EVP_aes_192_cfb8()` 或 `EVP_aes_256_cfb8()` 获取AES-CFB-8密码对象（标准测试数据使用CFB-8模式，根据密钥长度选择）**
+    - ❌ **错误：不要使用 `EVP_aes_128_cfb128()`（这是CFB-128模式，与测试数据不匹配）**
+    - ✅ **必须从环境变量TEST_IV读取IV，如果不存在则使用全零IV**
+    - ❌ **绝对不要实现完整的AES算法！**
+    - ❌ **绝对不要使用纯C/C++实现！代码会太长，一定会截断！只有在OpenSSL完全不可用时才使用纯实现！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出密文！🚨🚨🚨**
+    - **必须使用 `printf("密文: ");` 或 `std::cout << "密文: ";` 输出密文！**
+    - **必须输出完整的密文，不要截断！**
+    - **重要：只输出实际加密的数据长度（使用 `ciphertext_len`），不要输出整个缓冲区或IV！**
+    - **绝对不能没有输出！程序必须输出密文！**
+
+mode_specific: |
+  **CFB模式实现细节（必须严格遵循）：**
+  
+  **注意：C和C++语言特定的实现要求已分离到以下文件：**
+  - `prompts/algorithms/c/AES-CFB.yaml` - C语言特定内容
+  - `prompts/algorithms/cpp/AES-CFB.yaml` - C++语言特定内容
+  - prompt_loader.py会自动根据语言加载对应的内容
+  
+  **通用实现要求：**
+  - **🚨🚨🚨 绝对重要：必须使用CFB-8模式，不是CFB-128模式！🚨🚨🚨**
+  - **密钥长度检测：**根据密钥字节长度选择对应的EVP函数
+    - 16字节（128位）→ `EVP_aes_128_cfb8()`（🚨🚨🚨 必须使用cfb8，绝对禁止使用cfb128！）
+    - 24字节（192位）→ `EVP_aes_192_cfb8()`（🚨🚨🚨 必须使用cfb8，绝对禁止使用cfb128！）
+    - 32字节（256位）→ `EVP_aes_256_cfb8()`（🚨🚨🚨 必须使用cfb8，绝对禁止使用cfb128！）
+  - **IV处理：**IV必须为16字节，从环境变量TEST_IV读取，如果不存在则使用全零
+  - **🚨🚨🚨 CFB模式：标准测试数据使用CFB-8模式（每次处理1字节），必须使用 `EVP_aes_*_cfb8()` 函数，绝对禁止使用 `EVP_aes_*_cfb128()`！使用cfb128会导致测试失败！**

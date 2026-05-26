@@ -1,0 +1,52 @@
+# AES-GCM模式特定prompt
+# 注意：AES算法的共同内容已提取到 prompts/algorithms/AES/common.yaml
+# C和C++语言特定的内容已分离到 prompts/algorithms/c/AES-GCM.yaml 和 prompts/algorithms/cpp/AES-GCM.yaml
+# prompt_loader.py会自动加载这些内容
+
+algorithm_specific: |
+  **AES-GCM模式说明：**
+  - GCM（Galois/Counter Mode）模式是认证加密模式
+  - 提供加密和认证功能
+  - 需要初始化向量（IV），通常为12字节（96位），但也可以使用其他长度
+  - 对于AES，每个块大小为16字节（128位）
+  - AES支持128位、192位、256位密钥长度
+  - GCM模式会生成认证标签（Authentication Tag），通常为16字节（128位）
+  - **🚨🚨🚨 重要：GCM模式使用OpenSSL官方测试数据进行测试！🚨🚨🚨**
+  - **测试数据已包含在test_data.yaml中，使用与AES其他模式相同的明文、密钥和IV（IV使用前12字节作为nonce）**
+  - **预期输出（本仓库 NIST/OpenSSL 向量）：16 字节密文 + 16 字节认证标签 = 32 字节 = 64 个十六进制字符（`ciphertext_with_tag`）。**
+  - **失败特征（极高频）：输出前半段 hex 与预期一致、后半段 tag 不一致 → 几乎总是 **未把 `TEST_AAD` 传入** `cipher.update` / OpenSSL AAD 的 `EVP_EncryptUpdate(..., NULL, ...)`。**
+  
+  **实现要求：**
+  - 对于Python：使用 **`pycryptodome`**（推荐）或 `cryptography` 的 GCM；**必须**与向量 `ciphertext_with_tag`（密文∥tag）一致。
+    - **PyCryptodome 固定写法（失败驱动）：** `nonce` = `binascii.unhexlify(TEST_IV)`（**12 字节**）；`cipher = AES.new(key, AES.MODE_GCM, nonce=nonce)`；**`cipher.update(binascii.unhexlify(os.environ['TEST_AAD']))`**（AAD 必更新，否则 tag 错误）；`ciphertext, tag = cipher.encrypt_and_digest(plaintext)`；**输出 `ciphertext + tag` 的连续 hex**（共 16+16=32 字节 → 64 个十六进制字符），一行 `密文: ...`。
+    - **禁止**只输出密文而漏掉 tag；**禁止**省略 `update(AAD)`。
+  - 对于C/C++：**🚨🚨🚨 必须优先使用OpenSSL库！🚨🚨🚨**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+    - ✅ **必须使用 `EVP_aes_128_gcm()`、`EVP_aes_192_gcm()` 或 `EVP_aes_256_gcm()` 获取AES-GCM密码对象（根据密钥长度选择）**
+    - ✅ **必须使用 `EVP_CIPHER_CTX_ctrl()` 设置IV长度和认证标签长度**
+    - ✅ **必须从环境变量TEST_IV读取IV，如果不存在则使用全零IV**
+    - ❌ **绝对不要实现完整的AES算法！**
+    - ❌ **绝对不要使用纯C/C++实现！代码会太长，一定会截断！只有在OpenSSL完全不可用时才使用纯实现！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出密文和认证标签！🚨🚨🚨**
+    - **必须使用 `printf("密文: ");` 或 `std::cout << "密文: ";` 输出密文！**
+    - **必须输出完整的密文和认证标签，不要截断！**
+    - **重要：只输出实际加密的数据长度（使用 `ciphertext_len`），不要输出整个缓冲区或IV！**
+    - **绝对不能没有输出！程序必须输出密文和认证标签！**
+
+mode_specific: |
+  **GCM模式实现细节（必须严格遵循）：**
+  
+  **注意：C和C++语言特定的实现要求已分离到以下文件：**
+  - `prompts/algorithms/c/AES-GCM.yaml` - C语言特定内容
+  - `prompts/algorithms/cpp/AES-GCM.yaml` - C++语言特定内容
+  - prompt_loader.py会自动根据语言加载对应的内容
+  
+  **通用实现要求：**
+  - **密钥长度检测：**根据密钥字节长度选择对应的EVP函数
+    - 16字节（128位）→ `EVP_aes_128_gcm()`
+    - 24字节（192位）→ `EVP_aes_192_gcm()`
+    - 32字节（256位）→ `EVP_aes_256_gcm()`
+  - **IV处理：**IV通常为12字节（96位），从环境变量TEST_IV读取，如果不存在则使用全零
+  - **认证标签：**GCM模式会生成认证标签，通常为16字节（128位）
+  - **测试验证：**GCM模式使用OpenSSL官方测试数据（已包含在test_data.yaml中），生成的代码将通过标准测试进行验证

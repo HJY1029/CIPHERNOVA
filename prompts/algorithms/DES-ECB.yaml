@@ -1,0 +1,28 @@
+# DES-ECB模式特定prompt
+# 注意：DES算法的共同内容已提取到 prompts/algorithms/DES/common.yaml
+# C和C++语言特定的内容已分离到 prompts/algorithms/c/DES-ECB.yaml 和 prompts/algorithms/cpp/DES-ECB.yaml
+# prompt_loader.py会自动加载这些内容
+
+algorithm_specific: |
+  **DES-ECB模式说明：**
+  - ECB（Electronic Codebook）模式是最简单的分组密码模式
+  - 每个明文块独立加密，不依赖其他块
+  - 不需要初始化向量（IV）
+  - 对于DES，每个块大小为8字节（64位）
+  
+  **ECB模式特定实现要求：**
+  - ✅ **必须使用 `EVP_des_ecb()` 获取DES-ECB密码对象**
+  - ✅ **必须加载legacy provider（OpenSSL 3.0需要）：`OSSL_PROVIDER_load(NULL, "legacy")`**
+  - ✅ **输出时只输出密文，绝对不要输出IV！**
+
+mode_specific: |
+  **ECB模式实现细节（必须严格遵循）：**
+  
+  **注意：C和C++语言特定的实现要求已分离到以下文件：**
+  - `prompts/algorithms/c/DES-ECB.yaml` - C语言特定内容
+  - `prompts/algorithms/cpp/DES-ECB.yaml` - C++语言特定内容
+  - prompt_loader.py会自动根据语言加载对应的内容
+  
+  **通用实现要求：**
+  - **ECB模式不需要IV：**`EVP_EncryptInit_ex()` 的IV参数应设为NULL
+  - **PKCS#7填充：**OpenSSL EVP会自动处理填充

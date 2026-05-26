@@ -1,0 +1,7 @@
+supplement: |
+  本项目 DES-ECB 标准向量见仓库 test_data.yaml：明文 16 字节（32 个十六进制字符）、密钥 8 字节（16 个十六进制字符）。预期密文长度与明文相同（32 个十六进制字符），不包含额外填充块。
+  若使用 OpenSSL EVP：在 enc/dec 前对 EVP_CIPHER_CTX 调用 EVP_CIPHER_CTX_set_padding(ctx, 0)，禁止 PKCS#7 填充；否则会出现密文比预期长 8 字节（多一整块）且与 golden 完全不匹配。
+  仅实现 DES，勿与 AES 密钥长度混淆。
+
+c: |
+  校验密钥 hex 长度为 16（8 字节）。密文输出仅包含与明文等长的加密结果，不要附加 IV 或 padding 块。

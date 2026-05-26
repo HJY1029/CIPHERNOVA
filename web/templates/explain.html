@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}AI代码解释 - 织密新星 (CipherNova){% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>💡 AI代码解释</h1>
+        <p>让AI详细解释生成的代码工作原理和实现细节</p>
+    </div>
+    <div class="content">
+        <div id="status" class="status"></div>
+        
+        <div class="form-group">
+            <label>代码（从首页生成代码后，粘贴到这里）</label>
+            <textarea id="codeInput" class="form-control" rows="15" placeholder="请粘贴要解释的代码..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>编程语言</label>
+            <select id="language" class="form-control">
+                <option value="python">Python</option>
+                <option value="c">C</option>
+                <option value="cpp">C++</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>算法（可选）</label>
+            <input type="text" id="algorithm" class="form-control" placeholder="例如：DES, AES, RSA等">
+        </div>
+        <div class="form-group">
+            <label>模式（可选）</label>
+            <input type="text" id="mode" class="form-control" placeholder="例如：ECB, CBC, CFB等">
+        </div>
+        <div class="form-group">
+            <label>解释深度</label>
+            <select id="depth" class="form-control">
+                <option value="simple">简单解释</option>
+                <option value="detailed" selected>详细解释</option>
+                <option value="expert">专家级解释</option>
+            </select>
+        </div>
+        <button type="button" class="btn" onclick="explainCode()">生成解释</button>
+        <div id="explainResult" style="margin-top: 20px; display: none; background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #e9ecef;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    async function explainCode() {
+        const code = document.getElementById('codeInput').value.trim();
+        if (!code) {
+            showStatus('请先输入代码', 'error');
+            return;
+        }
+        
+        const language = document.getElementById('language').value;
+        const depth = document.getElementById('depth').value;
+        const algorithm = document.getElementById('algorithm').value;
+        const mode = document.getElementById('mode').value;
+        
+        const resultDiv = document.getElementById('explainResult');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<div class="status info">AI正在生成代码解释...</div>';
+        
+        try {
+            const response = await fetch('/api/explain-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    code: code,
+                    language: language,
+                    depth: depth,
+                    algorithm: algorithm || null,
+                    mode: mode || null
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                resultDiv.innerHTML = `
+                    <h4>代码解释</h4>
+                    <div style="line-height: 1.8; color: #333;">
+                        ${data.explanation.replace(/\n/g, '<br>')}
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `<div class="status error">解释生成失败: ${data.error}</div>`;
+            }
+        } catch (error) {
+            resultDiv.innerHTML = `<div class="status error">解释生成失败: ${error.message}</div>`;
+        }
+    }
+</script>
+{% endblock %}
+

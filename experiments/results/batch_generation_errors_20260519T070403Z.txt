@@ -1,0 +1,353 @@
+# scripts/run_full_llm_matrix.py — 批量生成失败记录
+# started_utc: 2026-05-19T07:04:03.979152+00:00
+# results_json: /mnt/d/aicrypto-helper/experiments/results/full_matrix_20260519T070403Z.json
+# configs_per_provider: 45
+# providers: ['doubao']
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-19T08:56:14.998158+00:00
+provider: doubao
+case_id: sm4-cfb-cpp
+config: {"algorithm": "SM4", "mode": "CFB", "language": "cpp"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+测试失败：结果不匹配
+实际结果: e1c289ae526dab14a72a5132ebfb7038
+预期结果: 2754B10C806AEF23698989882D80903A
+(规范化后: 实际=e1c289ae526dab14a72a5132ebfb7038, 预期=2754b10c806aef23698989882d80903a)
+
+匹配度分析：
+  - 匹配字符数: 3/32
+  - 匹配率: 9.4%
+  - 匹配率很低，说明代码逻辑可能有根本性错误
+
+
+程序完整输出:
+密文: e1c289ae526dab14a72a5132ebfb7038
+
+error:
+测试失败：结果不匹配
+实际结果: e1c289ae526dab14a72a5132ebfb7038
+预期结果: 2754B10C806AEF23698989882D80903A
+(规范化后: 实际=e1c289ae526dab14a72a5132ebfb7038, 预期=2754b10c806aef23698989882d80903a)
+
+匹配度分析：
+  - 匹配字符数: 3/32
+  - 匹配率: 9.4%
+  - 匹配率很低，说明代码逻辑可能有根本性错误
+
+
+程序完整输出:
+密文: e1c289ae526dab14a72a5132ebfb7038
+
+total_ms: 1581278
+generated_filename: sm4_cfb.cpp
+generated_code:
+```
+#include <cstdint>
+#include <sstream>
+#include <cstdlib>
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <cctype>
+#include <algorithm>
+#include <vector>
+#include <cstring>
+
+// SM4算法常量和置换表定义
+const uint32_t FK[4] = {0xA3B1BAC6, 0x56AA3350, 0x677D9197, 0xB27022DC};
+const uint32_t CK[32] = {
+    0x00070E15, 0x1C232A31, 0x383F464D, 0x545B6269,
+    0x70777E85, 0x8C939AA1, 0xA8AFB6BD, 0xC4CBD2D9,
+    0xE0E7EEF5, 0xFC030A11, 0x181F262D, 0x343B4249,
+    0x50575E65, 0x6C737A81, 0x888F969D, 0xA4ABB2B9,
+    0xC0C7CED5, 0xDCE3EAF1, 0xF8FF060D, 0x141B2229,
+    0x30373E45, 0x4C535A61, 0x686F767D, 0x848B9299,
+    0xA0A7AEB5, 0xBCC3CAD1, 0xD8DFE6ED, 0xF4FB0209,
+    0x10171E25, 0x2C333A41, 0x484F565D, 0x646B7279
+};
+
+// S盒置换表 - 确保与SM4标准完全一致
+const uint8_t Sbox[256] = {
+    0xD6, 0x90, 0xE9, 0xFE, 0xCC, 0xE1, 0x3D, 0xB7, 0x16, 0xB6, 0x14, 0xC2, 0x28, 0xFB, 0x2C, 0x05,
+    0x2B, 0x67, 0x9A, 0x76, 0x2A, 0xBE, 0x04, 0xC3, 0xAA, 0x44, 0x13, 0x26, 0x49, 0x86, 0x06, 0x99,
+    0x9C, 0x42, 0x50, 0xF4, 0x91, 0xEF, 0x98, 0x7A, 0x33, 0x54, 0x0B, 0x43, 0xED, 0xCF, 0xAC, 0x62,
+    0xE4, 0xB3, 0x1C, 0xA9, 0xC9, 0x08, 0xE8, 0x95, 0x80, 0xDF, 0x94, 0xFA, 0x75, 0x8F, 0x3F, 0xA6,
+    0x47, 0x07, 0xA7, 0xFC, 0xF3, 0x73, 0x17, 0xBA, 0x83, 0x59, 0x3C, 0x19, 0xE6, 0x85, 0x4F, 0xA8,
+    0x68, 0x6B, 0x81, 0xB2, 0x71, 0x64, 0xDA, 0x8B, 0xF8, 0xEB, 0x0F, 0x4B, 0x70, 0x56, 0x9D, 0x35,
+    0x1E, 0x24, 0x0E, 0x5E, 0x63, 0x58, 0xD1, 0xA2, 0x25, 0x22, 0x7C, 0x3B, 0x01, 0x21, 0x78, 0x87,
+    0xD4, 0x00, 0x46, 0x57, 0x9F, 0xD3, 0x27, 0x52, 0x4C, 0x36, 0x02, 0xE7, 0xA0, 0xC4, 0xC8, 0x9E,
+    0xEA, 0xBF, 0x8A, 0xD2, 0x40, 0xC7, 0x38, 0xB5, 0xA3, 0xF7, 0xF2, 0xCE, 0xF9, 0x61, 0x15, 0xA1,
+    0xE0, 0xAE, 0x5D, 0xA4, 0x9B, 0x34, 0x1A, 0x55, 0xAD, 0x93, 0x32, 0x30, 0xF5, 0x8C, 0xB1, 0xE3,
+    0x1D, 0xF6, 0xE2, 0x2E, 0x82, 0x66, 0xCA, 0x60, 0xC0, 0x29, 0x23, 0xAB, 0x0D, 0x53, 0x4E, 0x6F,
+    0xD5, 0xDB, 0x37, 0x45, 0xDE, 0xFD, 0x8E, 0x2F, 0x03, 0xFF, 0x6A, 0x72, 0x6D, 0x6C, 0x5B, 0x51,
+    0x8D, 0x1B, 0xAF, 0x92, 0xBB, 0xDD, 0xBC, 0x7F, 0x11, 0xD9, 0x5C, 0x41, 0x1F, 0x10, 0x5A, 0xD8,
+    0x0A, 0xC1, 0x31, 0x88, 0xA5, 0xCD, 0x7B, 0xBD, 0x2D, 0x74, 0xD0, 0x12, 0xB8, 0xE5, 0xB4, 0xB0,
+    0x89, 0x69, 0x97, 0x4A, 0x0C, 0x96, 0x77, 0x7E, 0x65, 0xB9, 0xF1, 0x09, 0xC5, 0x6E, 0xC6, 0x84,
+    0x18, 0xF0, 0x7D, 0xEC, 0x3A, 0xDC, 0x4D, 0x20, 0x79, 0xEE, 0x5F, 0x3E, 0xD7, 0xCB, 0x39, 0x48
+};
+
+// 循环左移n位
+uint32_t rotl(uint32_t x, int n) {
+    return (x << n) | (x >> (32 - n));
+}
+
+// 非线性变换τ
+uint32_t tau(uint32_t x) {
+    uint8_t b0 = (x >> 24) & 0xFF;
+    uint8_t b1 = (x >> 16) & 0xFF;
+    uint8_t b2 = (x >> 8) & 0xFF;
+    uint8_t b3 = x & 0xFF;
+    
+    b0 = Sbox[b0];
+    b1 = Sbox[b1];
+    b2 = Sbox[b2];
+    b3 = Sbox[b3];
+    
+    return ((uint32_t)b0 << 24) | ((uint32_t)b1 << 16) | ((uint32_t)b2 << 8) | b3;
+}
+
+// 线性变换L
+uint32_t L(uint32_t x) {
+    return x ^ rotl(x, 2) ^ rotl(x, 10) ^ rotl(x, 18) ^ rotl(x, 24);
+}
+
+// 线性变换L'（用于密钥扩展）
+uint32_t L_prime(uint32_t x) {
+    return x ^ rotl(x, 13) ^ rotl(x, 23);
+}
+
+// 密钥扩展函数
+uint32_t key_extension(uint32_t ka, uint32_t kc, int rk_idx) {
+    uint32_t kb = tau(ka);
+    kb = L_prime(kb);
+    return kc ^ kb ^ CK[rk_idx] ^ FK[3];
+}
+
+// 轮函数F
+uint32_t F(uint32_t x0, uint32_t x1, uint32_t x2, uint32_t x3, uint32_t rk) {
+    uint32_t t = x1 ^ x2 ^ x3 ^ rk;
+    t = tau(t);
+    t = L(t);
+    return x0 ^ t;
+}
+
+// SM4单块加密
+void sm4_encrypt_block(const uint32_t rk[32], const uint8_t input[16], uint8_t output[16]) {
+    uint32_t x[4];
+    // 将输入字节转换为32位字，注意字节顺序（大端序）
+    x[0] = ((uint32_t)input[0] << 24) | ((uint32_t)input[1] << 16) | ((uint32_t)input[2] << 8) | input[3];
+    x[1] = ((uint32_t)input[4] << 24) | ((uint32_t)input[5] << 16) | ((uint32_t)input[6] << 8) | input[7];
+    x[2] = ((uint32_t)input[8] << 24) | ((uint32_t)input[9] << 16) | ((uint32_t)input[10] << 8) | input[11];
+    x[3] = ((uint32_t)input[12] << 24) | ((uint32_t)input[13] << 16) | ((uint32_t)input[14] << 8) | input[15];
+    
+    // 初始变换
+    x[0] ^= FK[0];
+    x[1] ^= FK[1];
+    x[2] ^= FK[2];
+    x[3] ^= FK[3];
+    
+    // 32轮迭代
+    for (int i = 0; i < 32; ++i) {
+        uint32_t temp = F(x[0], x[1], x[2], x[3], rk[i]);
+        x[0] = x[1];
+        x[1] = x[2];
+        x[2] = x[3];
+        x[3] = temp;
+    }
+    
+    // 输出变换（字交换）
+    uint32_t output_words[4];
+    output_words[0] = x[3];
+    output_words[1] = x[2];
+    output_words[2] = x[1];
+    output_words[3] = x[0];
+    
+    // 将32位字转换为输出字节
+    for (int i = 0; i < 4; ++i) {
+        output[i*4] = (output_words[i] >> 24) & 0xFF;
+        output[i*4 + 1] = (output_words[i] >> 16) & 0xFF;
+        output[i*4 + 2] = (output_words[i] >> 8) & 0xFF;
+        output[i*4 + 3] = output_words[i] & 0xFF;
+    }
+}
+
+// 生成SM4轮密钥
+void sm4_generate_round_keys(const uint8_t key[16], uint32_t rk[32]) {
+    uint32_t mk[4];
+    // 将密钥字节转换为32位字
+    mk[0] = ((uint32_t)key[0] << 24) | ((uint32_t)key[1] << 16) | ((uint32_t)key[2] << 8) | key[3];
+    mk[1] = ((uint32_t)key[4] << 24) | ((uint32_t)key[5] << 16) | ((uint32_t)key[6] << 8) | key[7];
+    mk[2] = ((uint32_t)key[8] << 24) | ((uint32_t)key[9] << 16) | ((uint32_t)key[10] << 8) | key[11];
+    mk[3] = ((uint32_t)key[12] << 24) | ((uint32_t)key[13] << 16) | ((uint32_t)key[14] << 8) | key[15];
+    
+    // 密钥扩展
+    uint32_t k[36];
+    k[0] = mk[0] ^ FK[0];
+    k[1] = mk[1] ^ FK[1];
+    k[2] = mk[2] ^ FK[2];
+    k[3] = mk[3] ^ FK[3];
+    
+    for (int i = 0; i < 32; ++i) {
+        rk[i] = key_extension(k[i], k[i+3], i);
+        k[i+4] = k[i] ^ rk[i];
+    }
+}
+
+// 去除字符串中的所有空白字符
+void remove_whitespace(std::string &str) {
+    str.erase(std::remove_if(str.begin(), str.end(), ::isspace), str.end());
+}
+
+// 将十六进制字符串转换为字节数组
+std::vector<uint8_t> hex_to_bytes(const std::string &hex) {
+    std::vector<uint8_t> bytes;
+    
+    if (hex.empty()) {
+        std::cerr << "错误：十六进制字符串为空" << std::endl;
+        exit(1);
+    }
+    
+    if (hex.length() % 2 != 0) {
+        std::cerr << "错误：十六进制字符串长度必须为偶数" << std::endl;
+        exit(1);
+    }
+    
+    for (size_t i = 0; i < hex.length(); i += 2) {
+        std::string byte_str = hex.substr(i, 2);
+        // 检查是否为有效的十六进制字符
+        if (!isxdigit(byte_str[0]) || !isxdigit(byte_str[1])) {
+            std::cerr << "错误：十六进制字符串包含无效字符" << std::endl;
+            exit(1);
+        }
+        uint8_t byte = static_cast<uint8_t>(std::stoi(byte_str, nullptr, 16));
+        bytes.push_back(byte);
+    }
+    
+    return bytes;
+}
+
+// 将字节数组转换为十六进制字符串
+std::string bytes_to_hex(const uint8_t *bytes, size_t length) {
+    std::stringstream ss;
+    ss << std::hex << std::setfill('0');
+    for (size_t i = 0; i < length; ++i) {
+        ss << std::setw(2) << static_cast<int>(bytes[i]);
+    }
+    return ss.str();
+}
+
+// SM4-CFB模式加密 - CFB-128位模式
+std::vector<uint8_t> sm4_cfb_encrypt(const std::vector<uint8_t> &plaintext, 
+                                     const std::vector<uint8_t> &key, 
+                                     const std::vector<uint8_t> &iv) {
+    // 检查密钥长度
+    if (key.size() != 16) {
+        std::cerr << "错误：SM4密钥必须为16字节（32个十六进制字符）" << std::endl;
+        exit(1);
+    }
+    
+    // 检查IV长度
+    if (iv.size() != 16) {
+        std::cerr << "错误：SM4-CFB模式IV必须为16字节（32个十六进制字符）" << std::endl;
+        exit(1);
+    }
+    
+    // 生成轮密钥
+    uint32_t rk[32];
+    sm4_generate_round_keys(key.data(), rk);
+    
+    // 初始化反馈寄存器（复制IV）
+    uint8_t feedback[16];
+    std::copy(iv.begin(), iv.end(), feedback);
+    
+    // 分配输出缓冲区
+    std::vector<uint8_t> ciphertext(plaintext.size());
+    
+    // CFB-128模式加密 - 每次处理一个完整块
+    for (size_t i = 0; i < plaintext.size(); i += 16) {
+        // 加密反馈寄存器
+        uint8_t encrypted_feedback[16];
+        sm4_encrypt_block(rk, feedback, encrypted_feedback);
+        
+        // 处理当前块
+        size_t block_size = std::min((size_t)16, plaintext.size() - i);
+        for (size_t j = 0; j < block_size; ++j) {
+            ciphertext[i + j] = plaintext[i + j] ^ encrypted_feedback[j];
+        }
+        
+        // 更新反馈寄存器（左移一个块大小，将新的密文移入）
+        memmove(feedback, feedback + block_size, 16 - block_size);
+        std::copy(&ciphertext[i], &ciphertext[i + block_size], feedback + (16 - block_size));
+    }
+    
+    return ciphertext;
+}
+
+int main() {
+    // 从环境变量读取输入
+    std::string plaintext_hex, key_hex, iv_hex;
+    
+    // 读取明文
+    char *env_plaintext = std::getenv("TEST_PLAINTEXT");
+    if (env_plaintext) {
+        plaintext_hex = env_plaintext;
+        remove_whitespace(plaintext_hex);
+        if (plaintext_hex.empty()) {
+            std::cerr << "错误：环境变量TEST_PLAINTEXT为空" << std::endl;
+            return 1;
+        }
+    } else {
+        std::cerr << "错误：环境变量TEST_PLAINTEXT未设置" << std::endl;
+        return 1;
+    }
+    
+    // 读取密钥
+    char *env_key = std::getenv("TEST_KEY");
+    if (env_key) {
+        key_hex = env_key;
+        remove_whitespace(key_hex);
+        if (key_hex.empty()) {
+            std::cerr << "错误：环境变量TEST_KEY为空" << std::endl;
+            return 1;
+        }
+    } else {
+        std::cerr << "错误：环境变量TEST_KEY未设置" << std::endl;
+        return 1;
+    }
+    
+    // 读取IV
+    char *env_iv = std::getenv("TEST_IV");
+    if (env_iv) {
+        iv_hex = env_iv;
+        remove_whitespace(iv_hex);
+        if (iv_hex.empty()) {
+            std::cerr << "错误：环境变量TEST_IV为空，使用全零IV" << std::endl;
+            iv_hex = "00000000000000000000000000000000";
+        }
+    } else {
+        // 使用全零IV
+        iv_hex = "00000000000000000000000000000000";
+        std::cerr << "环境变量TEST_IV未设置，使用全零IV" << std::endl;
+    }
+    
+    // 转换为字节数组
+    std::vector<uint8_t> plaintext = hex_to_bytes(plaintext_hex);
+    std::vector<uint8_t> key = hex_to_bytes(key_hex);
+    std::vector<uint8_t> iv = hex_to_bytes(iv_hex);
+    
+    // 执行加密
+    std::vector<uint8_t> ciphertext = sm4_cfb_encrypt(plaintext, key, iv);
+    
+    // 输出密文
+    std::cout << "密文: " << bytes_to_hex(ciphertext.data(), ciphertext.size()) << std::endl;
+    
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+

@@ -1,0 +1,36 @@
+# 豆包 · AES-256-GCM（test_data modes.GCM）
+mandatory: |
+  **`EVP_aes_256_gcm()`**（**不是** `aes_128_ecb`）；nonce **12B**；**先 AAD 再明文**；**ct||tag = 64 hex**。
+  **禁止** `unsigned char *ciphertext` 与 **`uint8_t ciphertext[N]` 同名**；**禁止** 后处理注入 ECB `main`。
+
+supplement: |
+  **自测 golden（64 hex）：** **`F7264413A84C0E7CD536867EB9F2173667BA0510262AE487D737EE6298F77E0C`**。
+  key **32B**；nonce **`99AA3E68ED8173A0EED06684`**（12B）；AAD **`4D23C3CEC334B49BDB370C437FEC78DE`**（16B）。
+  **批量 aes-gcm-c：** **`conflicting types for 'ciphertext'`**、误注入 **`aes_ecb`**、OpenSSL **-3** → 见 `c:`/`cpp:`。
+
+python: |
+  ```python
+  c = AES.new(key, AES.MODE_GCM, nonce=nonce)
+  c.update(aad)
+  ct, tag = c.encrypt_and_digest(pt)
+  print("密文:", (ct+tag).hex().lower())
+  ```
+
+c: |
+  **`EVP_aes_256_gcm()`**；变量 **`ct_out[32]`**、**`tag[16]`**（**禁止** 名 **`ciphertext`** 既指针又数组）。
+  AAD **`EVP_EncryptUpdate(ctx, NULL, &l, aad, aad_len)`** → 明文 Update → Final → **`EVP_CTRL_GCM_GET_TAG`**。
+  打印 **ct_out||tag** → **64 hex**。
+
+cpp: |
+  同 C；**禁止** 手写 GCM 多项式；**禁止** `_aicrypto` 自动补丁 ECB。
+  **`EVP_aes_256_gcm()`** + **`set_padding(0)`**；**`CTX_free` 一次**。
+  **`printf("密文: ");`** → **`f7264413…`**（64 hex）。
+
+test_feedback_improve: |
+  **【豆包 · AES-GCM】** 删重复 **`ciphertext`** 声明与 ECB 注入；**先 AAD**；**64 hex**。
+
+test_feedback_improve_c: |
+  **`EVP_aes_256_gcm`**；**`ct_out`/`tag`** 命名。
+
+test_feedback_improve_cpp: |
+  同 C；勿 **`stringstream`** 无 **`<sstream>`**。

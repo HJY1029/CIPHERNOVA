@@ -1,0 +1,62 @@
+# RSA密钥生成特定prompt
+algorithm_specific: |
+  **🚨🚨🚨 必须优先使用OpenSSL库，保持代码简洁！🚨🚨🚨**
+  - **代码长度限制导致纯实现经常截断，必须优先使用OpenSSL库！**
+  - **使用OpenSSL库可以大大减少代码长度，避免因token限制导致的截断问题！**
+  - **必须包含头文件：`#include <openssl/rsa.h>` 和 `#include <openssl/pem.h>`**
+  - **必须使用OpenSSL EVP函数进行密钥生成，不要实现完整的RSA算法！**
+  - **编译命令：C语言 `gcc -o program program.c -lssl -lcrypto`，C++ `g++ -o program program.cpp -lssl -lcrypto`**
+  - **绝对不要实现完整的RSA算法（大数运算、素数生成、模幂运算等）！**
+  
+  **RSA密钥生成说明：**
+  - RSA是一种非对称加密算法
+  - 需要生成公钥和私钥对
+  - 密钥长度通常为2048位、3072位或4096位
+  - 公钥包含模数n和指数e（通常为65537）
+  - 私钥包含模数n和私钥指数d
+  
+  **实现要求：**
+  - 对于Python：使用 `cryptography` 或 `pycryptodome` 库的RSA密钥生成功能
+  - 对于C/C++：**🚨🚨🚨 必须优先使用OpenSSL库！🚨🚨🚨**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_PKEY_keygen_init()`、`EVP_PKEY_keygen()`**
+    - ✅ **必须使用 `EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL)` 创建RSA密钥上下文**
+    - ✅ **必须使用 `EVP_PKEY_CTX_set_rsa_keygen_bits()` 设置密钥长度**
+    - ❌ **绝对不要实现完整的RSA算法！**
+    - ❌ **绝对不要使用纯C/C++实现！代码会太长，一定会截断！只有在OpenSSL完全不可用时才使用纯实现！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出公钥和私钥！🚨🚨🚨**
+    - **必须输出公钥和私钥的模数n、指数e和d（十六进制格式）**
+    - **必须输出完整的密钥信息，不要截断！**
+
+mode_specific: |
+  **密钥生成实现细节（必须严格遵循）：**
+  
+  **使用OpenSSL库的实现要求（C/C++语言）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <openssl/rsa.h>`
+     - `#include <openssl/pem.h>`
+     - `#include <stdlib.h>` (C语言) 或 `#include <cstdlib>` (C++)
+     - `#include <stdio.h>` (C语言) 或 `#include <iostream>` (C++)
+  
+  2. **必须使用OpenSSL EVP函数：**
+     - ✅ **正确：使用 `EVP_PKEY_CTX_new_id(EVP_PKEY_RSA, NULL)` 创建RSA密钥上下文**
+     - ✅ **正确：使用 `EVP_PKEY_keygen_init()` 初始化密钥生成**
+     - ✅ **正确：使用 `EVP_PKEY_CTX_set_rsa_keygen_bits()` 设置密钥长度（如2048、3072、4096）**
+     - ✅ **正确：使用 `EVP_PKEY_keygen()` 生成密钥对**
+     - ✅ **正确：使用 `EVP_PKEY_get1_RSA()` 获取RSA结构**
+     - ✅ **正确：使用 `RSA_get0_key()` 获取公钥和私钥参数**
+  
+  3. **main函数必须完整实现：**
+     - 创建RSA密钥上下文
+     - 设置密钥长度（从环境变量或使用默认值2048）
+     - 生成密钥对
+     - 提取公钥和私钥参数（n, e, d）
+     - 输出公钥和私钥（十六进制格式）
+     - 释放资源并返回0
+  
+  **关键实现细节：**
+  - **密钥长度：**通常为2048位、3072位或4096位
+  - **公钥指数e：**通常为65537（0x10001）
+  - **输出格式：**输出模数n、公钥指数e和私钥指数d（十六进制格式）
+

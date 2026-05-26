@@ -1,0 +1,72 @@
+# scripts/run_full_llm_matrix.py — 批量生成失败记录
+# started_utc: 2026-05-08T14:12:16.472143+00:00
+# results_json: /mnt/d/aicrypto-helper/experiments/results/full_matrix_20260508T141216Z.json
+# configs_per_provider: 45
+# providers: ['openai']
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-08T14:14:32.794612+00:00
+provider: openai
+case_id: aes-ofb-c
+config: {"algorithm": "AES", "mode": "OFB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 30000
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T14:15:10.725779+00:00
+provider: openai
+case_id: aes-ofb-cpp
+config: {"algorithm": "AES", "mode": "OFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 34948
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T14:16:26.683718+00:00
+provider: openai
+case_id: sm4-cfb-c
+config: {"algorithm": "SM4", "mode": "CFB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 28696
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T14:17:07.052539+00:00
+provider: openai
+case_id: sm4-ofb-c
+config: {"algorithm": "SM4", "mode": "OFB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 31737
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T14:17:43.971833+00:00
+provider: openai
+case_id: sm4-ofb-cpp
+config: {"algorithm": "SM4", "mode": "OFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 33986
+--------------------------------------------------------------------------------
+

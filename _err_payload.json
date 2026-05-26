@@ -1,0 +1,48 @@
+{
+  "title": "不同错误类型的分布与修复效果",
+  "source_note": "**实测聚合**：自 `llm_performance.json`（修改时间 2026-05-06 19:27:22），共扫描 **514** 条性能明细；其中失败样本 **304** 条用于「数量/占比」；**118** 条 attempts>1 用于「修复后通过率」。 分类为关键词启发式，不等同于论文人工标注子集。",
+  "rows": [
+    {
+      "name": "算法理解",
+      "count": 8,
+      "share_pct": 2.63,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 100.0
+    },
+    {
+      "name": "实现细节",
+      "count": 157,
+      "share_pct": 51.64,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 57.14
+    },
+    {
+      "name": "环境配置",
+      "count": 124,
+      "share_pct": 40.79,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 0.0
+    },
+    {
+      "name": "代码结构",
+      "count": 15,
+      "share_pct": 4.93,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 0.0
+    }
+  ],
+  "total": {
+    "name": "合计",
+    "count": 304,
+    "share_pct": 100.0,
+    "pass_before_pct": 0.0,
+    "pass_after_pct": 5.08
+  },
+  "_meta": {
+    "performance_json": "D:\\aicrypto-helper\\llm_performance.json",
+    "records_total": 514,
+    "failure_records": 304,
+    "multi_attempt_records": 118,
+    "mtime_local": "2026-05-06 19:27:22"
+  }
+}

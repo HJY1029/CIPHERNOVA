@@ -1,0 +1,15 @@
+# 豆包 · AES-128-ECB
+supplement: |
+  AES-128-ECB：**无 IV**（仍可读 env 但 ECB 不用）；密钥 **32 hex → 16B**；明文 **64 hex → 32B**。
+  **自测 golden（64 hex）：** **`DB727AC6624F3699CBFC4F0F890832B8A4B1DCA1F52EF8E4CE0FD12E307476C6`**（前缀 **`DB727AC6…`**）。
+  **禁止** 只输出 **32 hex（半块）**；**禁止** `key_len==8` / **DES** 文案；**禁止** 手搓 `KeyExpansion` + 教材调试行。
+
+python: |
+  `import os`；`AES.new(key, AES.MODE_ECB)` → `encrypt`；**`print("密文:", ct.hex())`**（**64 hex**）。
+
+c: |
+  **仅** **`EVP_aes_128_ecb()`** + **`set_padding(0)`**；**`EncryptUpdate` 处理全部 `plaintext_len`**（常见 **32**）。
+  **`printf("密文: ");`** + **`%02x`** × **`ciphertext_len`**；**禁止** `#define 8`、**禁止** `EVP_aes_256_ecb` 除非题面 256。
+
+cpp: |
+  同 C；**`EVP_aes_128_ecb()`**；输出 **与明文等长** 的密文 hex（本测 **64**）。

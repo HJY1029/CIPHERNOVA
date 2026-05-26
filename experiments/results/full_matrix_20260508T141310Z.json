@@ -1,0 +1,597 @@
+{
+  "started_at_utc": "2026-05-08T14:13:10.749119+00:00",
+  "providers": [
+    "qwen_coder_local"
+  ],
+  "configs_count": 45,
+  "results": [
+    {
+      "provider": "qwen_coder_local",
+      "cases": [
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3039,
+          "case_id": "des-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 9639,
+          "case_id": "des-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 5521,
+          "case_id": "des-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2643,
+          "case_id": "des-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1741440,
+          "case_id": "des-cbc-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1833380,
+          "case_id": "des-cbc-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3759,
+          "case_id": "des-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1916334,
+          "case_id": "des-cfb-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 3841536,
+          "case_id": "des-cfb-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2790,
+          "case_id": "des-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1771006,
+          "case_id": "des-ofb-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1632232,
+          "case_id": "des-ofb-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2324,
+          "case_id": "aes-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3825,
+          "case_id": "aes-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 5091,
+          "case_id": "aes-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1829,
+          "case_id": "aes-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2565,
+          "case_id": "aes-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 4057,
+          "case_id": "aes-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1773,
+          "case_id": "aes-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1841390,
+          "case_id": "aes-cfb-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1706934,
+          "case_id": "aes-cfb-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2045,
+          "case_id": "aes-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1749505,
+          "case_id": "aes-ofb-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1704439,
+          "case_id": "aes-ofb-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2364,
+          "case_id": "aes-gcm-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2640,
+          "case_id": "aes-gcm-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1810523,
+          "case_id": "aes-gcm-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2460,
+          "case_id": "aes-ctr-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1951041,
+          "case_id": "aes-ctr-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1894150,
+          "case_id": "aes-ctr-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "python"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 2084345,
+          "case_id": "rsa-python",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1880758,
+          "case_id": "rsa-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1913762,
+          "case_id": "rsa-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1666143,
+          "case_id": "sm4-ecb-python",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1897559,
+          "case_id": "sm4-ecb-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1624098,
+          "case_id": "sm4-ecb-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1529660,
+          "case_id": "sm4-cbc-python",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 3113185,
+          "case_id": "sm4-cbc-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1791398,
+          "case_id": "sm4-cbc-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1751229,
+          "case_id": "sm4-cfb-python",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1938489,
+          "case_id": "sm4-cfb-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1787776,
+          "case_id": "sm4-cfb-cpp",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 2080947,
+          "case_id": "sm4-ofb-python",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1812673,
+          "case_id": "sm4-ofb-c",
+          "generation_ok": false
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'",
+          "vector_status": "—",
+          "total_ms": 1855438,
+          "case_id": "sm4-ofb-cpp",
+          "generation_ok": false
+        }
+      ]
+    }
+  ],
+  "finished_at_utc": "2026-05-09T06:51:30.841319+00:00"
+}

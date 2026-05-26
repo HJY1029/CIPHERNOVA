@@ -1,0 +1,53 @@
+# SM4-ECB模式的C语言特定内容
+c_specific: |
+  **【稳定性】** 在首次 `EVP_EncryptUpdate` 前 **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**（本向量 16 字节明文 = 整块，无 PKCS）。密文缓冲建议 **`malloc(plaintext_len + 32)`** 或等价栈空间，避免 `EVP_EncryptFinal_ex` 越界 → **`malloc(): corrupted top size`**。
+  **【golden】** ECB 密文须为 **`681EDF34D206965E86B3E94F536E4246`**（与 test_data 一致）。
+
+  **使用OpenSSL库的实现要求（C语言，如果OpenSSL支持SM4）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <stdlib.h>`
+     - `#include <stdio.h>`
+     - `#include <string.h>`
+  
+  2. **必须使用OpenSSL EVP函数（如果支持）：**
+     - ✅ **正确：使用 `EVP_sm4_ecb()` 获取SM4-ECB密码对象**
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_CIPHER_CTX_new()` 和 `EVP_CIPHER_CTX_free()`**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取明文和密钥（TEST_PLAINTEXT, TEST_KEY）
+     - 将十六进制字符串转换为字节数组
+     - 使用OpenSSL EVP函数进行SM4-ECB模式加密
+     - 输出密文（十六进制格式）
+     - 释放资源并返回0
+  
+  **关键实现细节（C语言）：**
+  - **密钥长度：**SM4密钥必须为16字节（128位）
+  - **块大小：**SM4块大小为16字节（128位）
+  - **ECB模式：**不需要IV
+  - **🚨🚨🚨 输出长度控制（绝对重要！）：**必须只输出实际加密的数据长度，不要输出整个缓冲区！
+    - ✅ **正确做法（C）：**
+      ```c
+      int len;
+      int ciphertext_len = 0;
+      unsigned char *ciphertext = malloc(plaintext_len + 16);  // 预留填充空间
+      
+      EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);
+      ciphertext_len = len;
+      EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
+      ciphertext_len += len;  // 总长度 = Update长度 + Final长度
+      
+      // 只输出 ciphertext_len 长度的数据！
+      printf("密文: ");
+      for (int i = 0; i < ciphertext_len; i++) {  // 使用 ciphertext_len！
+          printf("%02x", ciphertext[i]);
+      }
+      printf("\n");
+      free(ciphertext);
+      ```
+    - ❌ **错误做法（绝对禁止）：**
+      - 输出整个缓冲区（`sizeof(ciphertext)`）
+      - 输出额外的填充空间
+    - **关键：`ciphertext_len` 是 `EVP_EncryptUpdate()` 和 `EVP_EncryptFinal_ex()` 返回的长度之和，这是实际加密的数据长度！**
+

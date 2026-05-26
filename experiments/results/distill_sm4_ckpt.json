@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "schema": "run_qwen_distillation_ablation",
+  "fingerprint": "0ded8cd44989d9758868f870",
+  "fp_payload": {
+    "schema": "run_qwen_distillation_ablation",
+    "config": "/mnt/d/aicrypto-helper/config.yaml",
+    "provider": "qwen_coder_local",
+    "algorithm": "SM4",
+    "grid": [
+      {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "cpp"
+      }
+    ],
+    "limit": 0,
+    "enable_validation": false,
+    "web_batch_single": true,
+    "max_retries": 3,
+    "skip_baseline": false,
+    "skip_distill": false
+  },
+  "results_baseline": [
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.16140327100001173,
+      "filepath": "generated_code/sm4_ecb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "SM4|ECB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.7083751849999942,
+      "filepath": "generated_code/sm4_ecb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "SM4|ECB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.0087592720000202,
+      "filepath": "generated_code/sm4_ecb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "SM4|ECB|cpp"
+    }
+  ],
+  "results_distill": []
+}

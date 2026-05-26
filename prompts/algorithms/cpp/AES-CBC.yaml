@@ -1,0 +1,84 @@
+# AES-CBC模式的C++语言特定内容
+cpp_specific: |
+  **使用OpenSSL库的实现要求（C++语言）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <cstdlib>`
+     - `#include <iostream>`
+     - `#include <string>`
+     - `#include <iomanip>`
+  
+  2. **必须使用OpenSSL EVP函数：**
+     - ✅ **正确：使用 `EVP_aes_128_cbc()`、`EVP_aes_192_cbc()` 或 `EVP_aes_256_cbc()`（根据密钥长度选择）**
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_CIPHER_CTX_new()` 和 `EVP_CIPHER_CTX_free()`**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取明文、密钥和IV（TEST_PLAINTEXT, TEST_KEY, TEST_IV）
+     - 将十六进制字符串转换为字节数组
+     - 如果TEST_IV不存在，使用全零IV（16字节）
+     - 根据密钥长度选择正确的EVP函数（128位、192位或256位）
+     - 使用OpenSSL EVP函数进行CBC模式加密
+     - 输出密文（十六进制格式，不包含IV）
+     - 释放资源并返回0
+  
+  **关键实现细节（C++语言）：**
+  - **密钥长度检测：**根据密钥字节长度选择对应的EVP函数
+    - 16字节（128位）→ `EVP_aes_128_cbc()`
+    - 24字节（192位）→ `EVP_aes_192_cbc()`
+    - 32字节（256位）→ `EVP_aes_256_cbc()`
+  - **IV处理：**IV必须为16字节，从环境变量TEST_IV读取，如果不存在则使用全零
+  - **PKCS#7填充：**OpenSSL EVP会自动处理填充
+    - **重要：即使明文长度是块大小的整数倍（如32字节正好是2个块），PKCS#7填充也会添加一个完整的填充块（16字节）！**
+    - **因此，32字节明文的密文长度应该是48字节（32字节明文 + 16字节填充），而不是32字节！**
+    - **🚨🚨🚨 但是，如果测试数据中的预期密文长度等于明文长度（如32字节），说明只期望输出 `EVP_EncryptUpdate()` 返回的长度，不包括 `EVP_EncryptFinal_ex()` 的填充块！**
+    - **🚨🚨🚨 关键：必须检查 `EVP_EncryptUpdate()` 返回的长度是否等于明文长度，如果相等，则只输出这个长度，不输出 `EVP_EncryptFinal_ex()` 的填充块！**
+  - **🚨🚨🚨 输出长度控制（绝对重要！）：**必须只输出实际加密的数据长度，不要输出整个缓冲区或IV！
+    - ✅ **正确做法（C++）：**
+      ```cpp
+      int len;
+      int ciphertext_len = 0;
+      unsigned char ciphertext[plaintext_len + 16];  // 预留填充空间
+      
+      EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);
+      int update_len = len;  // EVP_EncryptUpdate 返回的长度
+      
+      // ⚠️⚠️⚠️ 重要：EVP_EncryptFinal_ex 的第二个参数必须使用 ciphertext + update_len（不是 ciphertext + len）！
+      EVP_EncryptFinal_ex(ctx, ciphertext + update_len, &len);
+      // 注意：final_len 是填充块的长度，但输出时只输出 update_len，不包括填充块！
+      
+      // 🚨🚨🚨 输出长度控制（绝对重要！）：只输出 update_len 长度的数据，不包括填充块，不要输出IV！
+      // ⚠️⚠️⚠️ 绝对不能使用范围for循环（如 `for (auto c : ciphertext)`），必须使用索引循环并明确使用 update_len！
+      std::cout << "密文: ";
+      for (int i = 0; i < update_len; i++) {  // ✅ 必须使用 update_len 变量，不是数组大小或vector.size()！
+          std::cout << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(ciphertext[i]);
+      }
+      std::cout << std::endl;
+      // ⚠️⚠️⚠️ 绝对不要使用以下方式输出（会输出整个缓冲区）：**
+      // - `for (auto c : ciphertext)` - 范围for循环可能输出整个vector
+      // - `for (size_t i = 0; i < ciphertext.size(); i++)` - 会输出整个vector大小
+      // - `for (size_t i = 0; i < ciphertext.capacity(); i++)` - 会输出整个vector容量
+      ```
+    - ❌ **错误做法（C++，绝对禁止）：**
+      ```cpp
+      // ❌ 错误：使用范围for循环（会输出整个vector，即使resize了也可能有问题）
+      for (unsigned char c : ciphertext) { ... }
+      for (auto c : ciphertext) { ... }
+      
+      // ❌ 错误：使用vector.size()（可能包含未使用的空间）
+      for (size_t i = 0; i < ciphertext.size(); i++) { ... }
+      
+      // ❌ 错误：使用vector.capacity()（会输出整个容量）
+      for (size_t i = 0; i < ciphertext.capacity(); i++) { ... }
+      
+      // ❌ 错误：使用数组大小
+      for (int i = 0; i < sizeof(ciphertext); i++) { ... }
+      ```
+    - **🚨🚨🚨 关键要求（绝对必须遵守）：**
+      - **必须使用 `update_len` 变量控制输出循环，不能使用任何其他长度（数组大小、vector.size()、vector.capacity()等）！**
+      - **`update_len` 是 `EVP_EncryptUpdate()` 返回的长度，这是实际加密的数据长度（不包括填充块）！**
+      - **即使使用了 `ciphertext.resize(update_len)`，输出时也必须明确使用 `update_len` 变量，不能使用 `ciphertext.size()`！**
+      - **必须使用索引循环 `for (int i = 0; i < update_len; i++)`，绝对不能使用范围for循环！**
+      - **如果使用vector，输出时必须使用 `ciphertext[i]` 和 `update_len`，不能使用范围for循环！**
+      - **必须在main函数中直接输出，不要创建辅助函数（如`bytes_to_hex`），确保使用`update_len`控制输出长度！**
+

@@ -1,0 +1,371 @@
+# scripts/run_full_llm_matrix.py — 批量生成失败记录
+# started_utc: 2026-05-08T14:13:10.749089+00:00
+# results_json: /mnt/d/aicrypto-helper/experiments/results/full_matrix_20260508T141310Z.json
+# configs_per_provider: 45
+# providers: ['qwen_coder_local']
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-08T14:45:14.206999+00:00
+provider: qwen_coder_local
+case_id: des-cbc-c
+config: {"algorithm": "DES", "mode": "CBC", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1741440
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T15:18:48.261259+00:00
+provider: qwen_coder_local
+case_id: des-cbc-cpp
+config: {"algorithm": "DES", "mode": "CBC", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1833380
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T15:53:58.589551+00:00
+provider: qwen_coder_local
+case_id: des-cfb-c
+config: {"algorithm": "DES", "mode": "CFB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1916334
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T17:04:00.016930+00:00
+provider: qwen_coder_local
+case_id: des-cfb-cpp
+config: {"algorithm": "DES", "mode": "CFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 3841536
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T17:36:53.053599+00:00
+provider: qwen_coder_local
+case_id: des-ofb-c
+config: {"algorithm": "DES", "mode": "OFB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1771006
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T18:07:06.207431+00:00
+provider: qwen_coder_local
+case_id: des-ofb-cpp
+config: {"algorithm": "DES", "mode": "OFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1632232
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T18:41:34.981021+00:00
+provider: qwen_coder_local
+case_id: aes-cfb-c
+config: {"algorithm": "AES", "mode": "CFB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1841390
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T19:13:13.359808+00:00
+provider: qwen_coder_local
+case_id: aes-cfb-cpp
+config: {"algorithm": "AES", "mode": "CFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1706934
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T19:45:40.032407+00:00
+provider: qwen_coder_local
+case_id: aes-ofb-c
+config: {"algorithm": "AES", "mode": "OFB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1749505
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T20:17:12.300342+00:00
+provider: qwen_coder_local
+case_id: aes-ofb-cpp
+config: {"algorithm": "AES", "mode": "OFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1704439
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T20:50:50.208047+00:00
+provider: qwen_coder_local
+case_id: aes-gcm-cpp
+config: {"algorithm": "AES", "mode": "GCM", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1810523
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T21:26:58.925086+00:00
+provider: qwen_coder_local
+case_id: aes-ctr-c
+config: {"algorithm": "AES", "mode": "CTR", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1951041
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T22:02:06.621222+00:00
+provider: qwen_coder_local
+case_id: aes-ctr-cpp
+config: {"algorithm": "AES", "mode": "CTR", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1894150
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T22:40:34.163565+00:00
+provider: qwen_coder_local
+case_id: rsa-python
+config: {"algorithm": "RSA", "language": "python"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 2084345
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T23:14:44.454682+00:00
+provider: qwen_coder_local
+case_id: rsa-c
+config: {"algorithm": "RSA", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1880758
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-08T23:49:33.397021+00:00
+provider: qwen_coder_local
+case_id: rsa-cpp
+config: {"algorithm": "RSA", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1913762
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T00:20:18.973686+00:00
+provider: qwen_coder_local
+case_id: sm4-ecb-python
+config: {"algorithm": "SM4", "mode": "ECB", "language": "python"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1666143
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T00:55:26.677050+00:00
+provider: qwen_coder_local
+case_id: sm4-ecb-c
+config: {"algorithm": "SM4", "mode": "ECB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1897559
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T01:25:31.674953+00:00
+provider: qwen_coder_local
+case_id: sm4-ecb-cpp
+config: {"algorithm": "SM4", "mode": "ECB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1624098
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T01:53:48.260823+00:00
+provider: qwen_coder_local
+case_id: sm4-cbc-python
+config: {"algorithm": "SM4", "mode": "CBC", "language": "python"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1529660
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T02:51:29.383574+00:00
+provider: qwen_coder_local
+case_id: sm4-cbc-c
+config: {"algorithm": "SM4", "mode": "CBC", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 3113185
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T03:24:31.121072+00:00
+provider: qwen_coder_local
+case_id: sm4-cbc-cpp
+config: {"algorithm": "SM4", "mode": "CBC", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1791398
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T03:56:19.809299+00:00
+provider: qwen_coder_local
+case_id: sm4-cfb-python
+config: {"algorithm": "SM4", "mode": "CFB", "language": "python"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1751229
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T04:31:36.361484+00:00
+provider: qwen_coder_local
+case_id: sm4-cfb-c
+config: {"algorithm": "SM4", "mode": "CFB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1938489
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T05:04:19.570455+00:00
+provider: qwen_coder_local
+case_id: sm4-cfb-cpp
+config: {"algorithm": "SM4", "mode": "CFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1787776
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T05:44:49.500247+00:00
+provider: qwen_coder_local
+case_id: sm4-ofb-python
+config: {"algorithm": "SM4", "mode": "OFB", "language": "python"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 2080947
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T06:17:48.620698+00:00
+provider: qwen_coder_local
+case_id: sm4-ofb-c
+config: {"algorithm": "SM4", "mode": "OFB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1812673
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-09T06:51:30.837650+00:00
+provider: qwen_coder_local
+case_id: sm4-ofb-cpp
+config: {"algorithm": "SM4", "mode": "OFB", "language": "cpp"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+save_code() got an unexpected keyword argument 'suppress_heuristic_warnings'
+total_ms: 1855438
+--------------------------------------------------------------------------------
+

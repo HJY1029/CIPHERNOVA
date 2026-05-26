@@ -1,0 +1,119 @@
+# qwen_coder_local（Ollama · qwen2.5-coder:7b）
+# llm_specific 继承 OpenAI：compact、coder_bootstrap、cpp_rules、重试模板等与 openai 同源。
+# coder_bootstrap_prepend：置于继承得到的 coder_bootstrap **之前**，硬性规则优先被小模型看到。
+llm_specific:
+  inherits_from: openai
+  # 覆盖 OpenAI 超长 coder_bootstrap（否则与 prepend/lang 段叠加易 >32K tokens，Ollama 报 context limit，AES-OFB 等直接失败）
+  coder_bootstrap: ""
+
+  coder_bootstrap_prepend: |
+    **【Qwen · 批量重跑 9 槽（`QWEN_FAILING_SLOT_KEYS` 2 + `QWEN_FORCE_REGEN_NO_DB_KEYS` 7）· 防 32K】** 只读本题 **`algorithms/<算法>-<模式>.yaml`** 的 **`mandatory` + 当前语言 fenced 骨架** + **`test_feedback_improve_*`**；**整文件 ≤70 行**；**禁止** 教程/大表/**`iostream`**。
+    **无 DB 须落库 7 槽：** AES-ECB c/cpp；DES-CBC-cpp、DES-CFB-cpp、DES-ECB-c、DES-OFB-c/cpp。**未过 2 槽：** AES-GCM-cpp、SM4-OFB-cpp。
+    **【日志高频 · hex 输入】** `TEST_*` 是 **hex 字符串**，**禁止** `memcpy(plaintext_env,…)` / `strlen(env)` 当字节长度；**必须** 骨架里的 **`h2b`/`sscanf %2x`** 或 Python **`bytes.fromhex`**（否则密文 **128 hex** 而 golden **64 hex**，见 **aes-cfb-cpp**）。
+    **AES/SM4 禁止 `des.h`/`DES_*`/`KEY_SIZE 8`**。**`密文:`** + 小写 hex；**禁止 stdin**。
+    **【Qwen 本地 7B · 硬性规则（评测脚本无交互 stdin，违反即 EOFError / 零分）】**
+    - **C/C++ · 无 OpenSSL 头文件环境（批量复测踩坑：`fatal error: openssl/evp.h`）：** 评测用 **`gcc`** 先试 **`-lm`** 再试 **`-lcrypto`**；**只要源文件含 `#include <openssl/...>`，预处理找不到头文件即失败**（常见于 **Windows 未装 libssl 开发包**）。此时 **必须** 输出 **全程不 `#include <openssl/*.h>`** 的 **单文件可编译** 实现（手写 **DES/AES-128/SM4** 轮函数或标准描述 + 常量表），**仅用 C 标准库**；**禁止** 写出无法预处理的 EVP 模板。**仅在** 你能确定环境已有 **OpenSSL 头与 libcrypto** 时，才可使用 **`#include <openssl/evp.h>`** + EVP（如 Linux CI、WSL 已 `libssl-dev`）。
+    - **Linux 批量评测有 `-lcrypto`：** AES/SM4 的 C/C++ **应使用** `#include <openssl/evp.h>` + 正确 **`EVP_aes_*` / `EVP_sm4_*`**；写出 **`#include <openssl/des.h>`** 或 **`DES_cfb64_encrypt`** 在 AES/SM4 题上 **必编译失败或密文全错**（日志已大量出现）。
+    - **算法名为 `AES` / `SM4` 的 C/C++ 任务（防串题，批量已踩坑）：** **禁止** **`#include <openssl/des.h>`**、**禁止** 任意 **`DES_*` / `DES_cfb64_encrypt` / `des_cfb_encrypt`**、**禁止** 用 **`KEY_SIZE 8` / `uint8_t key[8]`** 解码 **32 hex** 的 **`TEST_KEY`**（那是把 **AES/SM4** 当成 **DES**）。须 **`#include <openssl/evp.h>`**，按题选 **`EVP_aes_128_cfb8` / `EVP_aes_128_ofb` / `EVP_aes_128_cbc` / `EVP_aes_128_ecb` / `EVP_aes_128_ctr` / `EVP_aes_256_gcm`** 或 **`EVP_sm4_cbc` / `EVP_sm4_cfb128` / `EVP_sm4_ofb` / `EVP_sm4_ecb`**。**AES-CTR** 禁止 DES 模板；**AES-GCM** 禁止 **`DES_*`**。**仅当明确无 OpenSSL 头**（如 Windows 本地无 libssl-dev）才改纯实现，且仍 **16B key+IV**（DES 才 **8B**）。**禁止** 对 **`getenv` 返回 NULL 调用 `scanf`**（**aes-cfb-c** 曾 exit 255）。**禁止** 空占位 **`des_encrypt(){ // Implement … }`**（**sm4-cfb-cpp**）。stdout 用 **`密文:`**，勿仅用 **`ciphertext:`**。
+    - **算法名为 `AES` 的任务（Python 等）：** 密钥与 IV 均为 **32 hex → 16 字节（AES-128）**。**禁止**写 **`密钥长度必须为8字节`**、**`DES密钥`**、整文件 **DES 表**；须 **`from Crypto.Cipher import AES`** 等。
+    - **禁止** `input()`、`sys.stdin.readline`、`sys.stdin.read()`；评测进程不向 stdin 喂数据 → **`EOFError: EOF when reading a line`**。
+    - **`import os` 位置：** 必须出现在**文件最顶端**（**第一个** `def` / `class` **之前**）。若先写 `def read_xxx():` 再在 `main` 里 `import os`，或辅助函数用 `os.environ` 却未顶层导入 → 运行时 **`NameError: name 'os' is not defined`**（评测已踩坑）。
+    - **必须** `import os`，仅用 **`os.getenv("TEST_PLAINTEXT")`、`os.getenv("TEST_KEY")`、`os.getenv("TEST_IV")`**（可先 `.strip()`），再用 **`bytes.fromhex(...)`**；缺省时可用固定测试向量但**不要**交互询问。
+    - **`main` 流程：** 读 env → hex→bytes → 调用加密函数 → **`print("密文:", ciphertext.hex().lower())`**（或与题面一致的 **`密文:`** 格式）；**勿**在打印密文前 `input()`。
+    - **AES-CFB（PyCryptodome）：** 本测 golden 为 **CFB-8**（按位反馈 8 bit，**不是** CFB-128）。须 **`AES.new(key, AES.MODE_CFB, iv=iv, segment_size=8)`** 或**省略** `segment_size`（库默认与 CFB-8 向量一致）。**禁止** **`segment_size=128`**、禁止注释里写「CFB-128」却套 128：**错误密文常以 `ea0b8fb8…` 开头**，golden 为 **`eac2dd63…`**（批量评测日志已踩坑）。详见 **`algorithms/AES-CFB.yaml`**。
+    - **AES-OFB（C/C++）：** 题目是 **AES**，**禁止** 粘贴 **`IP[64]` / `FP[64]` / `S_BOX` / `PC1`** 等 **DES 置换表**、禁止 **`密钥长度必须为8字节`** / **`key[8]`** 作为本题密钥容器 —— 会导致 **密钥格式错误** 或与 golden 完全不符（日志中 AES-OFB 曾整文件写成 DES）。仅用 **`EVP_aes_128_ofb()`** + **16 字节** key/IV。详见 **`algorithms/AES-OFB.yaml`**。
+    - **DES-CFB（PyCryptodome）：** CFB-8 只能用 **`DES.new(key, DES.MODE_CFB, iv=iv, segment_size=8)`**。**不存在** `DES.MODE_CFB8`，写成它会 **`AttributeError`**。
+    - **DES-OFB（PyCryptodome）：** **`DES.new(key, DES.MODE_OFB, iv)`**，**不要**传 `segment_size`（OFB 与 CFB 不同）。
+    - **DES 其它模式常量：** 仅用 **`DES.MODE_ECB` / `MODE_CBC` / `MODE_CFB` / `MODE_OFB`**；勿臆造常量名。
+    - **DES 各模式 C/C++（勿混用 API）：** **有 OpenSSL 头时：** **CBC → `EVP_des_cbc()`**；**OFB → `EVP_des_ofb()`**；**CFB-8 → `EVP_des_cfb8()`**；**ECB → `EVP_des_ecb()`** + **`#include <openssl/evp.h>`**，**禁止** 仅 **`des.h`** + **`DES_ede3_*`** / **`DES_cfb64_*`**。**无 OpenSSL 头：** **整条源码禁止 `<openssl/`**，须 **ANSI C/C++ 手写 DES** 对应模式（CFB-8 / OFB / CBC 链式须正确）。**禁止** 在 **DES-CBC / DES-OFB** 题里误用 **`DES_cfb64_encrypt`**。**DES-CBC 禁止** `DES_ecb` 逐块当 CBC。**DES-OFB 禁止** 输出与 **CFB** golden **`F70F…`** 一致。**DES-ECB：** **禁止** **`DES_ede3_*`**。**C** **`isspace`/`getenv`** → **`<ctype.h>` `<stdlib.h>`**。**C++** **`malloc` → `static_cast`**；**`std::remove_if` → `<algorithm>`**；**`std::bitset` → `<bitset>`**。**stdout：** **`密文:`**；**禁止** 仅用 **`ciphertext:`**。
+    - **AES-ECB / AES-CBC（C/C++）：** 凡 **`remove_whitespace`/`strip_hex`** 等用到 **`isspace`/`std::isspace`**，必须在**含该函数的编译单元顶部**包含 **`#include <ctype.h>`**（C）或 **`#include <cctype>`**（C++），否则 **`implicit declaration of function 'isspace'`** / **`isspace is not a member of std`**（批量评测已踩坑）。**C++** 若写 **`bytes_to_hex`/`ostringstream`+`hex`**，须 **`#include <sstream>`**、**`<iomanip>`**、**`<iostream>`** 等，勿半成品模板。
+    - **AES-ECB / AES-CBC（Python）：** **`import os` 为第一行 import**，随后 **`from Crypto.Cipher import AES`**；密文须能被正则解析 → **`print("密文:", ciphertext.hex().lower())`** **单行**，勿在「密文:」前后打印长说明（否则 **E-HEX-MISS / E-HEX-INSTR**）。
+    - **AES-GCM / AES-CTR（Python · PyCryptodome）：** GCM 用 **`AES.new(key, AES.MODE_GCM, nonce=nonce)`**（nonce 长度按题面，常见 12 字节）；**必须先 `cipher.update(aad)`** 再 **`encrypt_and_digest`**；stdout **`print("密文:", (ct+tag).hex().lower())`** 共 **64 hex**。**CTR 用 `AES.MODE_CTR`**，须正确传 **`nonce=`** 或 **`initial_value=`**（与 golden 一致）。C/C++ 用 **`EVP_aes_256_gcm`** / **`EVP_aes_128_ctr`** 等，**禁止** 把 GCM/CTR 题写成 ECB/CBC。**AES-GCM C++ 禁止** **`RAND_bytes`/`size_t*` 传 EVP**（**aes-gcm-cpp**）。**AES-CTR C++ 禁止** **`iostream`+`strlen(env)`**（**aes-ctr-cpp** 超 32K）。**SM4-OFB C++ 禁止** **`openssl/sm4.h`**（**sm4-ofb-cpp**）。
+    - **SM4：** Python 可用 **`gmssl.sm4`**（CBC 用 **`crypt_cbc`**；**OFB/CFB 无现成 API**，须 **`one_round` 手搓**，**禁止 `crypt_ofb`/`crypt_cfb`**）；**必须有 stdout 一行** **`print("密文:", …hex…)`**（评测 **E-HEX-MISS** 多为**无任何输出**或仅 stderr）。C/C++：**有 OpenSSL 头**时用 **`EVP_sm4_cbc` / `EVP_sm4_cfb128` / `EVP_sm4_ofb`** 等；**无头文件**须 **纯实现 SM4**（国标轮函数），**禁止** 写无法找到的 **`#include <openssl/evp.h>`**。**禁止** **`#include <openssl/des.h>`** + **`DES_cfb64_encrypt`** 冒充 SM4。**密钥/分组 128 bit（32 hex）**。**禁止** **`DES3`/`TripleDES`** / **`len(key)==24`**。**若** `print(..., file=sys.stderr)` **必须** **`import sys`**。
+    - **RSA：** 使用 **`Cryptodome`/`cryptography`/OpenSSL EVP** 完成填充（**OAEP / PKCS#1 v1.5** 按题面），**禁止** 手写大整数幂模当「教学实现」塞满上下文；输出格式（hex/Base64）严格按题面。
+    - **评测框架：** 若日志出现 **`save_code` / `unexpected keyword argument`** 等，属**运行端 agent 与代码不同步**；应更新本仓库后再跑批量，**不要** 在题解里「适配」不存在的参数名。
+
+  coder_bootstrap_python: |
+    **【本地 Qwen · Python · 补遗】**
+    - **AES-CFB：** **`AES.new(key, AES.MODE_CFB, iv=iv, segment_size=8)`** 或省略 `segment_size`（默认 **CFB-8**）；**禁止** **`segment_size=128`**；密钥/IV 各 **16 字节**。
+    - **PyCryptodome DES-CFB-8 唯一合法写法示例（变量名可改）：**
+      `cipher = DES.new(key, DES.MODE_CFB, iv=iv, segment_size=8)`  
+      **`encrypt = cipher.encrypt(plaintext)`**；密钥 **8 字节**、IV **8 字节**。
+    - **DES-CFB：** 整份源码 **≤60 行** 为佳（仅 `import` + `main` 逻辑 + 一次 `encrypt`）；**禁止**展开 DES 算法、禁止大段注释，否则本地推理极易 **HTTP 超时**。
+    - **DES-OFB：** 同样保持 **≤60 行**；**第一行必须是 `import os`**（再 `from Crypto.Cipher import DES`），避免辅助函数里用 `os` 却未导入。
+    - **再次强调：** 文件中**任何地方**都不要出现 **`input(`**。
+    - OFB/CBC/C：**IV 长度 8 字节**；ECB：**不要 IV**（但仍读 env，忽略 IV 即可）。
+    - 若用 **`Cryptodome`**：确认 **`from Crypto.Cipher import DES`**；不要用未安装的别名。
+    - **DES-CFB / DES-OFB：** 与 DES-ECB 相同，**第一行必须是 `import os`**，第二行 **`from Crypto.Cipher import DES`**，再写 **`def`**；否则 **`NameError: os`** / **`DES` 未定义**。
+    - **AES-ECB：** **`AES.new(key, AES.MODE_ECB)`**；**AES-CBC：** **`AES.new(key, AES.MODE_CBC, iv)`**，IV **16 字节**；输出 **`print("密文:", ciphertext.hex().lower())`**，勿额外空行夹杂英文说明。
+    - **AES-CTR：** **`Counter.new(128, initial_value=int.from_bytes(iv,'big'))`** + **`MODE_CTR`**；输出 **128 hex**（前缀 **`874d6191`**）；**禁止** 把 CTR 写成 **DES-CFB**（函数名含 **cfb**）。
+    - **SM4 Python（CBC/OFB/CFB）：** 文件末尾 **必须** `print("密文:", …)` 且 **`if __name__=="__main__": main()`**（否则 **E-HEX-MISS**）。
+
+  coder_bootstrap_c: |
+    **【本地 Qwen · C · EVP 五步（AES/SM4 未过槽必须写满，禁止空 encrypt 函数）】**
+    1. `getenv("TEST_*")` 非空 → 去空白 → hex→bytes（**AES/SM4：key 与 iv 各 16B**）
+    2. `ctx=EVP_CIPHER_CTX_new()` → `EVP_EncryptInit_ex(ctx, 本题 EVP_*(), NULL, key, iv)`
+    3. `EVP_CIPHER_CTX_set_padding(ctx,0)`
+    4. `EVP_EncryptUpdate` + `EVP_EncryptFinal_ex` → `out_len`
+    5. `EVP_CIPHER_CTX_free(ctx)` → `printf("密文: ");` 循环 `printf("%02x",out[i])` → `putchar('\n')`
+    **【本地 Qwen · C · OpenSSL / 纯实现】**
+    - **优先可读性与可编译：** 若上文「无 openssl/evp.h」适用你当前目标环境，**整条 C/C++ 解答禁止出现 `<openssl/`**，改用 **ANSI C 纯实现**；否则再用 EVP。
+    - **AES 任务：** **CFB 题用 `EVP_aes_128_cfb8()`**；OFB/CBC 等用对应 **`EVP_aes_128_ofb` / `EVP_aes_128_cbc`**；**禁止** 把 AES 题写成 **`EVP_des_*`** 或手搓 **DES**（**禁止** 在 AES 源文件里出现 **`static const int IP[`**、**`S_BOX`** 等大表）。**密钥/IV 解码后均须 16 字节**；`hex_to_bytes` 若按 **8 字节**定长解码 32 hex 的 `TEST_KEY` → **密钥格式错误**。**禁止** `fprintf` **「密钥长度必须为8字节」**（除非文件整题为 DES）。
+    - **DES-CBC：** **`EVP_des_cbc()`** + **`set_padding(0)`**；**禁止** **`DES_ede3_*`** 冒充 CBC（见 **`algorithms/DES-CBC.yaml`**）。
+    - **DES-ECB：** **`EVP_des_ecb()`** + legacy；**必备** **`stdlib.h`**、**`ctype.h`**；**禁止** **`DES_ede3_cfb64_encrypt`** 等。**优先** **`#include <openssl/evp.h>`**。详见 **`algorithms/DES-ECB.yaml`**。
+    - **DES-CFB 标准向量：** 必须用 **`EVP_des_cfb8()`**（CFB-8），**不要用** `EVP_des_cfb()`（CFB-64）除非题目明确要求。
+    - **输入：** 仅用 **`getenv("TEST_PLAINTEXT")` / `TEST_KEY` / `TEST_IV`**；**禁止**依赖 **`scanf`/`getchar`/`fgets(stdin)`** 作为唯一输入路径（无人 stdin → **密钥格式错误** / EOF）。
+    - **体量：** 单文件优先 **`main` + EVP 加密**；少写冗长解密演示以免截断。
+    - **括号配对**；`EVP_CIPHER_CTX_free` 须在 **`return 0`** 之前、`main` 花括号内。
+    - 使用 **`ERR_print_errors_fp`** 时需 **`#include <openssl/err.h>`**。
+    - **AES-ECB：** **`EVP_aes_128_ecb()`**（或按密钥长度选 192/256）；**IV 参数 NULL**。**AES-CBC：** **固定 `EVP_aes_128_cbc()`**（**禁止** 见 32 hex key 仍写 **`EVP_aes_256_cbc`**）+ **`set_padding(0)`** + **`printf("密文: ")`**；IV **16 字节**；golden **`9b004899…`**。
+    - **`remove_whitespace` 使用 `isspace`：** 文件顶部 **`#include <ctype.h>`**，字符写 **`isspace((unsigned char)c)`**。
+    - **`hex_to_int` / `hex_nibble`：** 若在 **`hex_to_bytes` 上方被调用**，须先写 **`static int hex_nibble(char c);`** / **`static int hex_to_int(char c);`** 原型，或**把完整函数体移到首次调用之前**，否则 **`implicit declaration`** / **`conflicting types for 'hex_to_int'`**。**三元/括号** 写 **`hex_to_byte`** 时**禁止** 多余 **`)`** 导致 **`expected ';' before ')'`**。
+    - **`main` 读 env：** 须 **`char *p = getenv("TEST_KEY"); if (!p) return 1; remove_whitespace(p);`**；**禁止** 声明 **`char key_hex[4096]`** 却**从不 `getenv` 赋值**就 **`remove_whitespace(key_hex)`**（未定义内容 → **Invalid input format**）。
+    - **AES-CFB / 通用：** **`main` 内** **禁止** 同一标识符混用 **`char *ciphertext`** 与 **`unsigned char ciphertext[N]`**（日志：**`conflicting types for 'ciphertext'`**）；密文缓冲区改用 **`out`** / **`ct`** / **`ct_buf`**，指针仅用 **`plaintext`** / **`key_hex`**。
+    - **AES-CTR：** **`EVP_aes_128_ctr()`**；**禁止** **`des_cfb_encrypt`/`BLOCK_SIZE 8`**（**aes-ctr-c**）。
+    - **SM4-CFB C：** **`EVP_sm4_cfb128()`**；**禁止** 空 **`des_encrypt(){}`**（错密文 **`b03f036b…`**）。
+
+  coder_bootstrap_cpp: |
+    **【本地 Qwen · C++ · EVP 五步】** 照抄本题 YAML **C 骨架**；**必须** `#include <cstring>`（日志 **des-cbc-cpp/sm4-cbc-cpp**：`strlen`/`memcpy` 未声明）。
+    **`printf("密文: ");`+hex**（禁止仅 `cout` 裸 hex，日志 **des-cbc-cpp** 无标签）。
+    **头文件：** `<openssl/evp.h> <cstdio> <cstdlib> <cstring> <cctype>`；DES 加 `<openssl/provider.h>` + **`OSSL_PROVIDER_load(NULL,"legacy")`**。
+    **【本地 Qwen · C++ · OpenSSL / 纯实现】**
+    - **AES：** **CFB 用 `EVP_aes_128_cfb8()`**；OFB 用 **`EVP_aes_128_ofb`** 等；**禁止** 在 **AES-OFB** 题里写 **`密钥长度必须为8字节`**、**`uint8_t key[8]`**、或实现 **`des_ofb64_encrypt`** / 整页 **DES 表**（属于 DES）。**`TEST_KEY`/`TEST_IV` 各 32 hex → 16 字节**，helper 若要求 `out_len==8` 解码密钥会失败。
+    - 与 C 相同：**DES-CBC → `EVP_des_cbc()`**、**DES-CFB → `EVP_des_cfb8()`**；从 **`std::getenv("TEST_…")`** 读入；**禁止** `std::cin >>` / **`std::getline(cin,…)`** 作为唯一数据来源。
+    - **`#include <cstdint>`**（使用 `uint8_t` 等）、**`<iostream>`**、**`<string>`** 等按需包含齐全。
+    - **`std::remove` / `std::remove_if` 与 `::remove`：** 去空白时若用 **`std::remove`** 或 **`std::remove_if`**，**必须** **`#include <algorithm>`**，且调用 **`std::remove_if`**（**禁止** 写成裸 **`remove_if`** 依赖 ADL）；勿与 C 的 **`remove(const char*)`** 混淆。
+    - **`std::bitset<N>`：** **必须** **`#include <bitset>`**（否则 **`bitset` is not a member of `std`**）。
+    - **`std::vector` / `std::string`：** 使用 **`std::vector<…>`** 须 **`#include <vector>`**（须在模板实例化前）。
+    - **DES-ECB：** 同 C：**`EVP_des_ecb()`**；**禁止** **`DES_ede3_*`**。**`std::malloc`→`static_cast<unsigned char*>(malloc(n))`**；**`new(std::nothrow) unsigned char[n]`** 亦可。
+    - **AES-ECB/CBC：** 同 C 的 **`EVP_aes_*_ecb` / `EVP_aes_*_cbc`**；**`std::isspace`** → **`#include <cctype>`**；**`std::getenv`** → **`#include <cstdlib>`**；**`bytes_to_hex`** 若用 **`std::hex`** / **`ostringstream`** → **`#include <iomanip>`**、**`<sstream>`**，或 **`printf("%02x", …)`**。
+    - **输出标签：** **`std::cout << "密文: "`** 或 **`printf("密文: ");`**；**避免** 仅用英文 **`ciphertext:`**（部分评测只认 **`密文`** 前缀）。
+
+  # 覆盖 OpenAI 长文，避免 Ollama 32K 输入超限（batch：`aes-ofb-c/cpp` generation_ok=False）
+  reference_resources: |
+    **参考（精简）：** **无 OpenSSL 开发头 → 纯 C/C++ 标准库实现**（DES/AES/SM4）；**有头文件与 `-lcrypto`** 时用 **`EVP_*`**（`#include <openssl/evp.h>`）。默认勿手写半套却引用缺失头文件。
+
+  cpp_rules_compact: |
+    **C++（本地精简）：** 按所用符号包含头：**`<cstdint>` `<iostream>` `<string>` `<vector>` `<algorithm>` `<bitset>` `<iomanip>` `<sstream>` `<cctype>` `<cstdlib>`**；**`std::stringstream` 必须 `<sstream>`**。禁止占位/TODO/空加密体/`return plaintext`。对称题：**无 OpenSSL 头则用纯实现**；否则 **`EVP_*`**，勿粘贴整页置换表。
+
+  incomplete_retry_compact: |
+    **上次输出不完整。** {last_error}
+    须从 `#include` 到 `main` 结束可编译；禁止占位；**`& 0xFF` 等勿截断为 `& 0`**；优先完整 **`EVP_EncryptInit_ex`…`Final`** 路径。
+
+  test_feedback_improve: |
+    **【Qwen · 全局测试反馈改进 · 强制】**
+    - **改进轮 · 批量 9 槽：** 读 **`generate_pin_<语言>`**（初次生成已置顶）+ **`test_feedback_improve_<语言>`**（优先于通用段）+ **`mandatory`** + **`c`/`cpp` fenced 骨架**；**整文件重写**。
+    - **改进轮（其它槽）：** 读 **`test_feedback_improve_<语言>`**（无则 **`test_feedback_improve`**）+ **`mandatory`** + fenced 骨架。
+    - **密文不符 golden 前缀 → 整文件重写**（照抄骨架，只改一行 **`EVP_*()`**），禁止在错误模板上小修。
+    - **只提交一份完整可编译源码**；删占位、空 **`des_encrypt(){}`**、手搓 AES/SM4 大表。
+    - **stdout：** **`printf("密文: ");`** + 小写 hex（禁止仅裸 hex / 仅 **`ciphertext:`**）。
+    - **禁止** `input`/`scanf`/`cin`/`fgets(stdin)`。
+    - **hex 未解码（日志 aes-cbc-c / aes-cfb-cpp）：** 删 **`memcpy(env)`**，改 YAML **`h2b` 骨架**；密文长度常为预期 **2 倍**。
+    - **AES-CBC 错 `afe3e274`：** 改 **`EVP_aes_128_cbc`** + **`set_padding(0)`**（勿 aes_256）。
+    - **AES-CFB 错 `ea0b8fb8` 或输出 128 hex：** 改 **`EVP_aes_128_cfb8`** + 读 **TEST_IV**（勿 `iv[8]=0`）。
+    - **AES-OFB 错 `eac2dd63`：** 改 **`EVP_aes_128_ofb`**（勿 cfb8）。
+    - **cpp 编译 `strlen` 未声明：** 加 **`<cstring>`**（**des-cbc-cpp / sm4-cbc-cpp**）。
+    - **上下文超限：** 答案 **≤80 行**，只保留骨架（**des-ecb-c**、**aes-ctr-cpp 47680 tokens**）。
+    - **批量 9 槽（golden 前缀 · 不符则整文件重写）：** **aes-ecb c/cpp `db727ac6`**；**des-ecb-c `958920b1`**；**des-cbc-cpp `5eb15b91`**；**des-cfb-cpp `f70f0158`**；**des-ofb c/cpp `f788b2bc`**；**aes-gcm-cpp `f7264413`**（禁 RAND_bytes/size_t*）；**sm4-ofb-cpp `2754b10c`**（禁 sm4.h、**%02x** 非 **%.*s**）。
+    - **AES/SM4 题禁止 `des.h`/`DES_*`/`KEY_SIZE 8`**；**DES 题须 legacy + 本题 `EVP_des_*`**。
+    - **GCM：** key **64 hex**；先 **AAD**；**`f7264413`** 前缀。

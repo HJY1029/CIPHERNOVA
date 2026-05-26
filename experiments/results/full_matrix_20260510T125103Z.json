@@ -1,0 +1,597 @@
+{
+  "started_at_utc": "2026-05-10T12:51:03.883551+00:00",
+  "providers": [
+    "qwen_coder_local"
+  ],
+  "configs_count": 45,
+  "results": [
+    {
+      "provider": "qwen_coder_local",
+      "cases": [
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1338,
+          "case_id": "des-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1926,
+          "case_id": "des-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2473,
+          "case_id": "des-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1190,
+          "case_id": "des-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c: In function ‘remove_whitespace’:\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:12:14: warning: implicit declaration of function ‘isspace’ [-Wimplicit-function-declaration]\n   12 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:5:1: note: include ‘<ctype.h>’ or provide a declaration of ‘isspace’\n    4 | #include <openssl/des.h>\n  +++ |+#include <ctype.h>\n    5 | \n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c: In function ‘hex_to_bin’:\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:26:27: warning: implicit declaration of function ‘hex_to_int’; did you mean ‘hex_to_bin’? [-Wimplicit-function-declaration]\n   26 |         int high_nibble = hex_to_int(hex[i]);\n      |                           ^~~~~~~~~~\n      |                           hex_to_bin\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c: At top level:\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:36:5: error: conflicting types for ‘hex_to_int’; have ‘int(char)’\n   36 | int hex_to_int(char c) {\n      |     ^~~~~~~~~~\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:36:1: note: an argument type that has a default promotion cannot match an empty parameter name list declaration\n   36 | int hex_to_int(char c) {\n      | ^~~\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:26:27: note: previous implicit declaration of ‘hex_to_int’ with type ‘int()’\n   26 |         int high_nibble = hex_to_int(hex[i]);\n      |                           ^~~~~~~~~~\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c: In function ‘main’:\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:87:5: warning: ‘DES_cfb64_encrypt’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   87 |     DES_cfb64_encrypt(plaintext, plaintext, sizeof(plaintext), &des_key, iv, (DES_cfb8_ptr)&iv[0], DES_ENCRYPT);\n      |     ^~~~~~~~~~~~~~~~~\nIn file included from /tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:4:\n/usr/include/openssl/des.h:197:6: note: declared here\n  197 | void DES_cfb64_encrypt(const unsigned char *in, unsigned char *out,\n      |      ^~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:87:79: error: ‘DES_cfb8_ptr’ undeclared (first use in this function)\n   87 |     DES_cfb64_encrypt(plaintext, plaintext, sizeof(plaintext), &des_key, iv, (DES_cfb8_ptr)&iv[0], DES_ENCRYPT);\n      |                                                                               ^~~~~~~~~~~~\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:87:79: note: each undeclared identifier is reported only once for each function it appears in\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:87:64: warning: passing argument 4 of ‘DES_cfb64_encrypt’ from incompatible pointer type [-Wincompatible-pointer-types]\n   87 |     DES_cfb64_encrypt(plaintext, plaintext, sizeof(plaintext), &des_key, iv, (DES_cfb8_ptr)&iv[0], DES_ENCRYPT);\n      |                                                                ^~~~~~~~\n      |                                                                |\n      |                                                                unsigned char (*)[8]\n/usr/include/openssl/des.h:198:55: note: expected ‘DES_key_schedule *’ {aka ‘struct DES_ks *’} but argument is of type ‘unsigned char (*)[8]’\n  198 |                        long length, DES_key_schedule *schedule,\n      |                                     ~~~~~~~~~~~~~~~~~~^~~~~~~~\n/tmp/aicrypto_tester/test_1519c5bbcd6c413abf1dfa4b3893ab92.c:87:74: warning: passing argument 5 of ‘DES_cfb64_encrypt’ from incompatible pointer type [-Wincompatible-pointer-types]\n   87 |     DES_cfb64_encrypt(plaintext, plaintext, sizeof(plaintext), &des_key, iv, (DES_cfb8_ptr)&iv[0], DES_ENCRYPT);\n      |                                                                          ^~\n      |                                                                          |\n      |                                                                          unsigned char *\n/usr/include/openssl/des.h:199:36: note: expected ‘unsigned char (*)[8]’ but argument is of type ‘unsigned char *’\n  199 |                        DES_cblock *ivec, int *num, int enc);\n      |                        ~~~~~~~~~~~~^~~~\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C实现代码",
+          "vector_status": "未通过",
+          "total_ms": 6259283,
+          "case_id": "des-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_5b071f180a974f0393cb62195b5883c7.cpp: In function ‘void remove_whitespace(char*)’:\n/tmp/aicrypto_tester/test_5b071f180a974f0393cb62195b5883c7.cpp:11:14: error: ‘isspace’ was not declared in this scope\n   11 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_5b071f180a974f0393cb62195b5883c7.cpp: In function ‘void des_cfb_encrypt(const unsigned char*, const unsigned char*, const unsigned char*, unsigned char*, size_t)’:\n/tmp/aicrypto_tester/test_5b071f180a974f0393cb62195b5883c7.cpp:33:16: warning: ‘int DES_set_key(unsigned char (*)[8], DES_key_schedule*)’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   33 |     DES_set_key((DES_cblock *)key, &key_schedule);\n      |     ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\nIn file included from /tmp/aicrypto_tester/test_5b071f180a974f0393cb62195b5883c7.cpp:3:\n/usr/include/openssl/des.h:186:5: note: declared here\n  186 | int DES_set_key(const_DES_cblock *key, DES_key_schedule *schedule);\n      |     ^~~~~~~~~~~\n/tmp/aicrypto_tester/test_5b071f180a974f0393cb62195b5883c7.cpp:34:88: error: ‘DES_cblock_iv’ was not declared in this scope; did you mean ‘DES_cblock’?\n   34 |     DES_cfb64_encrypt(plaintext, ciphertext, length, &key_schedule, (DES_cblock *)iv, &DES_cblock_iv, DES_ENCRYPT);\n      |                                                                                        ^~~~~~~~~~~~~\n      |                                                                                        DES_cblock\n/tmp/aicrypto_tester/test_5b071f180a974f0393cb62195b5883c7.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_5b071f180a974f0393cb62195b5883c7.cpp:38:27: error: ‘getenv’ was not declared in this scope\n   38 |     char *env_plaintext = getenv(\"TEST_PLAINTEXT\");\n      |                           ^~~~~~\n/tmp/aicrypto_tester/test_5b071f180a974f0393cb62195b5883c7.cpp:4:1: note: ‘getenv’ is defined in header ‘<cstdlib>’; did you forget to ‘#include <cstdlib>’?\n    3 | #include <openssl/des.h>\n  +++ |+#include <cstdlib>\n    4 | \n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C++实现代码",
+          "vector_status": "未通过",
+          "total_ms": 6053038,
+          "case_id": "des-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1725,
+          "case_id": "des-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "代码执行失败: Invalid input format\n",
+          "vector_status": "未通过",
+          "total_ms": 6150212,
+          "case_id": "des-cfb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_217924d93fa049f8836a688a64d1eacc.cpp: In function ‘void remove_whitespace(char*)’:\n/tmp/aicrypto_tester/test_217924d93fa049f8836a688a64d1eacc.cpp:11:14: error: ‘isspace’ was not declared in this scope\n   11 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_217924d93fa049f8836a688a64d1eacc.cpp: In function ‘void des_cfb_encrypt(const unsigned char*, const unsigned char*, const unsigned char*, size_t, unsigned char*)’:\n/tmp/aicrypto_tester/test_217924d93fa049f8836a688a64d1eacc.cpp:42:56: error: ‘key_schedule’ was not declared in this scope\n   42 |         DES_cfb64_encrypt(current_iv, block, IV_SIZE, &key_schedule, NULL, &num_bytes, DES_ENCRYPT);\n      |                                                        ^~~~~~~~~~~~\n/tmp/aicrypto_tester/test_217924d93fa049f8836a688a64d1eacc.cpp:42:77: error: ‘num_bytes’ was not declared in this scope\n   42 |         DES_cfb64_encrypt(current_iv, block, IV_SIZE, &key_schedule, NULL, &num_bytes, DES_ENCRYPT);\n      |                                                                             ^~~~~~~~~\n/tmp/aicrypto_tester/test_217924d93fa049f8836a688a64d1eacc.cpp:42:88: error: ‘DES_ENCRYPT’ was not declared in this scope\n   42 |         DES_cfb64_encrypt(current_iv, block, IV_SIZE, &key_schedule, NULL, &num_bytes, DES_ENCRYPT);\n      |                                                                                        ^~~~~~~~~~~\n/tmp/aicrypto_tester/test_217924d93fa049f8836a688a64d1eacc.cpp:42:9: error: ‘DES_cfb64_encrypt’ was not declared in this scope; did you mean ‘des_cfb_encrypt’?\n   42 |         DES_cfb64_encrypt(current_iv, block, IV_SIZE, &key_schedule, NULL, &num_bytes, DES_ENCRYPT);\n      |         ^~~~~~~~~~~~~~~~~\n      |         des_cfb_encrypt\n",
+          "vector_status": "未通过",
+          "total_ms": 6208295,
+          "case_id": "des-cfb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1881,
+          "case_id": "des-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c: In function ‘remove_whitespace’:\n/tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c:11:14: warning: implicit declaration of function ‘isspace’ [-Wimplicit-function-declaration]\n   11 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c:5:1: note: include ‘<ctype.h>’ or provide a declaration of ‘isspace’\n    4 | #include <openssl/des.h>\n  +++ |+#include <ctype.h>\n    5 | \n/tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c: In function ‘main’:\n/tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c:55:22: error: ‘DES_BLOCK_SIZE’ undeclared (first use in this function); did you mean ‘BLOCK_SIZE’?\n   55 |     unsigned char iv[DES_BLOCK_SIZE];\n      |                      ^~~~~~~~~~~~~~\n      |                      BLOCK_SIZE\n/tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c:55:22: note: each undeclared identifier is reported only once for each function it appears in\n/tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c:65:5: warning: ‘DES_cfb64_encrypt’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   65 |     DES_cfb64_encrypt(plaintext, ciphertext, BLOCK_SIZE, (DES_key_schedule *)key, &iv[0], &DES_cfb8);\n      |     ^~~~~~~~~~~~~~~~~\nIn file included from /tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c:4:\n/usr/include/openssl/des.h:197:6: note: declared here\n  197 | void DES_cfb64_encrypt(const unsigned char *in, unsigned char *out,\n      |      ^~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c:65:92: error: ‘DES_cfb8’ undeclared (first use in this function)\n   65 |     DES_cfb64_encrypt(plaintext, ciphertext, BLOCK_SIZE, (DES_key_schedule *)key, &iv[0], &DES_cfb8);\n      |                                                                                            ^~~~~~~~\n/tmp/aicrypto_tester/test_7383ae43311a48aab913fc674176f11e.c:65:5: error: too few arguments to function ‘DES_cfb64_encrypt’\n   65 |     DES_cfb64_encrypt(plaintext, ciphertext, BLOCK_SIZE, (DES_key_schedule *)key, &iv[0], &DES_cfb8);\n      |     ^~~~~~~~~~~~~~~~~\n/usr/include/openssl/des.h:197:6: note: declared here\n  197 | void DES_cfb64_encrypt(const unsigned char *in, unsigned char *out,\n      |      ^~~~~~~~~~~~~~~~~\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C实现代码",
+          "vector_status": "未通过",
+          "total_ms": 5797743,
+          "case_id": "des-ofb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp: In function ‘void remove_whitespace(char*)’:\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:11:14: error: ‘isspace’ was not declared in this scope\n   11 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp: In function ‘void des_cfb_encrypt(const unsigned char*, const unsigned char*, const unsigned char*, unsigned char*, size_t)’:\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:34:78: error: ‘DES_ENCRYPT’ was not declared in this scope\n   34 |         DES_cfb64_encrypt(current_iv, keystream, IV_SIZE, &key[0], NULL, &i, DES_ENCRYPT);\n      |                                                                              ^~~~~~~~~~~\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:34:9: error: ‘DES_cfb64_encrypt’ was not declared in this scope; did you mean ‘des_cfb_encrypt’?\n   34 |         DES_cfb64_encrypt(current_iv, keystream, IV_SIZE, &key[0], NULL, &i, DES_ENCRYPT);\n      |         ^~~~~~~~~~~~~~~~~\n      |         des_cfb_encrypt\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:57:52: warning: format ‘%zu’ expects argument of type ‘size_t’, but argument 3 has type ‘int’ [-Wformat=]\n   57 |             fprintf(stderr, \"Key must be exactly %zu bytes\\n\", DES_KEY_SIZE);\n      |                                                  ~~^\n      |                                                    |\n      |                                                    long unsigned int\n      |                                                  %u\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:60:22: error: invalid conversion from ‘unsigned char*’ to ‘const char*’ [-fpermissive]\n   60 |         hex_to_bytes(key, key, DES_KEY_SIZE);\n      |                      ^~~\n      |                      |\n      |                      unsigned char*\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:19:30: note:   initializing argument 1 of ‘int hex_to_bytes(const char*, unsigned char*, size_t)’\n   19 | int hex_to_bytes(const char *hex, unsigned char *bytes, size_t len) {\n      |                  ~~~~~~~~~~~~^~~\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:65:52: warning: format ‘%zu’ expects argument of type ‘size_t’, but argument 3 has type ‘int’ [-Wformat=]\n   65 |             fprintf(stderr, \"Key must be exactly %zu bytes\\n\", DES_KEY_SIZE);\n      |                                                  ~~^\n      |                                                    |\n      |                                                    long unsigned int\n      |                                                  %u\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:77:51: warning: format ‘%zu’ expects argument of type ‘size_t’, but argument 3 has type ‘int’ [-Wformat=]\n   77 |             fprintf(stderr, \"IV must be exactly %zu bytes\\n\", IV_SIZE);\n      |                                                 ~~^\n      |                                                   |\n      |                                                   long unsigned int\n      |                                                 %u\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:80:22: error: invalid conversion from ‘unsigned char*’ to ‘const char*’ [-fpermissive]\n   80 |         hex_to_bytes(iv, iv, IV_SIZE);\n      |                      ^~\n      |                      |\n      |                      unsigned char*\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:19:30: note:   initializing argument 1 of ‘int hex_to_bytes(const char*, unsigned char*, size_t)’\n   19 | int hex_to_bytes(const char *hex, unsigned char *bytes, size_t len) {\n      |                  ~~~~~~~~~~~~^~~\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:85:51: warning: format ‘%zu’ expects argument of type ‘size_t’, but argument 3 has type ‘int’ [-Wformat=]\n   85 |             fprintf(stderr, \"IV must be exactly %zu bytes\\n\", IV_SIZE);\n      |                                                 ~~^\n      |                                                   |\n      |                                                   long unsigned int\n      |                                                 %u\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:88:22: error: invalid conversion from ‘unsigned char*’ to ‘const char*’ [-fpermissive]\n   88 |         hex_to_bytes(iv, iv, IV_SIZE);\n      |                      ^~\n      |                      |\n      |                      unsigned char*\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:19:30: note:   initializing argument 1 of ‘int hex_to_bytes(const char*, unsigned char*, size_t)’\n   19 | int hex_to_bytes(const char *hex, unsigned char *bytes, size_t len) {\n      |                  ~~~~~~~~~~~~^~~\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:96:22: error: invalid conversion from ‘unsigned char*’ to ‘const char*’ [-fpermissive]\n   96 |         hex_to_bytes(plaintext, plaintext, length);\n      |                      ^~~~~~~~~\n      |                      |\n      |                      unsigned char*\n/tmp/aicrypto_tester/test_e9afca8b691341609a9b1b815836d286.cpp:19:30: note:   initializing argument 1 of ‘int hex_to_bytes(const char*, unsigned char*, size_t)’\n   19 | int hex_to_bytes(const char *hex, unsigned char *bytes, size_t len) {\n      |                  ~~~~~~~~~~~~^~~\n",
+          "vector_status": "未通过",
+          "total_ms": 6042381,
+          "case_id": "des-ofb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2168,
+          "case_id": "aes-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2675,
+          "case_id": "aes-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3438,
+          "case_id": "aes-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1622,
+          "case_id": "aes-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2179,
+          "case_id": "aes-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 3952,
+          "case_id": "aes-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1530,
+          "case_id": "aes-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_4366fbda322041bd88ca612e5ab34b03.c: In function ‘hex_to_byte’:\n/tmp/aicrypto_tester/test_4366fbda322041bd88ca612e5ab34b03.c:20:145: error: expected ‘;’ before ‘)’ token\n   20 |             ((hex[1] >= '0' && hex[1] <= '9') ? (hex[1] - '0') : ((hex[1] >= 'A' && hex[1] <= 'F') ? (hex[1] - 'A' + 10) : (hex[1] - 'a' + 10))));\n      |                                                                                                                                                 ^\n      |                                                                                                                                                 ;\n/tmp/aicrypto_tester/test_4366fbda322041bd88ca612e5ab34b03.c:20:145: error: expected statement before ‘)’ token\n/tmp/aicrypto_tester/test_4366fbda322041bd88ca612e5ab34b03.c: In function ‘des_cfb_encrypt’:\n/tmp/aicrypto_tester/test_4366fbda322041bd88ca612e5ab34b03.c:29:5: warning: ‘DES_set_odd_parity’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   29 |     DES_set_odd_parity((DES_cblock *)key);\n      |     ^~~~~~~~~~~~~~~~~~\nIn file included from /tmp/aicrypto_tester/test_4366fbda322041bd88ca612e5ab34b03.c:4:\n/usr/include/openssl/des.h:176:28: note: declared here\n  176 | OSSL_DEPRECATEDIN_3_0 void DES_set_odd_parity(DES_cblock *key);\n      |                            ^~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_4366fbda322041bd88ca612e5ab34b03.c:30:5: warning: ‘DES_set_key_unchecked’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   30 |     DES_set_key_unchecked((DES_cblock *)key, &key_sched);\n      |     ^~~~~~~~~~~~~~~~~~~~~\n/usr/include/openssl/des.h:192:6: note: declared here\n  192 | void DES_set_key_unchecked(const_DES_cblock *key, DES_key_schedule *schedule);\n      |      ^~~~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_4366fbda322041bd88ca612e5ab34b03.c:36:9: warning: ‘DES_ecb_encrypt’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   36 |         DES_ecb_encrypt((DES_cblock *)current_iv, (DES_cblock *)&current_iv[4], &key_sched, DES_ENCRYPT);\n      |         ^~~~~~~~~~~~~~~\n/usr/include/openssl/des.h:105:6: note: declared here\n  105 | void DES_ecb_encrypt(const_DES_cblock *input, DES_cblock *output,\n      |      ^~~~~~~~~~~~~~~\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C实现代码",
+          "vector_status": "未通过",
+          "total_ms": 5898017,
+          "case_id": "aes-cfb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "代码执行失败: Invalid input length. Plaintext must be a multiple of 16 bytes, key and IV must be 8 bytes.\n",
+          "vector_status": "未通过",
+          "total_ms": 5988042,
+          "case_id": "aes-cfb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2154,
+          "case_id": "aes-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "代码执行失败: 程序异常退出，退出码: -11\n\n程序没有产生任何输出，可能是程序崩溃或等待输入。",
+          "vector_status": "未通过",
+          "total_ms": 6108283,
+          "case_id": "aes-ofb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp: In function ‘void des_encrypt(const unsigned char*, const unsigned char*, unsigned char*)’:\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:9:5: error: ‘DES_key_schedule’ was not declared in this scope\n    9 |     DES_key_schedule key_schedule;\n      |     ^~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:10:28: error: ‘DES_cblock’ was not declared in this scope\n   10 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);\n      |                            ^~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:10:40: error: expected primary-expression before ‘)’ token\n   10 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);\n      |                                        ^\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:10:47: error: ‘key_schedule’ was not declared in this scope\n   10 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);\n      |                                               ^~~~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:10:5: error: ‘DES_set_key_unchecked’ was not declared in this scope\n   10 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);\n      |     ^~~~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:11:34: error: expected primary-expression before ‘)’ token\n   11 |     DES_ecb_encrypt((DES_cblock *)plaintext, (DES_cblock *)ciphertext, &key_schedule, DES_ENCRYPT);\n      |                                  ^\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:11:59: error: expected primary-expression before ‘)’ token\n   11 |     DES_ecb_encrypt((DES_cblock *)plaintext, (DES_cblock *)ciphertext, &key_schedule, DES_ENCRYPT);\n      |                                                           ^\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:11:87: error: ‘DES_ENCRYPT’ was not declared in this scope\n   11 |     DES_ecb_encrypt((DES_cblock *)plaintext, (DES_cblock *)ciphertext, &key_schedule, DES_ENCRYPT);\n      |                                                                                       ^~~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:11:5: error: ‘DES_ecb_encrypt’ was not declared in this scope; did you mean ‘des_encrypt’?\n   11 |     DES_ecb_encrypt((DES_cblock *)plaintext, (DES_cblock *)ciphertext, &key_schedule, DES_ENCRYPT);\n      |     ^~~~~~~~~~~~~~~\n      |     des_encrypt\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp: In function ‘void des_decrypt(const unsigned char*, const unsigned char*, unsigned char*)’:\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:15:5: error: ‘DES_key_schedule’ was not declared in this scope\n   15 |     DES_key_schedule key_schedule;\n      |     ^~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:16:28: error: ‘DES_cblock’ was not declared in this scope\n   16 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);\n      |                            ^~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:16:40: error: expected primary-expression before ‘)’ token\n   16 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);\n      |                                        ^\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:16:47: error: ‘key_schedule’ was not declared in this scope\n   16 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);\n      |                                               ^~~~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:16:5: error: ‘DES_set_key_unchecked’ was not declared in this scope\n   16 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);\n      |     ^~~~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:17:34: error: expected primary-expression before ‘)’ token\n   17 |     DES_ecb_encrypt((DES_cblock *)ciphertext, (DES_cblock *)plaintext, &key_schedule, DES_DECRYPT);\n      |                                  ^\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:17:60: error: expected primary-expression before ‘)’ token\n   17 |     DES_ecb_encrypt((DES_cblock *)ciphertext, (DES_cblock *)plaintext, &key_schedule, DES_DECRYPT);\n      |                                                            ^\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:17:87: error: ‘DES_DECRYPT’ was not declared in this scope\n   17 |     DES_ecb_encrypt((DES_cblock *)ciphertext, (DES_cblock *)plaintext, &key_schedule, DES_DECRYPT);\n      |                                                                                       ^~~~~~~~~~~\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:17:5: error: ‘DES_ecb_encrypt’ was not declared in this scope; did you mean ‘des_encrypt’?\n   17 |     DES_ecb_encrypt((DES_cblock *)ciphertext, (DES_cblock *)plaintext, &key_schedule, DES_DECRYPT);\n      |     ^~~~~~~~~~~~~~~\n      |     des_encrypt\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_8e59e3f538ed4fb089e930eef59987e3.cpp:75:13: error: ‘isspace’ was not declared in this scope\n   75 |         if (isspace(plaintext_str[i])) continue;\n      |             ^~~~~~~\n",
+          "vector_status": "未通过",
+          "total_ms": 6762529,
+          "case_id": "aes-ofb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 5465,
+          "case_id": "aes-gcm-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 4065,
+          "case_id": "aes-gcm-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_601f52a8534b487982df3944ee994f17.cpp: In function ‘void remove_whitespace(char*)’:\n/tmp/aicrypto_tester/test_601f52a8534b487982df3944ee994f17.cpp:11:14: error: ‘isspace’ was not declared in this scope\n   11 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_601f52a8534b487982df3944ee994f17.cpp: In function ‘void des_encrypt(const unsigned char*, const unsigned char*, const unsigned char*, unsigned char*)’:\n/tmp/aicrypto_tester/test_601f52a8534b487982df3944ee994f17.cpp:21:5: error: ‘DES_iv32’ was not declared in this scope\n   21 |     DES_iv32 des_iv;\n      |     ^~~~~~~~\n/tmp/aicrypto_tester/test_601f52a8534b487982df3944ee994f17.cpp:23:12: error: ‘des_iv’ was not declared in this scope\n   23 |     memcpy(des_iv, iv, 8);\n      |            ^~~~~~\n",
+          "vector_status": "未通过",
+          "total_ms": 14522962,
+          "case_id": "aes-gcm-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2327,
+          "case_id": "aes-ctr-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_5c5223a6f8a14333a4d36927caac9b63.c: In function ‘des_cfb_encrypt’:\n/tmp/aicrypto_tester/test_5c5223a6f8a14333a4d36927caac9b63.c:27:9: warning: implicit declaration of function ‘DES_cfb64_encrypt’; did you mean ‘des_cfb_encrypt’? [-Wimplicit-function-declaration]\n   27 |         DES_cfb64_encrypt(state, &ciphertext[i], 1, &key[0], &state, &iv[0], DES_ENCRYPT);\n      |         ^~~~~~~~~~~~~~~~~\n      |         des_cfb_encrypt\n/tmp/aicrypto_tester/test_5c5223a6f8a14333a4d36927caac9b63.c:27:78: error: ‘DES_ENCRYPT’ undeclared (first use in this function)\n   27 |         DES_cfb64_encrypt(state, &ciphertext[i], 1, &key[0], &state, &iv[0], DES_ENCRYPT);\n      |                                                                              ^~~~~~~~~~~\n/tmp/aicrypto_tester/test_5c5223a6f8a14333a4d36927caac9b63.c:27:78: note: each undeclared identifier is reported only once for each function it appears in\n",
+          "vector_status": "未通过",
+          "total_ms": 7175316,
+          "case_id": "aes-ctr-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 7024,
+          "case_id": "aes-ctr-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1993,
+          "case_id": "rsa-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1987,
+          "case_id": "rsa-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1913,
+          "case_id": "rsa-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 1998,
+          "case_id": "sm4-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 2701,
+          "case_id": "sm4-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 4912,
+          "case_id": "sm4-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": false,
+          "error": "无法从输出中提取密文。\n程序输出:\n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+          "vector_status": "未通过",
+          "total_ms": 7276649,
+          "case_id": "sm4-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 11389,
+          "case_id": "sm4-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 14431,
+          "case_id": "sm4-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 5250,
+          "case_id": "sm4-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_a39ab2ea60a34052a9d01df22f57f5fa.c: In function ‘hex_to_byte’:\n/tmp/aicrypto_tester/test_a39ab2ea60a34052a9d01df22f57f5fa.c:25:87: error: expected ‘;’ before ‘)’ token\n   25 |                             (hex[1] >= 'a' && hex[1] <= 'f') ? hex[1] - 'a' + 10 : -1));\n      |                                                                                       ^\n      |                                                                                       ;\n/tmp/aicrypto_tester/test_a39ab2ea60a34052a9d01df22f57f5fa.c:25:87: error: expected statement before ‘)’ token\n/tmp/aicrypto_tester/test_a39ab2ea60a34052a9d01df22f57f5fa.c: In function ‘main’:\n/tmp/aicrypto_tester/test_a39ab2ea60a34052a9d01df22f57f5fa.c:78:5: warning: ‘DES_cfb64_encrypt’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   78 |     DES_cfb64_encrypt(plaintext, ciphertext, sizeof(plaintext), &des_key, (DES_cblock *)&des_iv, NULL, DES_ENCRYPT);\n      |     ^~~~~~~~~~~~~~~~~\nIn file included from /tmp/aicrypto_tester/test_a39ab2ea60a34052a9d01df22f57f5fa.c:4:\n/usr/include/openssl/des.h:197:6: note: declared here\n  197 | void DES_cfb64_encrypt(const unsigned char *in, unsigned char *out,\n      |      ^~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_a39ab2ea60a34052a9d01df22f57f5fa.c:78:65: warning: passing argument 4 of ‘DES_cfb64_encrypt’ from incompatible pointer type [-Wincompatible-pointer-types]\n   78 |     DES_cfb64_encrypt(plaintext, ciphertext, sizeof(plaintext), &des_key, (DES_cblock *)&des_iv, NULL, DES_ENCRYPT);\n      |                                                                 ^~~~~~~~\n      |                                                                 |\n      |                                                                 unsigned char (*)[8]\n/usr/include/openssl/des.h:198:55: note: expected ‘DES_key_schedule *’ {aka ‘struct DES_ks *’} but argument is of type ‘unsigned char (*)[8]’\n  198 |                        long length, DES_key_schedule *schedule,\n      |                                     ~~~~~~~~~~~~~~~~~~^~~~~~~~\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C实现代码",
+          "vector_status": "未通过",
+          "total_ms": 6979405,
+          "case_id": "sm4-cfb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "代码执行失败: Invalid input length\n",
+          "vector_status": "未通过",
+          "total_ms": 7222297,
+          "case_id": "sm4-cfb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": false,
+          "error": "无法从输出中提取密文。\n程序输出:\n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+          "vector_status": "未通过",
+          "total_ms": 8966971,
+          "case_id": "sm4-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c: In function ‘remove_whitespace’:\n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:12:14: warning: implicit declaration of function ‘isspace’ [-Wimplicit-function-declaration]\n   12 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:5:1: note: include ‘<ctype.h>’ or provide a declaration of ‘isspace’\n    4 | #include <openssl/des.h>\n  +++ |+#include <ctype.h>\n    5 | \n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c: In function ‘des_cfb_encrypt’:\n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:22:5: warning: ‘DES_set_odd_parity’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   22 |     DES_set_odd_parity((DES_cblock *)key);\n      |     ^~~~~~~~~~~~~~~~~~\nIn file included from /tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:4:\n/usr/include/openssl/des.h:176:28: note: declared here\n  176 | OSSL_DEPRECATEDIN_3_0 void DES_set_odd_parity(DES_cblock *key);\n      |                            ^~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:23:5: warning: ‘DES_set_key_checked’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   23 |     DES_set_key_checked((DES_cblock *)key, &key_schedule);\n      |     ^~~~~~~~~~~~~~~~~~~\n/usr/include/openssl/des.h:190:5: note: declared here\n  190 | int DES_set_key_checked(const_DES_cblock *key, DES_key_schedule *schedule);\n      |     ^~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:26:9: warning: ‘DES_ede3_cfb64_encrypt’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   26 |         DES_ede3_cfb64_encrypt(plaintext + i, ciphertext + i, 1, &key_schedule, (DES_cblock *)iv, &i, DES_ENCRYPT);\n      |         ^~~~~~~~~~~~~~~~~~~~~~\n/usr/include/openssl/des.h:147:6: note: declared here\n  147 | void DES_ede3_cfb64_encrypt(const unsigned char *in, unsigned char *out,\n      |      ^~~~~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:26:81: warning: passing argument 5 of ‘DES_ede3_cfb64_encrypt’ from incompatible pointer type [-Wincompatible-pointer-types]\n   26 |         DES_ede3_cfb64_encrypt(plaintext + i, ciphertext + i, 1, &key_schedule, (DES_cblock *)iv, &i, DES_ENCRYPT);\n      |                                                                                 ^~~~~~~~~~~~~~~~\n      |                                                                                 |\n      |                                                                                 unsigned char (*)[8]\n/usr/include/openssl/des.h:149:47: note: expected ‘DES_key_schedule *’ {aka ‘struct DES_ks *’} but argument is of type ‘unsigned char (*)[8]’\n  149 |                             DES_key_schedule *ks2, DES_key_schedule *ks3,\n      |                             ~~~~~~~~~~~~~~~~~~^~~\n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:26:99: warning: passing argument 6 of ‘DES_ede3_cfb64_encrypt’ from incompatible pointer type [-Wincompatible-pointer-types]\n   26 |         DES_ede3_cfb64_encrypt(plaintext + i, ciphertext + i, 1, &key_schedule, (DES_cblock *)iv, &i, DES_ENCRYPT);\n      |                                                                                                   ^~\n      |                                                                                                   |\n      |                                                                                                   size_t * {aka long unsigned int *}\n/usr/include/openssl/des.h:149:70: note: expected ‘DES_key_schedule *’ {aka ‘struct DES_ks *’} but argument is of type ‘size_t *’ {aka ‘long unsigned int *’}\n  149 |                             DES_key_schedule *ks2, DES_key_schedule *ks3,\n      |                                                    ~~~~~~~~~~~~~~~~~~^~~\n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:26:103: warning: passing argument 7 of ‘DES_ede3_cfb64_encrypt’ makes pointer from integer without a cast [-Wint-conversion]\n   26 |         DES_ede3_cfb64_encrypt(plaintext + i, ciphertext + i, 1, &key_schedule, (DES_cblock *)iv, &i, DES_ENCRYPT);\n      |                                                                                                       ^~~~~~~~~~~\n      |                                                                                                       |\n      |                                                                                                       int\n/usr/include/openssl/des.h:150:41: note: expected ‘unsigned char (*)[8]’ but argument is of type ‘int’\n  150 |                             DES_cblock *ivec, int *num, int enc);\n      |                             ~~~~~~~~~~~~^~~~\n/tmp/aicrypto_tester/test_0d00d0aa65524d7893da89f37fe3a7c6.c:26:9: error: too few arguments to function ‘DES_ede3_cfb64_encrypt’\n   26 |         DES_ede3_cfb64_encrypt(plaintext + i, ciphertext + i, 1, &key_schedule, (DES_cblock *)iv, &i, DES_ENCRYPT);\n      |         ^~~~~~~~~~~~~~~~~~~~~~\n/usr/include/openssl/des.h:147:6: note: declared here\n  147 | void DES_ede3_cfb64_encrypt(const unsigned char *in, unsigned char *out,\n      |      ^~~~~~~~~~~~~~~~~~~~~~\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C实现代码",
+          "vector_status": "未通过",
+          "total_ms": 6827428,
+          "case_id": "sm4-ofb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 5784,
+          "case_id": "sm4-ofb-cpp",
+          "generation_ok": true
+        }
+      ]
+    }
+  ],
+  "finished_at_utc": "2026-05-11T22:15:16.469162+00:00"
+}

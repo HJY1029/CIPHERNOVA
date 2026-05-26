@@ -1,0 +1,17 @@
+# DES-OFB模式的C语言特定内容
+c_specific: |
+  **【编译铁律】** `#define` 的宏名必须是标识符。**禁止** `#define 8`、`#define 8 8`、`#define 8 8 // DES块大小…`（必报 `macro names must be identifiers`）。块长请写 **`#define DES_BLOCK_BYTES 8`** 或 **`enum { DES_BLK = 8 };`**。
+
+  **使用OpenSSL库的实现要求（C语言）：**
+  1. **`hex_to_bytes`** — 将十六进制字符串转为字节数组（须完整实现）。
+  2. **`main`** — 读 `TEST_PLAINTEXT` / `TEST_KEY` / `TEST_IV`（hex），转二进制，加密，打印 **`密文:`** + hex，`return 0`。
+  3. **必须与 `test_data.yaml` 中 DES-OFB golden 一致 → 使用整块 OFB：**
+     - `#include <openssl/evp.h>`、`#include <openssl/provider.h>`、`#include <stdio.h>`、`#include <stdlib.h>`、`#include <string.h>`
+     - `OSSL_PROVIDER_load(NULL, "legacy")`；`EVP_des_ofb()`；**在第一次 `EVP_EncryptUpdate` 之前** `EVP_CIPHER_CTX_set_padding(ctx, 0)`。
+     - `EVP_EncryptInit_ex(ctx, EVP_des_ofb(), NULL, key, iv);` — key、iv 各 **8** 字节。
+     - `EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);` 再累加长度；`EVP_EncryptFinal_ex`；打印长度用 **`ciphertext_len`**（Update+Final），不是 `sizeof(指针)`。
+     - **`main` 内 `int len` / `ciphertext_len` 只声明一次：** 禁止在已有 **`int len = 0, ciphertext_len = 0;`**（或等价首段声明）之后再次 **`int len, ciphertext_len = …`** / 第二次 **`int len`**（→ **`redeclaration of 'len'`**）。`Update`/`Final` 两段共用同一 **`len`** 传 **`&len`** 累加；后续循环只用 **`int i`** 等新名。
+  4. **自测 golden（默认向量）：** 密文 hex 须为 **`F788B2BC5949FCBBB3962D8E99733A96`**。
+  5. **编译：** `gcc -o program program.c -lssl -lcrypto`
+
+  **禁止：** 手写「OFB-8」逐字节反馈且与 `EVP_des_ofb` 语义混用；用 **密文** 更新 OFB 寄存器（那是 CFB）。

@@ -1,0 +1,59 @@
+{
+  "title": "不同错误类型的分布与修复效果",
+  "source_note": "**历史库聚合**：`code_history.db`（修改时间 2026-05-25 15:53:10）∪ `llm_performance.json`（修改时间 2026-05-25 15:51:12） provider=`deepseek`；共 **1657** 条明细（history **698** + performance **876** + 首次生成推断失败 **83**）。**实验总体**为 **264** 条失败记录（含 performance 终态失败 **181** 条 + 首次生成内曾失败且同会话最终成功 **83** 条，来自 **83** 个 ``attempts>1`` 成功会话）；表中「数量/占比/修复前后通过率」均在该失败子集上统计。**「修复后通过率」= 观测口径**：本条已标向量通过，或**同一 provider 且同一 (算法,模式,语言)** 在**更晚**的 history/performance 记录中出现 `test_success===true`，或本条为首次生成推断失败（``_first_gen_repaired``）；history 成功记录可补全「仅在 Web 落库、未写入 performance 末条」的修复。 全库 **269** 条 `attempts>1`；失败样本合计 **245** / **264** 条计为「后续已跑通」。「修复前通过率」：分母为**失败样本**；分子为其中本条日志即 `test_success===true` 的条数（多为 **0**）。 分类为关键词启发式，不等同于论文人工标注子集。",
+  "rows": [
+    {
+      "name": "算法理解",
+      "count": 119,
+      "share_pct": 45.08,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 94.12
+    },
+    {
+      "name": "实现细节",
+      "count": 75,
+      "share_pct": 28.41,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 90.67
+    },
+    {
+      "name": "环境配置",
+      "count": 18,
+      "share_pct": 6.82,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 100.0
+    },
+    {
+      "name": "代码结构",
+      "count": 52,
+      "share_pct": 19.7,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 90.38
+    }
+  ],
+  "total": {
+    "name": "合计",
+    "count": 264,
+    "share_pct": 100.0,
+    "pass_before_pct": 0.0,
+    "pass_after_pct": 92.8
+  },
+  "_meta": {
+    "code_history_db": "D:\\aicrypto-helper\\code_history.db",
+    "db_mtime_local": "2026-05-25 15:53:10",
+    "performance_json": "D:\\aicrypto-helper\\experiments\\results\\llm_performance.json",
+    "performance_mtime_local": "2026-05-25 15:51:12",
+    "provider_filter": "deepseek",
+    "records_from_history": 698,
+    "records_from_performance": 876,
+    "records_total": 1657,
+    "first_gen_success_sessions": 83,
+    "first_gen_inferred_failures": 83,
+    "first_gen_error_messages_enriched": 68,
+    "failure_records": 264,
+    "failure_rows_resolved": 245,
+    "multi_attempt_records": 269,
+    "multi_direct_test_pass": 116,
+    "multi_resolved_via_later_success": 134
+  }
+}

@@ -1,0 +1,16 @@
+# OpenAI · AES-256-GCM
+supplement: |
+  nonce **12 字节**（`TEST_IV` 24 hex）；**禁止**运行时强制「IV 须 16 字节」报错。输出 **密文(16B)+tag(16B)=64 hex**。
+
+python: |
+  **禁止**开头多轮 `input()`；用 `os.getenv` 读 `TEST_*`。  
+  `aad = bytes.fromhex(os.getenv("TEST_AAD", "4D23C3CEC334B49BDB370C437FEC78DE").strip())`  
+  `cipher.update(aad)` 后 `encrypt_and_digest`；只打印 **`密文:` + hex**。
+
+c: |
+  **`#include <limits.h>`**（若内联/宏里用 **`CHAR_BIT`**）；或旋转掩码写 **`(unsigned)(sizeof(x) * 8u - 1u)`**，避免 **`CHAR_BIT` undeclared**。
+  **`main` 内**对 **`len`/`ciphertext_len`/`tag_len`** **只声明一次**，多段 **`EncryptUpdate`** 复用 **`int outl`**，避免 **`redeclaration`**。
+  `EVP_aes_256_gcm()`；IV/nonce **12**；`EVP_EncryptInit_ex` 用 nonce 指针与长度 **12**。先 AAD `EncryptUpdate(out=NULL)`，再明文，GET_TAG 16 字节。
+
+cpp: |
+  **每个** `EVP_CIPHER_CTX` **只 free 一次**；不要在错误分支与正常路径**重复** `EVP_CIPHER_CTX_free` 同一指针。RAII 时注意 early return 只清理一次。

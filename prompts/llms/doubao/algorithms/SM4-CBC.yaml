@@ -1,0 +1,19 @@
+# 豆包 · SM4-CBC（test_data，C/C++ 易与 ECB/字节序混淆）
+supplement: |
+  SM4-CBC：密钥 / IV 各 **32 hex（16 字节）**；明文 **32 hex（16 字节）**；**无 PKCS**（整块加密前 **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**）。
+  本仓库 **TEST_IV 为全 0** 时，首块 **`P ⊕ IV = P`**，故密文与 **SM4-ECB 相同**。**自测 golden：** **`681EDF34D206965E86B3E94F536E4246`**。
+  **禁止**把 CBC 当成 **ECB 后再异或 IV**、或 **输出 `P⊕E(K,0)`** 等变体；须 **`EVP_sm4_cbc()`** 标准链式。
+  **错例（豆包常见）：** 输出 **`210f05324e14ebe9aa6776996de720a7`** 等与 golden 完全不符时，多为 **cipher 选成 OFB/CFB**、**IV 长度不是 16**、或 **自写 SM4 与 OpenSSL 字节序不一致**——本评测以 **`EVP_sm4_cbc` + `set_padding(0)`** 输出为准。
+
+c: |
+  **禁止** `#define 8`、`#define 8 8`；SM4 块 **16** 字节，用 **`#define SM4_BLOCK_BYTES 16`**。
+  **`OSSL_LIB_CTX` 可默认**；`EVP_sm4_cbc()` + **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**（在首次 **Update** 前）。
+  **`EVP_EncryptInit_ex(ctx, EVP_sm4_cbc(), NULL, key16, iv16)`**；**`EVP_EncryptUpdate`** 传入**全部明文字节**；**`Final`**；按 **`ciphertext_len`** 打印 **`密文:`** + **32 hex**。
+  若得到 **`210f0532…`** 等与 golden 无关的输出，多为 **cipher 误选**、**IV 未按 16 字节传入**、或 **与 CFB/OFB 状态机混用**。
+
+python: |
+  **SM4-CBC**；key/iv 各 **32 hex**；**`print("密文:", ct.hex())`** → golden **`681EDF34D206965E86B3E94F536E4246`**。
+
+cpp: |
+  **`EVP_sm4_cbc()`** + **`set_padding(0)`** + 16B key/iv；golden **`681EDF34D206965E86B3E94F536E4246`**（**勿**与 **`2754B10C…`** 混淆）。
+  **禁止** `#define 8`；三元式须含 **`?`**；**`printf("密文: ");`** + **32 hex**。

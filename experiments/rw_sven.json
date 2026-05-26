@@ -1,0 +1,156 @@
+{
+  "protocol": "DES_12_grid_ECB_CBC_CFB_OFB_x_python_c_cpp",
+  "arm": "sven_lm_350m",
+  "inputs_dir": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs",
+  "rates_percent": {
+    "GSR": 100.0,
+    "VPR": 0.0,
+    "FTPR": 0.0
+  },
+  "rows": [
+    {
+      "task_id": "DES_ECB_python",
+      "mode": "ECB",
+      "language": "python",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_ecb.py",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "  File \"/tmp/aicrypto_validator/test_55a2431d6fd044bbb325b2314719fb5d.py\", line 3\n    def __init__(self):\nIndentationError: unexpected indent\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_ECB_c",
+      "mode": "ECB",
+      "language": "c",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_ecb.c",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "编译失败: /tmp/aicrypto_validator/test_bbfb3aa4014c4fc49b2535ac3964208e.c: In function ‘main’:\n/tmp/aicrypto_validator/test_bbfb3aa4014c4fc49b2535ac3964208e.c:12:24: warning: implicit declaration of function ‘des_ecb_encrypt’ [-Wimplicit-function-declaration]\n   12 |     char *ciphertext = des_ecb_encrypt(test_ciphertext, test_key);\n      |                        ^~~~~~~~~~~~~~~\n/tmp/aicrypto_validator/test_bbfb3aa4014c4fc49b2535ac3964208e.c:12:24: warning: initialization of ‘char *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]\n/usr/bin/ld: /tmp/cc8NSWZJ.o: in function `main':\ntest_bbfb3aa4014c4fc49b2535ac3964208e.c:(.text+0x41): undefined reference to `des_ecb_encrypt'\ncollect2: error: ld returned 1 exit status\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_ECB_cpp",
+      "mode": "ECB",
+      "language": "cpp",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_ecb.cpp",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "编译失败: /tmp/aicrypto_validator/test_d67cf9c2f4e244aba6c4803b8308e743.cpp: In function ‘int main()’:\n/tmp/aicrypto_validator/test_d67cf9c2f4e244aba6c4803b8308e743.cpp:28:25: error: expected ‘;’ at end of input\n   28 |     std::cout << \"Key: \"\n      |                         ^\n      |                         ;\n/tmp/aicrypto_validator/test_d67cf9c2f4e244aba6c4803b8308e743.cpp:28:25: error: expected ‘}’ at end of input\n/tmp/aicrypto_validator/test_d67cf9c2f4e244aba6c4803b8308e743.cpp:5:12: note: to match this ‘{’\n    5 | int main() {\n      |            ^\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CBC_python",
+      "mode": "CBC",
+      "language": "python",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_cbc.py",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "  File \"/tmp/aicrypto_validator/test_d4464e49809f4027adcba1932410191b.py\", line 3\n    def __init__(self, key, iv):\nIndentationError: unexpected indent\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CBC_c",
+      "mode": "CBC",
+      "language": "c",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_cbc.c",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "编译失败: /tmp/aicrypto_validator/test_b5f6dd1a195f4e1c989e25bfed46215e.c: In function ‘main’:\n/tmp/aicrypto_validator/test_b5f6dd1a195f4e1c989e25bfed46215e.c:17:12: warning: missing terminating \" character\n   17 |     printf(\"\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\\n      |            ^\n/tmp/aicrypto_validator/test_b5f6dd1a195f4e1c989e25bfed46215e.c:17:12: error: missing terminating \" character\n   17 |     printf(\"\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\\n      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_validator/test_b5f6dd1a195f4e1c989e25bfed46215e.c:17:5: error: expected expression at end of input\n   17 |     printf(\"\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\n\\\n      |     ^~~~~~\n/tmp/aicrypto_validator/test_b5f6dd1a195f4e1c989e25bfed46215e.c:17:5: error: expected declaration or statement at end of input\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CBC_cpp",
+      "mode": "CBC",
+      "language": "cpp",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_cbc.cpp",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "编译失败: /tmp/aicrypto_validator/test_00ec5ed5f74642a8a225a7fa162b2386.cpp: In function ‘int main()’:\n/tmp/aicrypto_validator/test_00ec5ed5f74642a8a225a7fa162b2386.cpp:12:23: error: aggregate ‘std::stringstream ss’ has incomplete type and cannot be defined\n   12 |     std::stringstream ss;\n      |                       ^~\n/tmp/aicrypto_validator/test_00ec5ed5f74642a8a225a7fa162b2386.cpp:13:23: error: ‘TEST_PLAINTEXT’ was not declared in this scope\n   13 |     ss << std::hex << TEST_PLAINTEXT;\n      |                       ^~~~~~~~~~~~~~\n/tmp/aicrypto_validator/test_00ec5ed5f74642a8a225a7fa162b2386.cpp:17:23: error: aggregate ‘std::stringstream ss2’ has incomplete type and cannot be defined\n   17 |     std::stringstream ss2;\n      |                       ^~~\n/tmp/aicrypto_validator/test_00ec5ed5f74642a8a225a7fa162b2386.cpp:18:24: error: ‘TEST_KEY’ was not declared in this scope\n   18 |     ss2 << std::hex << TEST_KEY;\n      |                        ^~~~~~~~\n/tmp/aicrypto_validator/test_00ec5ed5f74642a8a225a7fa162b2386.cpp:22:23: error: aggregate ‘std::stringstream ss3’ has incomplete type and cannot be defined\n   22 |     std::stringstream ss3;\n      |                       ^~~\n/tmp/aicrypto_validator/test_00ec5ed5f74642a8a225a7fa162b2386.cpp:23:24: error: ‘TEST_IV’ was not declared in this scope\n   23 |     ss3 << std::hex << TEST_IV;\n      |                        ^~~~~~~\n/tmp/aicrypto_validator/test_00ec5ed5f74642a8a225a7fa162b2386.cpp:27:18: error: ‘decrypt’ was not declared in this scope\n   27 |     ciphertext = decrypt(plaintext, key, iv);\n      |                  ^~~~~~~\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CFB_python",
+      "mode": "CFB",
+      "language": "python",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_cfb.py",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "  File \"/tmp/aicrypto_validator/test_c42828fcae1e44feaa77d7b83ce672b9.py\", line 3\n    def __init__(self, ciphertext, key, iv):\nIndentationError: unexpected indent\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CFB_c",
+      "mode": "CFB",
+      "language": "c",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_cfb.c",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "编译失败: /tmp/aicrypto_validator/test_f1e217732afb426fadbb6800df3d96b6.c: In function ‘main’:\n/tmp/aicrypto_validator/test_f1e217732afb426fadbb6800df3d96b6.c:14:13: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char **’ [-Wformat=]\n   14 |     scanf(\"%s\", &ciphertext);\n      |            ~^   ~~~~~~~~~~~\n      |             |   |\n      |             |   char **\n      |             char *\n/tmp/aicrypto_validator/test_f1e217732afb426fadbb6800df3d96b6.c:17:13: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char **’ [-Wformat=]\n   17 |     scanf(\"%s\", &key);\n      |            ~^   ~~~~\n      |             |   |\n      |             |   char **\n      |             char *\n/tmp/aicrypto_validator/test_f1e217732afb426fadbb6800df3d96b6.c:20:13: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char **’ [-Wformat=]\n   20 |     scanf(\"%s\", &iv);\n      |            ~^   ~~~\n      |             |   |\n      |             |   char **\n      |             char *\n/tmp/aicrypto_validator/test_f1e217732afb426fadbb6800df3d96b6.c:23:13: warning: format ‘%s’ expects argument of type ‘char *’, but argument 2 has type ‘char **’ [-Wformat=]\n   23 |     scanf(\"%s\", &plaintext);\n      |            ~^   ~~~~~~~~~~\n      |             |   |\n      |             |   char **\n      |             char *\n/tmp/aicrypto_validator/test_f1e217732afb426fadbb6800df3d96b6.c:26:5: warning: implicit declaration of function ‘DES_cfb128_encrypt’ [-Wimplicit-function-declaration]\n   26 |     DES_cfb128_encrypt(plaintext, key, iv, ciphertext);\n      |     ^~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_validator/test_f1e217732afb426fadbb6800df3d96b6.c:29:5: warning: implicit declaration of function ‘DES_cfb128_decrypt’ [-Wimplicit-function-declaration]\n   29 |     DES_cfb128_decrypt(ciphertext, key, iv, plaintext);\n      |     ^~~~~~~~~~~~~~~~~~\n/usr/bin/ld: /tmp/ccjAh5eM.o: in function `main':\ntest_f1e217732afb426fadbb6800df3d96b6.c:(.text+0x104): undefined reference to `DES_cfb128_encrypt'\n/usr/bin/ld: test_f1e217732afb426fadbb6800df3d96b6.c:(.text+0x135): undefined reference to `DES_cfb128_decrypt'\ncollect2: error: ld returned 1 exit status\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CFB_cpp",
+      "mode": "CFB",
+      "language": "cpp",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_cfb.cpp",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "编译失败: /tmp/aicrypto_validator/test_4f985bf0b1d74275b4d286dbfdb9335d.cpp: In function ‘int main()’:\n/tmp/aicrypto_validator/test_4f985bf0b1d74275b4d286dbfdb9335d.cpp:33:14: error: expected ‘;’ at end of input\n   33 |     std::cout\n      |              ^\n      |              ;\n/tmp/aicrypto_validator/test_4f985bf0b1d74275b4d286dbfdb9335d.cpp:33:14: error: expected ‘}’ at end of input\n/tmp/aicrypto_validator/test_4f985bf0b1d74275b4d286dbfdb9335d.cpp:5:12: note: to match this ‘{’\n    5 | int main() {\n      |            ^\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_OFB_python",
+      "mode": "OFB",
+      "language": "python",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_ofb.py",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "  File \"/tmp/aicrypto_validator/test_ae31e092e81b4fa1be9012ce0e4dcfdb.py\", line 3\n    def __init__(self):\nIndentationError: unexpected indent\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_OFB_c",
+      "mode": "OFB",
+      "language": "c",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_ofb.c",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "编译失败: /tmp/aicrypto_validator/test_67277a3f9b084af6a0525addf4d21853.c: In function ‘main’:\n/tmp/aicrypto_validator/test_67277a3f9b084af6a0525addf4d21853.c:12:10: error: conflicting types for ‘ciphertext’; have ‘char[1024]’\n   12 |     char ciphertext[1024];\n      |          ^~~~~~~~~~\n/tmp/aicrypto_validator/test_67277a3f9b084af6a0525addf4d21853.c:9:20: note: previous definition of ‘ciphertext’ with type ‘unsigned char *’\n    9 |     unsigned char *ciphertext = _aicrypto_ct_buf;\n      |                    ^~~~~~~~~~\n/tmp/aicrypto_validator/test_67277a3f9b084af6a0525addf4d21853.c:52:12: warning: missing terminating \" character\n   52 |     printf(\"Please input the iv:\n      |            ^\n/tmp/aicrypto_validator/test_67277a3f9b084af6a0525addf4d21853.c:52:12: error: missing terminating \" character\n   52 |     printf(\"Please input the iv:\n      |            ^~~~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_validator/test_67277a3f9b084af6a0525addf4d21853.c:52:5: error: expected expression at end of input\n   52 |     printf(\"Please input the iv:\n      |     ^~~~~~\n/tmp/aicrypto_validator/test_67277a3f9b084af6a0525addf4d21853.c:52:5: error: expected declaration or statement at end of input\n",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_OFB_cpp",
+      "mode": "OFB",
+      "language": "cpp",
+      "file": "/mnt/d/aicrypto-helper/experiments/sven_des_outputs/des_ofb.cpp",
+      "missing": false,
+      "gsr": true,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "编译失败: /tmp/aicrypto_validator/test_be4f59a176bb453789efb3aec4873c88.cpp: In function ‘int main()’:\n/tmp/aicrypto_validator/test_be4f59a176bb453789efb3aec4873c88.cpp:28:27: error: expected ‘;’ at end of input\n   28 |   std::cout << \"TEST_IV: \"\n      |                           ^\n      |                           ;\n/tmp/aicrypto_validator/test_be4f59a176bb453789efb3aec4873c88.cpp:28:27: error: expected ‘}’ at end of input\n/tmp/aicrypto_validator/test_be4f59a176bb453789efb3aec4873c88.cpp:5:12: note: to match this ‘{’\n    5 | int main() {\n      |            ^\n",
+      "test_hint": null
+    }
+  ]
+}

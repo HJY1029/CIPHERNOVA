@@ -1,0 +1,54 @@
+# SM4-CBC模式的C++语言特定内容
+cpp_specific: |
+  **使用OpenSSL库的实现要求（C++语言，如果OpenSSL支持SM4）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <cstdlib>`
+     - `#include <iostream>`
+     - `#include <string>`
+     - `#include <iomanip>`
+  
+  2. **必须使用OpenSSL EVP函数（如果支持）：**
+     - ✅ **正确：使用 `EVP_sm4_cbc()` 获取SM4-CBC密码对象**
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_CIPHER_CTX_new()` 和 `EVP_CIPHER_CTX_free()`**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取明文、密钥和IV（TEST_PLAINTEXT, TEST_KEY, TEST_IV）
+     - 将十六进制字符串转换为字节数组
+     - 如果TEST_IV不存在，使用全零IV（16字节）
+     - 使用OpenSSL EVP函数进行SM4-CBC模式加密
+     - 输出密文（十六进制格式，不包含IV）
+     - 释放资源并返回0
+  
+  **关键实现细节（C++语言）：**
+  - **密钥长度：**SM4密钥必须为16字节（128位）
+  - **块大小：**SM4块大小为16字节（128位）
+  - **IV处理：**IV必须为16字节，从环境变量TEST_IV读取，如果不存在则使用全零
+  - **🚨🚨🚨 输出长度控制（绝对重要！）：**必须只输出实际加密的数据长度，不要输出整个缓冲区或IV！
+    - ✅ **正确做法（C++）：**
+      ```cpp
+      int len;
+      int ciphertext_len = 0;
+      unsigned char ciphertext[plaintext_len + 16];  // 预留填充空间
+      
+      EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);
+      ciphertext_len = len;
+      EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
+      ciphertext_len += len;  // 总长度 = Update长度 + Final长度
+      
+      // 只输出 ciphertext_len 长度的数据，不要输出IV！
+      std::cout << "密文: ";
+      for (int i = 0; i < ciphertext_len; i++) {  // 使用 ciphertext_len！
+          std::cout << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(ciphertext[i]);
+      }
+      std::cout << std::endl;
+      ```
+    - ❌ **错误做法（绝对禁止）：**
+      - 输出整个缓冲区（`sizeof(ciphertext)` 或 `ciphertext.size()`）
+      - 输出IV（IV只用于加密过程，不应该出现在输出中）
+      - 输出额外的填充空间
+      - 使用范围for循环（`for (auto c : ciphertext)`）
+      - 使用vector.size()或vector.capacity()
+    - **关键：`ciphertext_len` 是 `EVP_EncryptUpdate()` 和 `EVP_EncryptFinal_ex()` 返回的长度之和，这是实际加密的数据长度！**
+

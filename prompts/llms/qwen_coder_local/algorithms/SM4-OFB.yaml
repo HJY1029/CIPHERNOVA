@@ -1,0 +1,144 @@
+# SM4|ofb：cpp 用 EVP_sm4_ofb()；python 用 gmssl one_round 手搓 OFB-128（无 crypt_ofb）
+generate_pin_python: |
+  **SM4|ofb|python（gmssl 无 crypt_ofb · 整文件照抄 python: 块）：**
+  - **禁止** `crypt_ofb` / `encrypt_ofb` / `crypt_cfb`（`CryptSM4` 仅有 **`crypt_ecb` / `crypt_cbc`**）。
+  - **OFB-128：** `R=iv` → `o=E_K(R)` via **`one_round`** → `C=P⊕o` → **`R=o`**（反馈 **密钥流块 o**，**不是**密文 C）。
+  - **env：** `TEST_KEY` / `TEST_IV` / `TEST_PLAINTEXT` 各 **32 hex** → **`bytes.fromhex`**。
+  - **输出：** **`print("密文:", …hex().lower())`**；golden 前缀 **`2754b10c`**。
+
+generate_pin_cpp: |
+  **SM4|ofb|cpp（唯一未过 · 禁止改骨架 · 整文件照抄 cpp: 块）：**
+  - **cipher：** **`EVP_sm4_ofb()`**（**禁止 `EVP_sm4_ofb128()`** — evp.h 无此符号）。
+  - **env：** 必须 **`getenv("TEST_PLAINTEXT")` + `getenv("TEST_KEY")` + `getenv("TEST_IV")`** + **strip + h2b**。
+  - **禁止：** `h2b("0000000000000000",…)` 硬编码；**禁止** 只读 TEST_PLAINTEXT；**禁止 `strlen(getenv…)` 当 pt_len**。
+  - **输出：** **`printf("密文: ");` + `%02x` 循环**；golden **`2754b10c`**。
+
+mandatory: |
+  **SM4-OFB · 强制**
+  - **Python：** gmssl **`one_round` 手搓 OFB-128**（见 **python:** 块）；**禁止 crypt_ofb**。
+  - **C/C++：** **`EVP_sm4_ofb()`** + **`set_padding(0)`**；key/iv/pt 各 **16B**（env **32 hex**）。
+  - **golden 前缀：`2754b10c`**（**`2754b10c806aef23698989882d80903a`**）。
+
+supplement: |
+  **2026-05-23 最新失败（sm4_ofb.cpp）：**
+  - 只写 **`getenv("TEST_PLAINTEXT")`**，key/iv 硬编码 **`h2b("0000000000000000",…)`** → 必须三路 **getenv+h2b**。
+  - **调用 `h2b()` 但无函数体** → 链接/编译 undefined；须照抄骨架内 **strip+h2b**。
+  - **`strlen(plaintext)` 加密 hex 文本** → 密文全错；须 **h2b 后 `pt,16`**。
+  - 仅 `#include <openssl/evp.h>` → 补 **stdio/stdlib/string/ctype**。
+
+  **2026-05-25 失败（sm4_ofb.py）：**
+  - **`s.crypt_ofb(iv, pt)`** → **`AttributeError: no attribute 'crypt_ofb'`**；gmssl **无** 此方法。
+  - 须 **`bytes_to_list` / `list_to_bytes` + `one_round`**；OFB 反馈 **`R=o`**（勿写成 CFB 的 **`R=c_block`**）。
+
+c: |
+  **【SM4|ofb|c · 照抄】**
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;
+    strip(ph);strip(kh);strip(ih);
+    if(strlen(ph)!=32||strlen(kh)!=32||strlen(ih)!=32)return 1;
+    unsigned char pt[16],key[16],iv[16],out[16];
+    if(h2b(ph,pt,16)||h2b(kh,key,16)||h2b(ih,iv,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!ctx)return 1;
+    if(!EVP_EncryptInit_ex(ctx,EVP_sm4_ofb(),NULL,key,iv))return 1;
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;
+    if(!EVP_EncryptUpdate(ctx,out,&o1,pt,16))return 1;
+    if(!EVP_EncryptFinal_ex(ctx,out+o1,&o2))return 1;
+    printf("密文: ");
+    for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+
+cpp: |
+  **【SM4|ofb|cpp · 照抄整文件 · 禁止删改 h2b/strip】**
+  ```cpp
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;
+    strip(ph);strip(kh);strip(ih);
+    if(strlen(ph)!=32||strlen(kh)!=32||strlen(ih)!=32)return 1;
+    unsigned char pt[16],key[16],iv[16],out[16];
+    if(h2b(ph,pt,16)||h2b(kh,key,16)||h2b(ih,iv,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!ctx)return 1;
+    if(!EVP_EncryptInit_ex(ctx,EVP_sm4_ofb(),NULL,key,iv))return 1;
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;
+    if(!EVP_EncryptUpdate(ctx,out,&o1,pt,16))return 1;
+    if(!EVP_EncryptFinal_ex(ctx,out+o1,&o2))return 1;
+    printf("密文: ");
+    for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+
+python: |
+  **【SM4|ofb|python · 照抄整文件 · gmssl 无 crypt_ofb】**
+  ```python
+  import os
+  from gmssl.sm4 import CryptSM4, SM4_ENCRYPT, bytes_to_list, list_to_bytes
+
+  def sm4_ofb_encrypt(key, iv, pt):
+      c = CryptSM4()
+      c.set_key(key, SM4_ENCRYPT)
+      R = iv
+      out = bytearray()
+      for off in range(0, len(pt), 16):
+          block = pt[off:off + 16]
+          o = list_to_bytes(c.one_round(c.sk, bytes_to_list(R)))
+          c_block = bytes(block[i] ^ o[i] for i in range(len(block)))
+          out.extend(c_block)
+          R = o
+      return bytes(out)
+
+  k = bytes.fromhex(os.getenv("TEST_KEY", "").strip())
+  iv = bytes.fromhex(os.getenv("TEST_IV", "").strip())
+  pt = bytes.fromhex(os.getenv("TEST_PLAINTEXT", "").strip())
+  print("密文:", sm4_ofb_encrypt(k, iv, pt).hex().lower())
+  ```
+
+test_feedback_improve: |
+  **SM4-OFB：** Python 禁 **crypt_ofb** → **one_round 手搓 OFB**；C/C++ 用 **`EVP_sm4_ofb()`**；golden **`2754b10c`**
+
+test_feedback_improve_python: |
+  **【sm4-ofb-python · 整文件重写】**
+  1. **删除** `crypt_ofb` / `encrypt_ofb` / `crypt_cfb`（gmssl **无** 这些方法）。
+  2. **照抄 python: 块**：`bytes_to_list` / `list_to_bytes` + **`one_round`**。
+  3. **OFB 反馈 `R = o`**（密钥流块）；**禁止** CFB 式 **`R = c_block`**。
+  4. 三路 **`os.getenv("TEST_*")` + `bytes.fromhex`**（IV 须读 **TEST_IV**，勿写死全零常量）。
+  5. **`print("密文:", …hex().lower())`**；golden **`2754b10c806aef23698989882d80903a`**。
+
+test_feedback_improve_cpp: |
+  **【sm4-ofb-cpp · 整文件重写 · 勿在原代码上小修】**
+  1. **须含 `static int h2b(...)` 与 `static void strip(...)`**（禁止只调用 h2b 无定义）。
+  2. **key/iv 必须从 `getenv("TEST_KEY")` / `getenv("TEST_IV")` + h2b**（**禁止 `h2b("0000000000000000",…)`**）。
+  3. **`EVP_sm4_ofb()`**（禁 ofb128）；**`EncryptUpdate(..., pt, 16)`**（禁 **strlen(env)**）。
+  4. **头文件五件套：** stdio/stdlib/string/ctype/evp。
+  5. 照抄 **SM4-OFB.yaml cpp:** 块；**`printf("密文: ");`+%02x**；golden **`2754b10c`**。
+
+test_feedback_improve_c: |
+  **SM4-OFB-c：** 同 cpp；**`EVP_sm4_ofb()`**；golden **`2754b10c`**

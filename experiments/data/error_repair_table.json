@@ -1,0 +1,14 @@
+{
+  "title": "不同错误类型的分布与修复效果",
+  "numeric_placeholder": true,
+  "source_note": "【静态占位】数值列以「-」表示；非运行时实测。实测：`python experiments/run_error_repair_table.py --from-performance`。注意：表中「修复后通过率」为 llm_performance 观测口径（同 case 更晚是否 test_success），非按错误类执行专用修复脚本；见 error_repair_aggregate.py 注释。",
+  "rows": [
+    { "name": "算法理解" },
+    { "name": "实现细节" },
+    { "name": "环境配置" },
+    { "name": "代码结构" }
+  ],
+  "total": {
+    "name": "合计"
+  }
+}

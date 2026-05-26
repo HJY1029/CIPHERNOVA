@@ -1,0 +1,150 @@
+{
+  "batch": "failing_slots",
+  "distillation_keep": true,
+  "provider": "qwen_coder_local",
+  "started_at_utc": "2026-05-22T22:16:32.547430+00:00",
+  "failing_slots_total": 9,
+  "force_regen_no_db": 7,
+  "configs_count": 9,
+  "since_used": "2026-05-04",
+  "only_pending": true,
+  "pending_filter_stats": {
+    "input": 2,
+    "pending": 2,
+    "no_record": 2,
+    "retest_fail": 0,
+    "retest_pass_skip": 0,
+    "skip_disabled": 0,
+    "force_regen_no_db": 7
+  },
+  "web_batch": true,
+  "cases": [
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 3512,
+      "case_id": "aes-ecb-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 4894,
+      "case_id": "aes-ecb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 3704,
+      "case_id": "des-cbc-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "success": false,
+      "error": "代码执行失败: 无法初始化DES-CFB8加密\n",
+      "vector_status": "未通过",
+      "vector_detail": "代码执行失败: 无法初始化DES-CFB8加密\n",
+      "total_ms": 10557834,
+      "case_id": "des-cfb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 2893809,
+      "case_id": "des-ecb-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 10119356,
+      "case_id": "des-ofb-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 5607818,
+      "case_id": "des-ofb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 7121351,
+      "case_id": "aes-gcm-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "success": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In function ‘void removeWhitespace(std::string&)’:\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:7:22: error: ‘remove_if’ is not a member of ‘std’; did you mean ‘remove_cv’?\n    7 |     input.erase(std::remove_if(input.begin(), input.end(), [](unsigned char ch) {\n      |                      ^~~~~~~~~\n      |                      remove_cv\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In function ‘bool hexToBytes(const std::string&, std::vector<unsigned char>&)’:\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:46:20: error: ‘hexCharToValue’ was not declared in this scope\n   46 |         int high = hexCharToValue(hex[i]);\n      |                    ^~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:92:32: error: conflicting declaration ‘std::vector<unsigned char> ciphertext’\n   92 |     std::vector<unsigned char> ciphertext(plaintextBytes.size());\n      |                                ^~~~~~~~~~\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:58:20: note: previous declaration as ‘unsigned char* ciphertext’\n   58 |     unsigned char *ciphertext = _aicrypto_ct_buf;\n      |                    ^~~~~~~~~~\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:93:9: error: redeclaration of ‘int len’\n   93 |     int len, ciphertext_len;\n      |         ^~~\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:60:9: note: ‘int len’ previously declared here\n   60 |     int len = 0, ciphertext_len = 0;\n      |         ^~~\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:93:14: error: redeclaration of ‘int ciphertext_len’\n   93 |     int len, ciphertext_len;\n      |              ^~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:60:18: note: ‘int ciphertext_len’ previously declared here\n   60 |     int len = 0, ciphertext_len = 0;\n      |                  ^~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:94:43: error: request for member ‘data’ in ‘ciphertext’, which is of non-class type ‘unsigned char*’\n   94 |     if (EVP_EncryptUpdate(ctx, ciphertext.data(), &len, plaintextBytes.data(), plaintextBytes.size()) != 1) {\n      |                                           ^~~~\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:101:45: error: request for member ‘data’ in ‘ciphertext’, which is of non-class type ‘unsigned char*’\n  101 |     if (EVP_EncryptFinal_ex(ctx, ciphertext.data() + len, &len) != 1) {\n      |                                             ^~~~\n",
+      "vector_status": "未通过",
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In function ‘void removeWhitespace(std::string&)’:\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:7:22: error: ‘remove_if’ is not a member of ‘std’; did you mean ‘remove_cv’?\n    7 |     input.erase(std::remove_if(input.begin(), input.end(), [](unsigned char ch) {\n      |                      ^~~~~~~~~\n      |                      remove_cv\n/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In func",
+      "total_ms": 9168394,
+      "case_id": "sm4-ofb-cpp",
+      "generation_ok": true
+    }
+  ],
+  "finished_at_utc": "2026-05-22T22:16:32.547458+00:00"
+}

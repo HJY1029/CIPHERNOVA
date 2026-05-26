@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}OpenSSL官方测试数据 - 织密新星 (CipherNova){% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>🔐 OpenSSL官方测试数据</h1>
+        <p>查看和复制OpenSSL官方测试向量和NIST标准测试向量，用于验证代码与OpenSSL标准实现的兼容性</p>
+    </div>
+    <div class="content">
+        <div id="status" class="status"></div>
+        
+        <div style="margin-bottom: 20px; padding: 15px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107;">
+            <p style="margin: 0; color: #856404;">
+                <strong>重要说明：</strong>这些是OpenSSL官方测试向量和NIST标准测试向量，与标准测试库中的测试数据不同。这些数据专门用于验证生成的代码与OpenSSL标准实现的兼容性。
+            </p>
+        </div>
+
+        <div style="margin-bottom: 20px; padding: 15px; background: #f0f7ff; border-radius: 8px; border-left: 4px solid #0066aa;">
+            <p style="margin: 0; color: #004085;">
+                <strong>使用说明：</strong>点击任意测试数据项右侧的"复制"按钮，可以快速复制该数据到剪贴板，方便在代码测试时使用。
+            </p>
+        </div>
+
+        {% if openssl_test_data %}
+            {% for algorithm, modes in openssl_test_data.items() %}
+                {% if algorithm != '说明' %}
+                <div class="test-data-section" style="margin-bottom: 30px; padding: 20px; background: #f8f9fa; border-radius: 12px; border: 1px solid #e9ecef;">
+                    <h2 style="color: #0066aa; margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                        <span style="font-size: 1.5em;">🔐</span>
+                        <span>{{ algorithm }}</span>
+                    </h2>
+                    
+                    {% for mode, data in modes.items() %}
+                    <div style="margin-bottom: 25px; padding: 15px; background: white; border-radius: 8px; border: 1px solid #dee2e6;">
+                        <h3 style="color: #555; margin-bottom: 15px; font-size: 1.1em;">
+                            <span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 4px; font-size: 0.85em; margin-right: 8px;">{{ mode.upper() }}</span>
+                            {% if mode == 'gcm' %}GCM模式 (NIST标准测试向量){% elif mode == 'ctr' %}CTR模式 (NIST标准测试向量){% elif mode == 'cbc' %}CBC模式 (OpenSSL官方测试向量){% elif mode == 'ecb' %}ECB模式 (OpenSSL官方测试向量){% else %}{{ mode.upper() }}模式{% endif %}
+                        </h3>
+
+                        {% if data.plaintext %}
+                        <div class="test-data-item" style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <label style="font-weight: 600; color: #333;">明文 (Plaintext):</label>
+                                <button class="copy-btn" onclick="copyToClipboard('{{ algorithm }}_{{ mode }}_plaintext')" 
+                                        style="background: #0066aa; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                                    📋 复制
+                                </button>
+                            </div>
+                            <div id="{{ algorithm }}_{{ mode }}_plaintext" class="data-value" 
+                                 style="background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-family: 'Courier New', monospace; word-break: break-all; color: #333;">
+                                {{ data.plaintext }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if data.key %}
+                        <div class="test-data-item" style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <label style="font-weight: 600; color: #333;">密钥 (Key):</label>
+                                <button class="copy-btn" onclick="copyToClipboard('{{ algorithm }}_{{ mode }}_key')" 
+                                        style="background: #0066aa; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                                    📋 复制
+                                </button>
+                            </div>
+                            <div id="{{ algorithm }}_{{ mode }}_key" class="data-value" 
+                                 style="background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-family: 'Courier New', monospace; word-break: break-all; color: #333;">
+                                {{ data.key }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if data.iv %}
+                        <div class="test-data-item" style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <label style="font-weight: 600; color: #333;">
+                                    {% if mode == 'gcm' %}Nonce (IV):{% else %}初始化向量 (IV):{% endif %}
+                                </label>
+                                <button class="copy-btn" onclick="copyToClipboard('{{ algorithm }}_{{ mode }}_iv')" 
+                                        style="background: #0066aa; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                                    📋 复制
+                                </button>
+                            </div>
+                            <div id="{{ algorithm }}_{{ mode }}_iv" class="data-value" 
+                                 style="background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-family: 'Courier New', monospace; word-break: break-all; color: #333;">
+                                {{ data.iv }}
+                            </div>
+                            {% if mode == 'gcm' %}
+                            <div style="margin-top: 5px; font-size: 0.85em; color: #666;">
+                                <em>注意：GCM模式使用12字节nonce（96位）</em>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        {% if data.aad %}
+                        <div class="test-data-item" style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <label style="font-weight: 600; color: #333;">附加认证数据 (AAD):</label>
+                                <button class="copy-btn" onclick="copyToClipboard('{{ algorithm }}_{{ mode }}_aad')" 
+                                        style="background: #0066aa; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                                    📋 复制
+                                </button>
+                            </div>
+                            <div id="{{ algorithm }}_{{ mode }}_aad" class="data-value" 
+                                 style="background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-family: 'Courier New', monospace; word-break: break-all; color: #333;">
+                                {{ data.aad }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if data.expected_output %}
+                        <div class="test-data-item" style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <label style="font-weight: 600; color: #333;">
+                                    {% if mode == 'gcm' %}预期输出 (密文+认证标签):{% else %}预期密文 (Expected Ciphertext):{% endif %}
+                                </label>
+                                <button class="copy-btn" onclick="copyToClipboard('{{ algorithm }}_{{ mode }}_expected')" 
+                                        style="background: #28a745; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                                    📋 复制
+                                </button>
+                            </div>
+                            <div id="{{ algorithm }}_{{ mode }}_expected" class="data-value" 
+                                 style="background: #d4edda; padding: 10px; border-radius: 6px; border: 1px solid #c3e6cb; font-family: 'Courier New', monospace; word-break: break-all; color: #155724;">
+                                {{ data.expected_output }}
+                            </div>
+                            {% if mode == 'gcm' %}
+                            <div style="margin-top: 5px; font-size: 0.85em; color: #666;">
+                                <em>注意：GCM模式输出包含密文和16字节认证标签</em>
+                            </div>
+                            {% elif mode == 'ctr' %}
+                            <div style="margin-top: 5px; font-size: 0.85em; color: #666;">
+                                <em>注意：CTR模式输出密文长度与明文相同（流密码模式）</em>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% elif data.ciphertext %}
+                        <div class="test-data-item" style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <label style="font-weight: 600; color: #333;">预期密文 (Expected Ciphertext):</label>
+                                <button class="copy-btn" onclick="copyToClipboard('{{ algorithm }}_{{ mode }}_ciphertext')" 
+                                        style="background: #28a745; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                                    📋 复制
+                                </button>
+                            </div>
+                            <div id="{{ algorithm }}_{{ mode }}_ciphertext" class="data-value" 
+                                 style="background: #d4edda; padding: 10px; border-radius: 6px; border: 1px solid #c3e6cb; font-family: 'Courier New', monospace; word-break: break-all; color: #155724;">
+                                {{ data.ciphertext }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if data.tag %}
+                        <div class="test-data-item" style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                                <label style="font-weight: 600; color: #333;">认证标签 (Authentication Tag):</label>
+                                <button class="copy-btn" onclick="copyToClipboard('{{ algorithm }}_{{ mode }}_tag')" 
+                                        style="background: #0066aa; color: white; border: none; padding: 5px 15px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                                    📋 复制
+                                </button>
+                            </div>
+                            <div id="{{ algorithm }}_{{ mode }}_tag" class="data-value" 
+                                 style="background: #f8f9fa; padding: 10px; border-radius: 6px; border: 1px solid #dee2e6; font-family: 'Courier New', monospace; word-break: break-all; color: #333;">
+                                {{ data.tag }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        {% if data.source %}
+                        <div class="test-data-item" style="margin-bottom: 15px;">
+                            <div style="margin-bottom: 5px;">
+                                <label style="font-weight: 600; color: #333;">数据来源：</label>
+                            </div>
+                            <div style="background: #fff3cd; padding: 10px; border-radius: 6px; border: 1px solid #ffc107; font-size: 0.9em; color: #856404;">
+                                {{ data.source }}
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div style="text-align: center; padding: 40px; color: #666;">
+                <p>暂无OpenSSL官方测试数据</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function copyToClipboard(elementId) {
+        const element = document.getElementById(elementId);
+        const text = element.textContent.trim();
+        
+        // 使用现代 Clipboard API
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(() => {
+                showCopySuccess(elementId);
+            }).catch(err => {
+                console.error('复制失败:', err);
+                fallbackCopy(text, elementId);
+            });
+        } else {
+            // 降级方案
+            fallbackCopy(text, elementId);
+        }
+    }
+    
+    function fallbackCopy(text, elementId) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+            showCopySuccess(elementId);
+        } catch (err) {
+            console.error('复制失败:', err);
+            showStatus('复制失败，请手动复制', 'error');
+        }
+        
+        document.body.removeChild(textArea);
+    }
+    
+    function showCopySuccess(elementId) {
+        const btn = document.querySelector(`#${elementId}`).parentElement.querySelector('.copy-btn');
+        const originalText = btn.textContent;
+        btn.textContent = '✓ 已复制';
+        btn.style.background = '#28a745';
+        
+        setTimeout(() => {
+            btn.textContent = originalText;
+            btn.style.background = '#0066aa';
+        }, 2000);
+        
+        showStatus('已复制到剪贴板', 'success');
+    }
+    
+    function showStatus(message, type) {
+        const statusDiv = document.getElementById('status');
+        if (statusDiv) {
+            statusDiv.textContent = message;
+            statusDiv.className = `status ${type}`;
+            statusDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                statusDiv.style.display = 'none';
+            }, 3000);
+        }
+    }
+</script>
+{% endblock %}
+

@@ -1,0 +1,501 @@
+# scripts/run_full_llm_matrix.py — 批量生成失败记录
+# started_utc: 2026-05-10T13:45:06.490550+00:00
+# results_json: /mnt/d/aicrypto-helper/experiments/results/full_matrix_20260510T134506Z.json
+# configs_per_provider: 45
+# providers: ['openai']
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-10T13:48:32.921194+00:00
+provider: openai
+case_id: aes-ofb-c
+config: {"algorithm": "AES", "mode": "OFB", "language": "c"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+测试失败：结果不匹配
+实际结果: 44574b49575153407e4653423e585a1d703c001a0306110e1b040f193b071757
+预期结果: EA0B8FB83A7EE32B2EA6995768424EC2864696B095F418FDE8848B72CA0D8130
+(规范化后: 实际=44574b49575153407e4653423e585a1d703c001a0306110e1b040f193b071757, 预期=ea0b8fb83a7ee32b2ea6995768424ec2864696b095f418fde8848b72ca0d8130)
+
+匹配度分析：
+  - 匹配字符数: 6/64
+  - 匹配率: 9.4%
+  - 匹配率很低，说明代码逻辑可能有根本性错误
+
+
+程序完整输出:
+密文: 44574b49575153407e4653423e585a1d703c001a0306110e1b040f193b071757
+
+error:
+测试失败：结果不匹配
+实际结果: 44574b49575153407e4653423e585a1d703c001a0306110e1b040f193b071757
+预期结果: EA0B8FB83A7EE32B2EA6995768424EC2864696B095F418FDE8848B72CA0D8130
+(规范化后: 实际=44574b49575153407e4653423e585a1d703c001a0306110e1b040f193b071757, 预期=ea0b8fb83a7ee32b2ea6995768424ec2864696b095f418fde8848b72ca0d8130)
+
+匹配度分析：
+  - 匹配字符数: 6/64
+  - 匹配率: 9.4%
+  - 匹配率很低，说明代码逻辑可能有根本性错误
+
+
+程序完整输出:
+密文: 44574b49575153407e4653423e585a1d703c001a0306110e1b040f193b071757
+
+total_ms: 139999
+generated_filename: aes_ofb.c
+generated_code:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+// 从环境变量中读取十六进制字符串并转换为字节数组
+static int hex_to_bytes(const char *hex, unsigned char **out) {
+    size_t len = strlen(hex);
+    if (len % 2 != 0) return -1; // 长度必须是偶数
+    size_t final_len = len / 2;
+    *out = (unsigned char *)malloc(final_len);
+    if (*out == NULL) return -1;
+    for (size_t i = 0, j = 0; i < len; i += 2, j++) {
+        sscanf(&hex[i], "%2hhx", &(*out)[j]);
+    }
+    return (int)final_len;
+}
+
+// 移除字符串中的所有空白字符
+static void remove_whitespace(char *str) {
+    char *p1 = str, *p2 = str;
+    while (*p2 != '\0') {
+        if (!isspace((unsigned char)*p2)) *p1++ = *p2;
+        p2++;
+    }
+    *p1 = '\0';
+}
+
+// AES加密的核心函数（简化版本，实际应用中应使用库函数）
+void AES_encrypt(const unsigned char *plaintext, unsigned char *ciphertext, const unsigned char *key, int keysize) {
+    // 这里是一个简化的AES加密函数，实际应用中应使用加密库
+    // 这个函数仅用于示例，不提供真正的加密
+    for (int i = 0; i < 16; i++) {
+        ciphertext[i] = plaintext[i] ^ key[i % keysize];
+    }
+}
+
+int main(void) {
+    char *env_plaintext = getenv("TEST_PLAINTEXT");
+    char *env_key = getenv("TEST_KEY");
+    char *env_iv = getenv("TEST_IV");
+
+    if (env_plaintext) remove_whitespace(env_plaintext);
+    if (env_key) remove_whitespace(env_key);
+    if (env_iv) remove_whitespace(env_iv);
+
+    unsigned char *plaintext, *key, *iv;
+    int plaintext_len, key_len, iv_len;
+
+    if (env_plaintext) {
+        plaintext_len = hex_to_bytes(env_plaintext, &plaintext);
+    } else {
+        fprintf(stderr, "环境变量 TEST_PLAINTEXT 未设置或为空\n");
+        return 1;
+    }
+
+    if (env_key) {
+        key_len = hex_to_bytes(env_key, &key);
+    } else {
+        fprintf(stderr, "环境变量 TEST_KEY 未设置或为空\n");
+        return 1;
+    }
+
+    if (env_iv) {
+        iv_len = hex_to_bytes(env_iv, &iv);
+    } else {
+        iv_len = 16;
+        iv = (unsigned char *)calloc(iv_len, sizeof(unsigned char));
+    }
+
+    if (key_len != 16 && key_len != 24 && key_len != 32) {
+        fprintf(stderr, "密钥长度必须是128位、192位或256位\n");
+        return 1;
+    }
+
+    unsigned char *ciphertext = malloc(plaintext_len);
+    if (!ciphertext) {
+        perror("内存分配失败");
+        return 1;
+    }
+
+    unsigned char feedback[16];
+    memcpy(feedback, iv, 16);
+
+    for (int i = 0; i < plaintext_len; i++) {
+        unsigned char output_block[16];
+        AES_encrypt(feedback, output_block, key, key_len);
+        ciphertext[i] = plaintext[i] ^ output_block[0];  // 使用第一个字节进行XOR
+        memmove(feedback, feedback + 1, 15);  // 左移1字节
+        feedback[15] = output_block[0];  // 新的输出字节填充到反馈寄存器的最右边
+    }
+
+    printf("密文: ");
+    for (int i = 0; i < plaintext_len; i++) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+
+    free(plaintext);
+    free(key);
+    free(iv);
+    free(ciphertext);
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-10T13:50:42.531840+00:00
+provider: openai
+case_id: aes-ofb-cpp
+config: {"algorithm": "AES", "mode": "OFB", "language": "cpp"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+测试失败：结果不匹配
+实际结果: 44697072696769445d70687900616a39703c001a0306110e1b040f193b071757
+预期结果: EA0B8FB83A7EE32B2EA6995768424EC2864696B095F418FDE8848B72CA0D8130
+(规范化后: 实际=44697072696769445d70687900616a39703c001a0306110e1b040f193b071757, 预期=ea0b8fb83a7ee32b2ea6995768424ec2864696b095f418fde8848b72ca0d8130)
+
+匹配度分析：
+  - 匹配字符数: 3/64
+  - 匹配率: 4.7%
+  - 匹配率很低，说明代码逻辑可能有根本性错误
+
+
+程序完整输出:
+密文: 44697072696769445d70687900616a39703c001a0306110e1b040f193b071757
+
+error:
+测试失败：结果不匹配
+实际结果: 44697072696769445d70687900616a39703c001a0306110e1b040f193b071757
+预期结果: EA0B8FB83A7EE32B2EA6995768424EC2864696B095F418FDE8848B72CA0D8130
+(规范化后: 实际=44697072696769445d70687900616a39703c001a0306110e1b040f193b071757, 预期=ea0b8fb83a7ee32b2ea6995768424ec2864696b095f418fde8848b72ca0d8130)
+
+匹配度分析：
+  - 匹配字符数: 3/64
+  - 匹配率: 4.7%
+  - 匹配率很低，说明代码逻辑可能有根本性错误
+
+
+程序完整输出:
+密文: 44697072696769445d70687900616a39703c001a0306110e1b040f193b071757
+
+total_ms: 129609
+generated_filename: aes_ofb.cpp
+generated_code:
+```
+#include <iostream>
+#include <vector>
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <cstdlib>
+#include <cstdint>
+#include <cstring>
+#include <algorithm>
+
+void remove_whitespace(std::string& input) {
+    input.erase(std::remove_if(input.begin(), input.end(), ::isspace), input.end());
+}
+
+std::vector<uint8_t> hex_to_bytes(const std::string& hex) {
+    std::vector<uint8_t> bytes;
+    for (size_t i = 0; i < hex.length(); i += 2) {
+        std::string byteString = hex.substr(i, 2);
+        uint8_t byte = static_cast<uint8_t>(strtol(byteString.c_str(), nullptr, 16));
+        bytes.push_back(byte);
+    }
+    return bytes;
+}
+
+const size_t AES_BLOCK_SIZE = 16;
+
+void aes_encrypt_block(const std::vector<uint8_t>& key, std::vector<uint8_t>& block) {
+    // This is a placeholder for AES encryption, replace with actual AES encryption
+    for (size_t i = 0; i < block.size(); ++i) {
+        block[i] ^= key[i % key.size()];
+    }
+}
+
+std::vector<uint8_t> aes_ofb_encrypt(const std::vector<uint8_t>& plaintext, const std::vector<uint8_t>& key, std::vector<uint8_t> iv) {
+    if (iv.size() != AES_BLOCK_SIZE) {
+        throw std::runtime_error("IV size must be equal to AES block size (16 bytes).");
+    }
+
+    std::vector<uint8_t> ciphertext(plaintext.size());
+    std::vector<uint8_t> output_block(AES_BLOCK_SIZE);
+
+    for (size_t i = 0; i < plaintext.size(); ++i) {
+        if (i % AES_BLOCK_SIZE == 0) {
+            output_block = iv;
+            aes_encrypt_block(key, output_block);
+            iv = output_block;
+        }
+        ciphertext[i] = plaintext[i] ^ output_block[i % AES_BLOCK_SIZE];
+    }
+
+    return ciphertext;
+}
+
+int main() {
+    const char* plaintext_hex = std::getenv("TEST_PLAINTEXT");
+    const char* key_hex = std::getenv("TEST_KEY");
+    const char* iv_hex = std::getenv("TEST_IV");
+
+    if (!plaintext_hex || !key_hex || !iv_hex) {
+        std::cerr << "Environment variables TEST_PLAINTEXT, TEST_KEY, or TEST_IV are not set." << std::endl;
+        return 1;
+    }
+
+    std::string plaintext_hex_str(plaintext_hex);
+    std::string key_hex_str(key_hex);
+    std::string iv_hex_str(iv_hex);
+
+    remove_whitespace(plaintext_hex_str);
+    remove_whitespace(key_hex_str);
+    remove_whitespace(iv_hex_str);
+
+    std::vector<uint8_t> plaintext = hex_to_bytes(plaintext_hex_str);
+    std::vector<uint8_t> key = hex_to_bytes(key_hex_str);
+    std::vector<uint8_t> iv = hex_to_bytes(iv_hex_str);
+
+    std::vector<uint8_t> ciphertext;
+    try {
+        ciphertext = aes_ofb_encrypt(plaintext, key, iv);
+    } catch (const std::exception& e) {
+        std::cerr << "Encryption failed: " << e.what() << std::endl;
+        return 1;
+    }
+
+    std::cout << "密文: ";
+    for (uint8_t c : ciphertext) {
+        std::cout << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(c);
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-10T13:56:46.668884+00:00
+provider: openai
+case_id: sm4-ofb-c
+config: {"algorithm": "SM4", "mode": "OFB", "language": "c"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+测试失败：结果不匹配
+实际结果: 00a75c3162c595939815d1939b1344c7
+预期结果: 2754B10C806AEF23698989882D80903A
+(规范化后: 实际=00a75c3162c595939815d1939b1344c7, 预期=2754b10c806aef23698989882d80903a)
+
+匹配度分析：
+  - 匹配字符数: 1/32
+  - 匹配率: 3.1%
+  - 匹配率很低，说明代码逻辑可能有根本性错误
+
+
+程序完整输出:
+密文: 00a75c3162c595939815d1939b1344c7
+
+error:
+测试失败：结果不匹配
+实际结果: 00a75c3162c595939815d1939b1344c7
+预期结果: 2754B10C806AEF23698989882D80903A
+(规范化后: 实际=00a75c3162c595939815d1939b1344c7, 预期=2754b10c806aef23698989882d80903a)
+
+匹配度分析：
+  - 匹配字符数: 1/32
+  - 匹配率: 3.1%
+  - 匹配率很低，说明代码逻辑可能有根本性错误
+
+
+程序完整输出:
+密文: 00a75c3162c595939815d1939b1344c7
+
+total_ms: 318355
+generated_filename: sm4_ofb.c
+generated_code:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+
+// S盒
+static const uint8_t Sbox[16][16] = {
+    {0xd6, 0x90, 0xe9, 0xfe, 0xcc, 0xe1, 0x3d, 0xb7, 0x16, 0xb6, 0x14, 0xc2, 0x28, 0xfb, 0x2c, 0x05},
+    {0x2b, 0x67, 0x9a, 0x76, 0x2a, 0xbe, 0x04, 0xc3, 0xaa, 0x44, 0x13, 0x26, 0x49, 0x86, 0x06, 0x99},
+    {0x9c, 0x42, 0x50, 0xf4, 0x91, 0xef, 0x98, 0x7a, 0x33, 0x54, 0x0b, 0x43, 0xed, 0xcf, 0xac, 0x62},
+    {0xe4, 0xb3, 0x1c, 0xa9, 0xc9, 0x08, 0xe8, 0x95, 0x80, 0xdf, 0x94, 0xfa, 0x75, 0x8f, 0x3f, 0xa6},
+    {0x47, 0x07, 0xa7, 0xfc, 0xf3, 0x73, 0x17, 0xba, 0x83, 0x59, 0x3c, 0x19, 0xe6, 0x85, 0x4f, 0xa8},
+    {0x68, 0x6b, 0x81, 0xb2, 0x71, 0x64, 0xda, 0x8b, 0xf8, 0xeb, 0x0f, 0x4b, 0x70, 0x56, 0x9d, 0x35},
+    {0x1e, 0x24, 0x0e, 0x5e, 0x63, 0x58, 0xd1, 0xa2, 0x25, 0x22, 0x7c, 0x3b, 0x01, 0x21, 0x78, 0x87},
+    {0xd4, 0x00, 0x46, 0x57, 0x9f, 0xd3, 0x27, 0x52, 0x4c, 0x36, 0x02, 0xe7, 0xa0, 0xc4, 0xc8, 0x9e},
+    {0xea, 0xbf, 0x8a, 0xd2, 0x40, 0xc7, 0x38, 0xb5, 0xa3, 0xf7, 0xf2, 0xce, 0xf9, 0x61, 0x15, 0xa1},
+    {0xe0, 0xae, 0x5d, 0xa4, 0x9b, 0x34, 0x1a, 0x55, 0xad, 0x93, 0x32, 0x30, 0xf5, 0x8c, 0xb1, 0xe3},
+    {0x1d, 0xf6, 0xe2, 0x2e, 0x82, 0x66, 0xca, 0x60, 0xc0, 0x29, 0x23, 0xab, 0x0d, 0x53, 0x4e, 0x6f},
+    {0xd5, 0xdb, 0x37, 0x45, 0xde, 0xfd, 0x8e, 0x2f, 0x03, 0xff, 0x6a, 0x72, 0x6d, 0x6c, 0x5b, 0x51},
+    {0x8d, 0x1b, 0xaf, 0x92, 0xbb, 0xdd, 0xbc, 0x7f, 0x11, 0xd9, 0x5c, 0x41, 0x1f, 0x10, 0x5a, 0xd8},
+    {0x0a, 0xc1, 0x31, 0x88, 0xa5, 0xcd, 0x7b, 0xbd, 0x2d, 0x74, 0xd0, 0x12, 0xb8, 0xe5, 0xb4, 0xb0},
+    {0x89, 0x69, 0x97, 0x4a, 0x0c, 0x96, 0x77, 0x7e, 0x65, 0xb9, 0xf1, 0x09, 0xc5, 0x6e, 0xc6, 0x84},
+    {0x18, 0xf0, 0x7d, 0xec, 0x3a, 0xdc, 0x4d, 0x20, 0x79, 0xee, 0x5f, 0x3e, 0xd7, 0xcb, 0x39, 0x48}
+};
+
+// 固定参数
+static const uint32_t FK[4] = {0xa3b1bac6, 0x56aa3350, 0x677d9197, 0xb27022dc};
+
+// 密钥扩展中的常量CK
+static const uint32_t CK[32] = {
+    0x00070e15, 0x1c232a31, 0x383f464d, 0x545b6269,
+    0x70777e85, 0x8c939aa1, 0xa8afb6bd, 0xc4cbd2d9,
+    0xe0e7eef5, 0xfc030a11, 0x181f262d, 0x343b4249,
+    0x50575e65, 0x6c737a81, 0x888f969d, 0xa4abb2b9,
+    0xc0c7ced5, 0xdce3eaf1, 0xf8ff060d, 0x141b2229,
+    0x30373e45, 0x4c535a61, 0x686f767d, 0x848b9299,
+    0xa0a7aeb5, 0xbcc3cad1, 0xd8dfe6ed, 0xf4fb0209,
+    0x10171e25, 0x2c333a41, 0x484f565d, 0x646b7279
+};
+
+// 循环左移
+unsigned int rotate_left(unsigned int x, int bits) {
+    return (x << bits) | (x >> (32 - bits));
+}
+
+// 轮函数
+unsigned int T(unsigned int x) {
+    return (Sbox[(x >> 24) & 0xF][x >> 28] << 24) |
+           (Sbox[(x >> 16) & 0xF][(x >> 20) & 0xF] << 16) |
+           (Sbox[(x >> 8) & 0xF][(x >> 12) & 0xF] << 8) |
+           Sbox[x & 0xF][(x >> 4) & 0xF];
+}
+
+// 密钥扩展算法
+void key_expansion(unsigned char *key, unsigned int *rk) {
+    unsigned int K[4];
+    for (int i = 0; i < 4; i++) {
+        K[i] = ((unsigned int)key[4 * i] << 24) |
+               ((unsigned int)key[4 * i + 1] << 16) |
+               ((unsigned int)key[4 * i + 2] << 8) |
+               ((unsigned int)key[4 * i + 3]);
+        K[i] ^= FK[i];
+    }
+
+    for (int i = 0; i < 32; i++) {
+        unsigned int tmp = K[1] ^ K[2] ^ K[3] ^ CK[i];
+        tmp = T(tmp);
+        K[0] ^= tmp;
+        rk[i] = K[0];
+        for (int j = 0; j < 3; j++) {
+            K[j] = K[j + 1];
+        }
+        K[3] = tmp;
+    }
+}
+
+// SM4加密单个分组
+void sm4_encrypt(unsigned char *input, unsigned char *output, unsigned int *rk) {
+    unsigned int X[4];
+    for (int i = 0; i < 4; i++) {
+        X[i] = ((unsigned int)input[4 * i] << 24) |
+               ((unsigned int)input[4 * i + 1] << 16) |
+               ((unsigned int)input[4 * i + 2] << 8) |
+               ((unsigned int)input[4 * i + 3]);
+    }
+
+    for (int i = 0; i < 32; i++) {
+        unsigned int tmp = X[1] ^ X[2] ^ X[3] ^ rk[i];
+        tmp = T(tmp);
+        X[0] ^= tmp;
+        for (int j = 0; j < 3; j++) {
+            X[j] = X[j + 1];
+        }
+        X[3] = tmp;
+    }
+
+    for (int i = 0; i < 4; i++) {
+        output[4 * i] = (X[3 - i] >> 24) & 0xFF;
+        output[4 * i + 1] = (X[3 - i] >> 16) & 0xFF;
+        output[4 * i + 2] = (X[3 - i] >> 8) & 0xFF;
+        output[4 * i + 3] = X[3 - i] & 0xFF;
+    }
+}
+
+// OFB模式加密
+void sm4_ofb_encrypt(unsigned char *plaintext, unsigned char *ciphertext, int length, unsigned char *iv, unsigned int *rk) {
+    unsigned char feedback[16];
+    memcpy(feedback, iv, 16);
+    int i = 0;
+    while (i < length) {
+        unsigned char output[16];
+        sm4_encrypt(feedback, output, rk);
+        for (int j = 0; j < 16 && i < length; j++, i++) {
+            ciphertext[i] = plaintext[i] ^ output[j];
+            feedback[j] = output[j];
+        }
+    }
+}
+
+// 主函数
+int main() {
+    char *env_plaintext = getenv("TEST_PLAINTEXT");
+    char *env_key = getenv("TEST_KEY");
+    char *env_iv = getenv("TEST_IV");
+
+    if (!env_plaintext || !env_key || !env_iv) {
+        fprintf(stderr, "环境变量缺失\n");
+        return 1;
+    }
+
+    unsigned char key[16];
+    unsigned char iv[16];
+    unsigned char plaintext[1024];
+    unsigned char ciphertext[1024];
+
+    int key_len = strlen(env_key) / 2;
+    int iv_len = strlen(env_iv) / 2;
+    int plaintext_len = strlen(env_plaintext) / 2;
+
+    for (int i = 0; i < key_len; i++) {
+        sscanf(env_key + 2 * i, "%2hhx", &key[i]);
+    }
+
+    for (int i = 0; i < iv_len; i++) {
+        sscanf(env_iv + 2 * i, "%2hhx", &iv[i]);
+    }
+
+    for (int i = 0; i < plaintext_len; i++) {
+        sscanf(env_plaintext + 2 * i, "%2hhx", &plaintext[i]);
+    }
+
+    unsigned int rk[32];
+    key_expansion(key, rk);
+    sm4_ofb_encrypt(plaintext, ciphertext, plaintext_len, iv, rk);
+
+    printf("密文: ");
+    for (int i = 0; i < plaintext_len; i++) {
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+

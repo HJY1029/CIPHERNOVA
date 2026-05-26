@@ -1,0 +1,55 @@
+# SM4-CFB模式特定prompt
+# 注意：C和C++语言特定的内容已分离到 prompts/algorithms/c/SM4-CFB.yaml 和 prompts/algorithms/cpp/SM4-CFB.yaml
+# prompt_loader.py会自动加载这些内容
+
+algorithm_specific: |
+  **SM4-CFB模式说明：**
+  - SM4是中国国家密码管理局发布的对称加密算法
+  - CFB（Cipher Feedback）模式是流密码模式
+  - 将分组密码转换为流密码
+  - 需要初始化向量（IV），长度为16字节（128位）
+  - 对于SM4，每个块大小为16字节（128位）
+  - SM4密钥必须为16字节（128位）
+  - **🚨🚨🚨 重要：标准测试数据使用CFB-128模式（每次处理128位），必须使用 `EVP_sm4_cfb128()` 函数！🚨🚨🚨**
+  - **测试数据已包含在test_data.yaml中，使用OpenSSL的实际输出作为预期值**
+  
+  **实现要求：**
+  - 对于Python：`gmssl.CryptSM4` **无** `encrypt_cfb`/`crypt_cfb`；须 **`set_key(..., SM4_ENCRYPT)` + `one_round` 手搓 CFB-128**（见 mode_specific）
+  - 对于C/C++：**如果OpenSSL支持SM4，使用OpenSSL库！**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+    - ✅ **必须使用 `EVP_sm4_cfb128()` 获取SM4-CFB-128密码对象（标准测试数据使用CFB-128模式）**
+    - ✅ **必须从环境变量TEST_IV读取IV，如果不存在则使用全零IV**
+    - ❌ **绝对不要实现完整的SM4算法！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+    - **🚨🚨🚨 重要：标准测试数据使用CFB-128模式，必须使用 `EVP_sm4_cfb128()` 函数，不要使用其他CFB变体！**
+  - **🚨🚨🚨 必须输出密文！🚨🚨🚨**
+    - **必须使用 `print("密文: ")` 或 `printf("密文: ");` 或 `std::cout << "密文: ";` 输出密文！**
+    - **必须输出完整的密文，不要截断！**
+    - **重要：只输出实际加密的数据长度，不要输出整个缓冲区或IV！**
+
+mode_specific: |
+  **CFB模式实现细节（必须严格遵循）：**
+  
+  **注意：C和C++语言特定的实现要求已分离到以下文件：**
+  - `prompts/algorithms/c/SM4-CFB.yaml` - C语言特定内容
+  - `prompts/algorithms/cpp/SM4-CFB.yaml` - C++语言特定内容
+  - prompt_loader.py会自动根据语言加载对应的内容
+  
+  **Python · CFB-128（gmssl 仅有 crypt_ecb/crypt_cbc，须用手动模式）：**
+  1. `from gmssl import sm4`；`from gmssl.sm4 import bytes_to_list, list_to_bytes`；`import binascii`, `import os`
+  2. `crypt = sm4.CryptSM4()`；`crypt.set_key(key, sm4.SM4_ENCRYPT)`
+  3. **CFB-128 状态机：** `R = iv`。对明文每 16 字节一块：`o = list_to_bytes(crypt.one_round(crypt.sk, bytes_to_list(R)))`；`c_block = bytes(p[i]^o[i] for i in range(len(block)))`；**`R = c_block`**（密文反馈）；拼接所有 `c_block`。
+  4. 输出一行 `密文: ` + 连续十六进制；**禁止** `crypt_cfb` / `encrypt_cfb`
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取明文、密钥和IV（TEST_PLAINTEXT, TEST_KEY, TEST_IV）
+     - 将十六进制字符串转换为字节数组
+     - 如果TEST_IV不存在，使用全零IV（16字节）
+     - 按上文完成 SM4-CFB-128 加密
+     - 输出密文（十六进制格式，不包含IV）
+     - 返回0
+  
+  **通用实现要求：**
+  - **密钥长度：**SM4密钥必须为16字节（128位）
+  - **块大小：**SM4块大小为16字节（128位）
+  - **IV处理：**IV必须为16字节，从环境变量TEST_IV读取，如果不存在则使用全零

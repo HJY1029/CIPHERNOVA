@@ -1,0 +1,101 @@
+# Qwen 本地 7B · 批量评测 I/O（覆盖继承自 openai 的 stdin/长文要求）
+
+code_requirements:
+  python: |
+    **【Qwen · Python · 强制】**
+    - **仅交付可运行加密脚本**（`import os` 置顶 → 读 `TEST_*` → 一次 encrypt → **`print("密文:", ct.hex().lower())`**）。
+    - **SM4-OFB：** gmssl **无 `crypt_ofb`**；须 **`one_round` 手搓 OFB-128**（见 **SM4-OFB.yaml python:** 块）。
+    - **禁止** 解密函数、交互 demo、长段说明 print。
+    - **整文件建议 ≤50 行**（防 Ollama 截断）。
+
+  c: |
+    **【Qwen · C · 强制】**
+    - **单文件 `main` + 加密**；**禁止** 解密、占位、空 `encrypt()`。
+    - **Linux 批量默认有 `-lcrypto`：** `#include <openssl/evp.h>` + 本题 **`EVP_*`**。
+    - **禁止** `#define 8` / `#define 8 8`；块长用命名宏（如 `AES_BLOCK_BYTES 16`）。
+    - **`isspace` → `#include <ctype.h>`**；**`main` 内 `EVP_CIPHER_CTX_free` 在 `return` 前**。
+    - **建议 ≤120 行**。
+
+  cpp: |
+    **【Qwen · C++ · 强制】**
+    - 同 C；**`std::remove_if` → `<algorithm>`**；**`stringstream` → `<sstream>`**；**`bitset` → `<bitset>`**。
+    - **禁止** `char *ciphertext` 与 `unsigned char ciphertext[N]` 同名。
+    - **建议 ≤120 行**。
+
+input_requirements:
+  python: |
+    **【Qwen · 输入 · 强制（批量无 stdin）】**
+    - **必须** `import os`；**仅** `os.getenv("TEST_PLAINTEXT")` / `TEST_KEY` / `TEST_IV`（GCM 加 `TEST_AAD`），先 `.strip()` 再 `bytes.fromhex`。
+    - **绝对禁止** `input()`、`sys.stdin.readline`、`sys.stdin.read()`。
+    - env 缺失时 **`return 1` 或 `sys.exit(1)`**，**禁止** 改为 stdin 交互。
+
+  c: |
+    **【Qwen · 输入 · 强制】**
+    - **仅** `getenv("TEST_PLAINTEXT")` / `TEST_KEY` / `TEST_IV`；指针非空再解码。
+    - **绝对禁止** `scanf`、`fgets(stdin)`、`getchar()`、`printf("请输入")` 等待输入。
+    - 可 `remove_whitespace`（须 `#include <ctype.h>`）。
+
+  cpp: |
+    **【Qwen · 输入 · 强制】**
+    - **仅** `std::getenv("TEST_…")`；**禁止** `std::cin` / `getline(cin,…)` 作为数据来源。
+    - env 空则 `return 1`，**禁止** stdin 回退。
+
+failure_driven_constraints:
+  python: |
+    **【失败驱动 · Qwen · Python】**
+    - 注释只用 **`#`**，**禁止 `//`**（会 SyntaxError）。
+    - **E-HEX-MISS：** 必须有 **`print("密文:", …hex…)`** 到 stdout；**禁止** 只定义函数不调用、**禁止** 文件末尾无 `main()` 调用（batch **sm4-cbc-python** / **sm4-ofb-python**）。
+    - **禁止** 仅用英文 **`ciphertext:`** 作唯一标签（batch **aes-cfb-c** / **sm4-cfb-cpp**）；评测优先 **`密文:`**。
+    - **AES-CFB：** `segment_size=8` 或省略；**禁止 128**（错前缀 `ea0b8fb8`）。
+    - **AES-CTR：** `Counter.new(128, initial_value=int.from_bytes(iv,'big'))`；C/C++ **`EVP_aes_128_ctr`**，**禁止** **cfb/des** 函数名（**aes-ctr-c**）。
+    - **SM4-CFB C：** **`EVP_sm4_cfb128`**；**禁止** 空 **des_encrypt**（**sm4-cfb-c**）。
+    - **SM4-OFB C：** key/iv **16B**，**禁止** **KEY_SIZE 8**（**sm4-ofb-c** Invalid input length）。
+    - **AES-GCM：** 先 `update(aad)`；输出 **(ct+tag).hex()** 共 **64 hex**；**禁止** `DES_KEY_SIZE`/8B key（**aes-gcm-cpp**）。
+    - **SM4：** `gmssl` 的 `crypt_cbc` / 手动 CFB-128（无 `encrypt_cfb` API）；**禁止 DES3**。
+
+  c: |
+    **【失败驱动 · Qwen · C】**
+    - **hex 未解码（日志高频）：** 禁止 **`memcpy(getenv("TEST_*"), buf, strlen(...))`**；必须 **h2b/sscanf %2x**（见各算法 YAML 骨架）。
+    - **AES/SM4 题出现 `openssl/des.h` / `DES_*` → 0 分**；改 **`EVP_aes_*` / `EVP_sm4_*`**。
+    - **禁止** `scanf`/`fgets` 在 **`getenv` 为 NULL 时**（batch **aes-cfb-c** → 崩溃 255）。
+    - **禁止** 空函数体 **`// Implement … here`**（batch **sm4-cfb-cpp**）。
+    - **AES-CFB-8：** `EVP_aes_128_cfb8()`，**不是** `cfb128`/`DES_cfb64`。
+    - **SM4-CFB：** `EVP_sm4_cfb128()` + `set_padding(0)`。
+    - **DES-CBC/OFB：** 用 **`EVP_des_cbc`/`EVP_des_ofb`**，**禁止** 函数名含 **cfb**（**des-cbc-c**、**des-ofb-c**）。
+    - **DES：** 须 **`OSSL_PROVIDER_load(NULL,"legacy")`**；golden **ECB `958920b1`** / **CBC `5eb15b91`** / **CFB `f70f0158`** / **OFB `f788b2bc`**。
+    - **DES-CFB C++：** **禁止** 空 **`des_encrypt(){}`**（**des-cfb-cpp** → `808ce3ff…`）。
+    - **无输出/255：** 查 `getenv` NULL、越界、重复 `free`。
+    - **`set_padding(0)`** 在首次 Update 前（CBC/ECB 等）。
+    - **AES-CBC：** 必须 **`EVP_aes_128_cbc()`**（**禁止 `aes_256_cbc`**）；错前缀 **`afe3e274`** → 128 + **set_padding(0)** + **`密文:`**。
+    - **AES-OFB/CFB 勿混：** OFB 前缀 **`ea0b8fb8`**；CFB-8 前缀 **`eac2dd63`**（见各算法 YAML）。
+    - **AES-GCM：** key **64 hex**（32B）；nonce **24 hex**；先 **AAD**；**`f7264413`**。
+    - **SM4：** key/iv **32 hex**；**`681edf34`**（ECB/CBC）；**`2754b10c`**（CFB/OFB）。
+    - **未过槽日志：** **sm4.h**→仅 **evp.h**；**RAND_bytes**→**TEST_IV**；**size_t* outl**→**int***；**128hex 输出**→**h2b**。
+
+  cpp: |
+    **【失败驱动 · Qwen · C++】**
+    - **批量未过槽（SM4-OFB-cpp）：** **`EVP_sm4_ofb()`** + **strip/h2b 定义** + 三路 **getenv**；禁硬编码 **0000…** / **strlen(env)**；golden **`2754b10c`**。
+    - **`#include <cstring>`**（日志 **des-cbc-cpp / sm4-cbc-cpp**：`strlen`/`memcpy` 未声明）。
+    - **禁止 `memcpy(env)` 不解 hex**；必须照抄 YAML **C 骨架** 的 **h2b**。
+    - 同 C；**VPR 高频：** 误粘贴 DES → 整文件删 DES 只留 **`EVP_sm4_*` / `EVP_aes_*`**。
+    - **批量未过槽（日志 2026-05-23）：** **SM4-OFB-cpp** 用 **`EVP_sm4_ofb()`**（禁 ofb128）；**string.h**+h2b；**2754b10c**。
+    - **自测 golden：** AES-CBC **`9b004899`**（64 hex）；CTR **`874d6191`**（128 hex）；SM4-ECB/CBC **`681edf34`**；SM4-CFB/OFB **`2754b10c`**。
+    - **无 `evp.h`：** 删全部 `<openssl/`，单文件纯实现（仍须 `密文:` 与正确长度）。
+
+output_requirements:
+  content: |
+    **【Qwen · 输出 · 强制】**
+    - **必须** 一行 **`密文:`** + **连续小写 hex**（无空格、无换行夹英文说明）。
+    - **禁止** 输出 IV/密钥/明文 hex 冒充密文；**禁止** 仅 `ciphertext:` 无中文标签（评测优先认 `密文`）。
+    - GCM：**64 hex**（16B 密文 + 16B tag）。
+
+key_requirements:
+  content: |
+    **【Qwen · 密钥 · 强制】**
+    - **AES/SM4：** key、IV 各 **32 hex → 16 字节**；**禁止** `key_len==8`、**禁止**「密钥8字节」文案。
+    - **DES：** key/IV 各 **16 hex → 8 字节**。
+    - **禁止** `rand`/`urandom`/`time` 生成 IV/密钥。
+
+ending:
+  content: |
+    **只输出纯源码**（无 ``` 围栏、无 markdown、无「以下是代码」）。从第一行 `import` 或 `#include` 开始，到 `main` 结束。

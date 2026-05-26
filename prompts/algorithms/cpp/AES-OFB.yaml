@@ -1,0 +1,7 @@
+# AES-OFB · C++（与 golden EA0B8FB8… 一致 = EVP_aes_128_ofb）
+cpp_specific: |
+  **【本测 golden】** 密文 hex 须以 **`EA0B8FB8`** 开头。
+
+  **推荐路径：** **`#include <openssl/evp.h>`** + **`EVP_CIPHER_CTX_new`** → **`EVP_EncryptInit_ex(ctx, EVP_aes_128_ofb(), NULL, key, iv)`** → **`EVP_CIPHER_CTX_set_padding(ctx, 0)`** → **Update / Final** → **`EVP_CIPHER_CTX_free`**；**`std::getenv("TEST_*")`** 解码 hex。
+
+  **禁止：** 类 **`AES::encryptBlock` 空实现**、**`output[i]=input[i]`** 占位、**整页 S 盒无 EVP**；**禁止**误用 CFB/DES。

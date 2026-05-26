@@ -1,0 +1,382 @@
+{
+  "version": 1,
+  "schema": "run_paper_ablation.suite_invoke",
+  "fingerprint": "b04055b6dd37ab2a3c303b74",
+  "fp_payload": {
+    "schema": "run_paper_ablation.suite_invoke",
+    "suite_name": "prompt",
+    "definitions": [
+      [
+        "完整所提方法",
+        "{}"
+      ],
+      [
+        "无测试反馈改进",
+        "{\"_ablation_no_test_feedback\": true}"
+      ],
+      [
+        "无分层提示架构（仅 base_prompt.yaml）",
+        "{\"prompt_ablation\": \"common_only\"}"
+      ],
+      [
+        "无任何提示",
+        "{\"prompt_ablation\": \"no_prompt\"}"
+      ]
+    ],
+    "tasks_desc": [
+      {
+        "provider": "deepseek",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "doubao",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "doubao",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "doubao",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "doubao",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "doubao",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "doubao",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "claude",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "claude",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "claude",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "claude",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "claude",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "claude",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "claude",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "claude",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "claude",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "claude",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "claude",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "claude",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "openai",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "openai",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "openai",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "openai",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "openai",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "openai",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "openai",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "openai",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "openai",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "openai",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "openai",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "openai",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "codex",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "codex",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "codex",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "codex",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "codex",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "codex",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "codex",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "codex",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "codex",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "codex",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "codex",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "codex",
+        "mode": "OFB",
+        "language": "cpp"
+      }
+    ],
+    "config_path": "config.yaml",
+    "max_retries": 3,
+    "enable_validation": true,
+    "trace_generation": false,
+    "baseline_from_history": true,
+    "history_db": "/mnt/d/aicrypto-helper/code_history.db"
+  },
+  "suite": "prompt",
+  "out_rows": {
+    "完整所提方法": [
+      {
+        "ok": true,
+        "filepath": "des_ecb.py",
+        "code_chars": 2570,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:34:07.440336",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.c",
+        "code_chars": 15361,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-08T12:08:06.862011",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      }
+    ],
+    "无测试反馈改进": [],
+    "无分层提示架构（仅 base_prompt.yaml）": [],
+    "无任何提示": []
+  },
+  "next_index": 2,
+  "total_tasks": 240,
+  "updated_at": "2026-05-23T18:20:05"
+}

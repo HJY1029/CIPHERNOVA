@@ -1,0 +1,1961 @@
+{
+  "provider": "qwen_coder_local",
+  "algorithm": null,
+  "grid_size": 45,
+  "history_skip_baseline": 0,
+  "history_skip_distill": 45,
+  "teacher_pool_lines": 2272,
+  "teacher_pool_path": "/mnt/d/aicrypto-helper/data/distillation_teacher.jsonl",
+  "pass_baseline": 26,
+  "pass_distill": 45,
+  "skip_baseline": false,
+  "skip_distill": false,
+  "merge_from": "/mnt/d/aicrypto-helper/experiments/results/experiments/qwen_distill_compare.json",
+  "refresh_baseline_cells": [
+    [
+      "SM4",
+      "ofb",
+      "python"
+    ]
+  ],
+  "refresh_distill_cells": [
+    [
+      "SM4",
+      "ofb",
+      "python"
+    ]
+  ],
+  "partial_update": true,
+  "results_baseline": [
+    {
+      "ok": false,
+      "error": "测试失败：结果不匹配\n实际结果: 6fb358655ac09610ce3db8bf81ad7464\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=6fb358655ac09610ce3db8bf81ad7464, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 6fb358655ac09610ce3db8bf81ad7464c6fed57288affc764997c6be6f762466\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 2978.255661848001,
+      "filepath": null,
+      "vector_detail": "测试失败：结果不匹配\n实际结果: 6fb358655ac09610ce3db8bf81ad7464\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=6fb358655ac09610ce3db8bf81ad7464, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 6fb358655ac09610ce3db8bf81ad7464c6fed57288affc764997c6be6f762466\n",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "DES|ECB|python"
+    },
+    {
+      "ok": false,
+      "error": "测试失败：结果不匹配\n实际结果: e00564b8ff7f0000\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=e00564b8ff7f0000, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n长度分析：\n  - 实际长度: 16 个字符 (8 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: -16 个字符 (-8 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n密文: e00564b8ff7f0000\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 4753.737112900009,
+      "filepath": null,
+      "vector_detail": "测试失败：结果不匹配\n实际结果: e00564b8ff7f0000\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=e00564b8ff7f0000, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n长度分析：\n  - 实际长度: 16 个字符 (8 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: -16 个字符 (-8 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n密文: e00564b8ff7f0000\n",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "DES|ECB|c"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_c046aa22a7a64f37bf4be0e449c07e87.cpp: In function ‘void strip(std::string&)’:\n/tmp/aicrypto_tester/test_c046aa22a7a64f37bf4be0e449c07e87.cpp:8:13: error: ‘remove_if’ was not declared in this scope; did you mean ‘remove’?\n    8 |     s.erase(remove_if(s.begin(), s.end(), isspace), s.end());\n      |             ^~~~~~~~~\n      |             remove\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 4742.1766463230015,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_c046aa22a7a64f37bf4be0e449c07e87.cpp: In function ‘void strip(std::string&)’:\n/tmp/aicrypto_tester/test_c046aa22a7a64f37bf4be0e449c07e87.cpp:8:13: error: ‘remove_if’ was not declared in this scope; did you mean ‘remove’?\n    8 |     s.erase(remove_if(s.begin(), s.end(), isspace), s.end());\n      |             ^~~~~~~~~\n      |             remove\n",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "DES|ECB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1933.3127067369642,
+      "filepath": "generated_code/des_cbc.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      "label": "DES|CBC|python"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_30efd73dda9148709db54654067ba6c8.c: In function ‘main’:\n/tmp/aicrypto_tester/test_30efd73dda9148709db54654067ba6c8.c:70:35: error: ‘plaintext’ undeclared (first use in this function); did you mean ‘plaintext_len’?\n   70 |     size_t plaintext_len = strlen(plaintext) / 2;\n      |                                   ^~~~~~~~~\n      |                                   plaintext_len\n/tmp/aicrypto_tester/test_30efd73dda9148709db54654067ba6c8.c:70:35: note: each undeclared identifier is reported only once for each function it appears in\n/tmp/aicrypto_tester/test_30efd73dda9148709db54654067ba6c8.c:73:17: error: ‘key’ undeclared (first use in this function); did you mean ‘key_t’?\n   73 |     des_encrypt(key, plaintext, ciphertext);\n      |                 ^~~\n      |                 key_t\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 4584.6911889539915,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_30efd73dda9148709db54654067ba6c8.c: In function ‘main’:\n/tmp/aicrypto_tester/test_30efd73dda9148709db54654067ba6c8.c:70:35: error: ‘plaintext’ undeclared (first use in this function); did you mean ‘plaintext_len’?\n   70 |     size_t plaintext_len = strlen(plaintext) / 2;\n      |                                   ^~~~~~~~~\n      |                                   plaintext_len\n/tmp/aicrypto_tester/test_30efd73dda9148709db54654067ba6c8.c:70:35: note: each undeclare",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "label": "DES|CBC|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1145.5662981509813,
+      "filepath": "generated_code/des_cbc.cpp",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "label": "DES|CBC|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 967.7895373899955,
+      "filepath": "generated_code/des_cfb.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      "label": "DES|CFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1195.1616597090033,
+      "filepath": "generated_code/des_cfb.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      "label": "DES|CFB|c"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:5:6: error: variable or field ‘strip’ declared void\n    5 | void strip(std::string& s) {\n      |      ^~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:5:17: error: ‘string’ is not a member of ‘std’\n    5 | void strip(std::string& s) {\n      |                 ^~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:4:1: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#include <string>’?\n    3 | #include <cstdio>\n  +++ |+#include <string>\n    4 | \n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:5:25: error: ‘s’ was not declared in this scope\n    5 | void strip(std::string& s) {\n      |                         ^\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:9:6: error: ‘vector’ in namespace ‘std’ does not name a template type\n    9 | std::vector<unsigned char> hex_to_bytes(const std::string& hex) {\n      |      ^~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:4:1: note: ‘std::vector’ is defined in header ‘<vector>’; did you forget to ‘#include <vector>’?\n    3 | #include <cstdio>\n  +++ |+#include <vector>\n    4 | \n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:19:29: error: ‘OSSL_PROVIDER_load’ was not declared in this scope; did you mean ‘OSSL_PROVIDER’?\n   19 |     OSSL_PROVIDER *legacy = OSSL_PROVIDER_load(nullptr, \"legacy\");\n      |                             ^~~~~~~~~~~~~~~~~~\n      |                             OSSL_PROVIDER\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:25:10: error: ‘string’ is not a member of ‘std’\n   25 |     std::string key_hex = \"0123456789abcdef\";\n      |          ^~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:25:10: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#include <string>’?\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:26:10: error: ‘string’ is not a member of ‘std’\n   26 |     std::string iv_hex = \"1234567890abcdef\";\n      |          ^~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:26:10: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#include <string>’?\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:27:10: error: ‘string’ is not a member of ‘std’\n   27 |     std::string plaintext_hex = \"0011223344556677\";\n      |          ^~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:27:10: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#include <string>’?\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:29:10: error: ‘vector’ is not a member of ‘std’\n   29 |     std::vector<unsigned char> key = hex_to_bytes(key_hex);\n      |          ^~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:29:10: note: ‘std::vector’ is defined in header ‘<vector>’; did you forget to ‘#include <vector>’?\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:29:17: error: expected primary-expression before ‘unsigned’\n   29 |     std::vector<unsigned char> key = hex_to_bytes(key_hex);\n      |                 ^~~~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:30:10: error: ‘vector’ is not a member of ‘std’\n   30 |     std::vector<unsigned char> iv = hex_to_bytes(iv_hex);\n      |          ^~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:30:10: note: ‘std::vector’ is defined in header ‘<vector>’; did you forget to ‘#include <vector>’?\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:30:17: error: expected primary-expression before ‘unsigned’\n   30 |     std::vector<unsigned char> iv = hex_to_bytes(iv_hex);\n      |                 ^~~~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:31:10: error: ‘vector’ is not a member of ‘std’\n   31 |     std::vector<unsigned char> plaintext = hex_to_bytes(plaintext_hex);\n      |          ^~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:31:10: note: ‘std::vector’ is defined in header ‘<vector>’; did you forget to ‘#include <vector>’?\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:31:17: error: expected primary-expression before ‘unsigned’\n   31 |     std::vector<unsigned char> plaintext = hex_to_bytes(plaintext_hex);\n      |                 ^~~~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:36:9: error: ‘OSSL_PROVIDER_unload’ was not declared in this scope; did you mean ‘OSSL_PROVIDER’?\n   36 |         OSSL_PROVIDER_unload(legacy);\n      |         ^~~~~~~~~~~~~~~~~~~~\n      |         OSSL_PROVIDER\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:40:58: error: ‘key’ was not declared in this scope; did you mean ‘key_t’?\n   40 |     if (EVP_EncryptInit_ex(ctx, EVP_des_cfb8(), nullptr, key.data(), iv.data()) != 1) {\n      |                                                          ^~~\n      |                                                          key_t\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:40:70: error: ‘iv’ was not declared in this scope; did you mean ‘div’?\n   40 |     if (EVP_EncryptInit_ex(ctx, EVP_des_cfb8(), nullptr, key.data(), iv.data()) != 1) {\n      |                                                                      ^~\n      |                                                                      div\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:43:9: error: ‘OSSL_PROVIDER_unload’ was not declared in this scope; did you mean ‘OSSL_PROVIDER’?\n   43 |         OSSL_PROVIDER_unload(legacy);\n      |         ^~~~~~~~~~~~~~~~~~~~\n      |         OSSL_PROVIDER\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:52:50: error: ‘plaintext’ was not declared in this scope\n   52 |     if (EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext.data(), plaintext.size()) != 1) {\n      |                                                  ^~~~~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:55:9: error: ‘OSSL_PROVIDER_unload’ was not declared in this scope; did you mean ‘OSSL_PROVIDER’?\n   55 |         OSSL_PROVIDER_unload(legacy);\n      |         ^~~~~~~~~~~~~~~~~~~~\n      |         OSSL_PROVIDER\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:64:9: error: ‘OSSL_PROVIDER_unload’ was not declared in this scope; did you mean ‘OSSL_PROVIDER’?\n   64 |         OSSL_PROVIDER_unload(legacy);\n      |         ^~~~~~~~~~~~~~~~~~~~\n      |         OSSL_PROVIDER\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:77:5: error: ‘OSSL_PROVIDER_unload’ was not declared in this scope; did you mean ‘OSSL_PROVIDER’?\n   77 |     OSSL_PROVIDER_unload(legacy);\n      |     ^~~~~~~~~~~~~~~~~~~~\n      |     OSSL_PROVIDER\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 5123.838606178004,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:5:6: error: variable or field ‘strip’ declared void\n    5 | void strip(std::string& s) {\n      |      ^~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:5:17: error: ‘string’ is not a member of ‘std’\n    5 | void strip(std::string& s) {\n      |                 ^~~~~~\n/tmp/aicrypto_tester/test_68eeb486f84a4455b73726f250a89485.cpp:4:1: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#incl",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "label": "DES|CFB|cpp"
+    },
+    {
+      "ok": false,
+      "error": "测试失败：结果不匹配\n实际结果: 8da8f0fe010fa0acd6b579c9dd587cdf\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=8da8f0fe010fa0acd6b579c9dd587cdf, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 8da8f0fe010fa0acd6b579c9dd587cdf6481da38c240a5acf748b565817d3699\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 2456.312023970997,
+      "filepath": null,
+      "vector_detail": "测试失败：结果不匹配\n实际结果: 8da8f0fe010fa0acd6b579c9dd587cdf\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=8da8f0fe010fa0acd6b579c9dd587cdf, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 8da8f0fe010fa0acd6b579c9dd587cdf6481da38c240a5acf748b565817d3699\n",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "python"
+      },
+      "label": "DES|OFB|python"
+    },
+    {
+      "ok": false,
+      "error": "测试失败：结果不匹配\n实际结果: 48656c6c6f2c20576f726c64210000\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=48656c6c6f2c20576f726c64210000, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n长度分析：\n  - 实际长度: 30 个字符 (15 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: -2 个字符 (-1 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n密文: 48656c6c6f2c20576f726c64210000\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 4870.8970978779835,
+      "filepath": null,
+      "vector_detail": "测试失败：结果不匹配\n实际结果: 48656c6c6f2c20576f726c64210000\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=48656c6c6f2c20576f726c64210000, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n长度分析：\n  - 实际长度: 30 个字符 (15 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: -2 个字符 (-1 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n密文: 48656c6c6f2c20576f726c64210000\n",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      "label": "DES|OFB|c"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:6:27: error: ‘string’ in namespace ‘std’ does not name a type\n    6 | static int h2b(const std::string &h, unsigned char *b, int n) {\n      |                           ^~~~~~\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:5:1: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#include <string>’?\n    4 | #include <cstring>\n  +++ |+#include <string>\n    5 | \n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp: In function ‘int h2b(const int&, unsigned char*, int)’:\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:9:22: error: request for member ‘substr’ in ‘h’, which is of non-class type ‘const int’\n    9 |         if (sscanf(h.substr(2 * i, 2).c_str(), \"%2x\", &v) != 1)\n      |                      ^~~~~~\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:22:10: error: ‘string’ is not a member of ‘std’\n   22 |     std::string ph = \"your_hex_string_here\";\n      |          ^~~~~~\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:22:10: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#include <string>’?\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:23:10: error: ‘string’ is not a member of ‘std’\n   23 |     std::string kh = \"your_hex_key_here\";\n      |          ^~~~~~\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:23:10: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#include <string>’?\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:24:10: error: ‘string’ is not a member of ‘std’\n   24 |     std::string ih = \"your_hex_iv_here\";\n      |          ^~~~~~\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:24:10: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#include <string>’?\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:26:9: error: ‘ph’ was not declared in this scope; did you mean ‘pt’?\n   26 |     if (ph.length() != 32 || kh.length() != 16 || ih.length() != 16)\n      |         ^~\n      |         pt\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:26:30: error: ‘kh’ was not declared in this scope\n   26 |     if (ph.length() != 32 || kh.length() != 16 || ih.length() != 16)\n      |                              ^~\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:26:51: error: ‘ih’ was not declared in this scope; did you mean ‘iv’?\n   26 |     if (ph.length() != 32 || kh.length() != 16 || ih.length() != 16)\n      |                                                   ^~\n      |                                                   iv\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:29:13: error: ‘ph’ was not declared in this scope; did you mean ‘pt’?\n   29 |     if (h2b(ph, pt, 16) || h2b(kh, key, 8) || h2b(ih, iv, 8))\n      |             ^~\n      |             pt\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:29:32: error: ‘kh’ was not declared in this scope\n   29 |     if (h2b(ph, pt, 16) || h2b(kh, key, 8) || h2b(ih, iv, 8))\n      |                                ^~\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:29:51: error: ‘ih’ was not declared in this scope; did you mean ‘iv’?\n   29 |     if (h2b(ph, pt, 16) || h2b(kh, key, 8) || h2b(ih, iv, 8))\n      |                                                   ^~\n      |                                                   iv\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 4868.30352577701,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:6:27: error: ‘string’ in namespace ‘std’ does not name a type\n    6 | static int h2b(const std::string &h, unsigned char *b, int n) {\n      |                           ^~~~~~\n/tmp/aicrypto_tester/test_d8d551202eb3482dac87486646771214.cpp:5:1: note: ‘std::string’ is defined in header ‘<string>’; did you forget to ‘#include <string>’?\n    4 | #include <cstring>\n  +++ |+#include <string>\n    5 | \n/tmp/aicrypto_tester/test_d8d55120",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "label": "DES|OFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 992.066076854011,
+      "filepath": "generated_code/aes_ecb.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "AES|ECB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1307.1065270020044,
+      "filepath": "generated_code/aes_ecb.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "AES|ECB|c"
+    },
+    {
+      "ok": false,
+      "error": "代码执行失败: ",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 5089.674909916008,
+      "filepath": null,
+      "vector_detail": "代码执行失败: ",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "AES|ECB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1032.7867607049993,
+      "filepath": "generated_code/aes_cbc.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      "label": "AES|CBC|python"
+    },
+    {
+      "ok": false,
+      "error": "代码执行失败: Usage: /tmp/aicrypto_tester/test_1f84d69860354178b531a0c92fe54daf <plaintext> <key> <iv>\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 4940.262499094009,
+      "filepath": null,
+      "vector_detail": "代码执行失败: Usage: /tmp/aicrypto_tester/test_1f84d69860354178b531a0c92fe54daf <plaintext> <key> <iv>\n",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "label": "AES|CBC|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2511.2340266150422,
+      "filepath": "generated_code/aes_cbc.cpp",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "label": "AES|CBC|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2219.828421739978,
+      "filepath": "generated_code/aes_cfb.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      "label": "AES|CFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1217.9866222590208,
+      "filepath": "generated_code/aes_cfb.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      "label": "AES|CFB|c"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_55dc6238e384437ba565373e7fc01821.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_55dc6238e384437ba565373e7fc01821.cpp:36:9: error: redeclaration of ‘int len’\n   36 |     int len, ciphertext_len = 0;\n      |         ^~~\n/tmp/aicrypto_tester/test_55dc6238e384437ba565373e7fc01821.cpp:5:9: note: ‘int len’ previously declared here\n    5 |     int len = 0, ciphertext_len = 0;\n      |         ^~~\n/tmp/aicrypto_tester/test_55dc6238e384437ba565373e7fc01821.cpp:36:14: error: redeclaration of ‘int ciphertext_len’\n   36 |     int len, ciphertext_len = 0;\n      |              ^~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_55dc6238e384437ba565373e7fc01821.cpp:5:18: note: ‘int ciphertext_len’ previously declared here\n    5 |     int len = 0, ciphertext_len = 0;\n      |                  ^~~~~~~~~~~~~~\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 4653.56400735199,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_55dc6238e384437ba565373e7fc01821.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_55dc6238e384437ba565373e7fc01821.cpp:36:9: error: redeclaration of ‘int len’\n   36 |     int len, ciphertext_len = 0;\n      |         ^~~\n/tmp/aicrypto_tester/test_55dc6238e384437ba565373e7fc01821.cpp:5:9: note: ‘int len’ previously declared here\n    5 |     int len = 0, ciphertext_len = 0;\n      |         ^~~\n/tmp/aicrypto_tester/test_55dc6238e384437ba565373e7fc01821.cpp:36:",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "label": "AES|CFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 935.4945732869674,
+      "filepath": "generated_code/aes_ofb.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "python"
+      },
+      "label": "AES|OFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1149.520115820982,
+      "filepath": "generated_code/aes_ofb.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      "label": "AES|OFB|c"
+    },
+    {
+      "ok": false,
+      "error": "无法从输出中提取密文。\n程序输出:\n密文: \n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 4898.4723089569015,
+      "filepath": null,
+      "vector_detail": "无法从输出中提取密文。\n程序输出:\n密文: \n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "label": "AES|OFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 979.4579561549472,
+      "filepath": "generated_code/aes_gcm.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "python"
+      },
+      "label": "AES|GCM|python"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c: In function ‘remove_whitespace’:\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:12:14: warning: implicit declaration of function ‘isspace’ [-Wimplicit-function-declaration]\n   12 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:5:1: note: include ‘<ctype.h>’ or provide a declaration of ‘isspace’\n    4 | #include <openssl/evp.h>\n  +++ |+#include <ctype.h>\n    5 | \n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c: In function ‘main’:\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:32:23: warning: passing argument 1 of ‘remove_whitespace’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]\n   32 |     remove_whitespace(plaintext_hex);\n      |                       ^~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:9:30: note: expected ‘char *’ but argument is of type ‘const char *’\n    9 | void remove_whitespace(char *str) {\n      |                        ~~~~~~^~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:33:23: warning: passing argument 1 of ‘remove_whitespace’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]\n   33 |     remove_whitespace(key_hex);\n      |                       ^~~~~~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:9:30: note: expected ‘char *’ but argument is of type ‘const char *’\n    9 | void remove_whitespace(char *str) {\n      |                        ~~~~~~^~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:34:23: warning: passing argument 1 of ‘remove_whitespace’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]\n   34 |     remove_whitespace(iv_hex);\n      |                       ^~~~~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:9:30: note: expected ‘char *’ but argument is of type ‘const char *’\n    9 | void remove_whitespace(char *str) {\n      |                        ~~~~~~^~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:35:23: warning: passing argument 1 of ‘remove_whitespace’ discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]\n   35 |     remove_whitespace(aad_hex);\n      |                       ^~~~~~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:9:30: note: expected ‘char *’ but argument is of type ‘const char *’\n    9 | void remove_whitespace(char *str) {\n      |                        ~~~~~~^~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:73:44: error: ‘aad_len’ undeclared (first use in this function); did you mean ‘aad_hex’?\n   73 |     if (1 != EVP_EncryptUpdate(ctx, NULL, &aad_len, aad, strlen((char *)aad))) {\n      |                                            ^~~~~~~\n      |                                            aad_hex\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:73:44: note: each undeclared identifier is reported only once for each function it appears in\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C实现代码",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 5690.804004847072,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c: In function ‘remove_whitespace’:\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:12:14: warning: implicit declaration of function ‘isspace’ [-Wimplicit-function-declaration]\n   12 |         if (!isspace((unsigned char)*src)) {\n      |              ^~~~~~~\n/tmp/aicrypto_tester/test_25d5142c00734ea4aa79ddcf0d12e91d.c:5:1: note: include ‘<ctype.h>’ or provide a declaration of ‘isspace’\n    4 | #include <openssl/evp.h>\n",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "c"
+      },
+      "label": "AES|GCM|c"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_7b986d69be3d4c93ace1d35527bfa694.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_7b986d69be3d4c93ace1d35527bfa694.cpp:46:9: error: ‘ERR_print_errors_fp’ was not declared in this scope\n   46 |         ERR_print_errors_fp(stderr);\n      |         ^~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_7b986d69be3d4c93ace1d35527bfa694.cpp:53:9: error: ‘ERR_print_errors_fp’ was not declared in this scope\n   53 |         ERR_print_errors_fp(stderr);\n      |         ^~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_7b986d69be3d4c93ace1d35527bfa694.cpp:60:9: error: ‘ERR_print_errors_fp’ was not declared in this scope\n   60 |         ERR_print_errors_fp(stderr);\n      |         ^~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_7b986d69be3d4c93ace1d35527bfa694.cpp:69:9: error: ‘ERR_print_errors_fp’ was not declared in this scope\n   69 |         ERR_print_errors_fp(stderr);\n      |         ^~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_7b986d69be3d4c93ace1d35527bfa694.cpp:78:9: error: ‘ERR_print_errors_fp’ was not declared in this scope\n   78 |         ERR_print_errors_fp(stderr);\n      |         ^~~~~~~~~~~~~~~~~~~\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 5644.60599878605,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_7b986d69be3d4c93ace1d35527bfa694.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_7b986d69be3d4c93ace1d35527bfa694.cpp:46:9: error: ‘ERR_print_errors_fp’ was not declared in this scope\n   46 |         ERR_print_errors_fp(stderr);\n      |         ^~~~~~~~~~~~~~~~~~~\n/tmp/aicrypto_tester/test_7b986d69be3d4c93ace1d35527bfa694.cpp:53:9: error: ‘ERR_print_errors_fp’ was not declared in this scope\n   53 |         ERR_print_errors_fp(stderr);\n      |         ^~~~",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "cpp"
+      },
+      "label": "AES|GCM|cpp"
+    },
+    {
+      "ok": false,
+      "error": "代码执行失败: Traceback (most recent call last):\n  File \"/tmp/aicrypto_tester/test_3884322066464e019e70b68c425eb2ab.py\", line 8, in <module>\n    cipher = AES.new(k, AES.MODE_CTR, counter=AES.Counter(iv))\n                                              ^^^^^^^^^^^\nAttributeError: module 'Crypto.Cipher.AES' has no attribute 'Counter'\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 2251.1040722649777,
+      "filepath": null,
+      "vector_detail": "代码执行失败: Traceback (most recent call last):\n  File \"/tmp/aicrypto_tester/test_3884322066464e019e70b68c425eb2ab.py\", line 8, in <module>\n    cipher = AES.new(k, AES.MODE_CTR, counter=AES.Counter(iv))\n                                              ^^^^^^^^^^^\nAttributeError: module 'Crypto.Cipher.AES' has no attribute 'Counter'\n",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "python"
+      },
+      "label": "AES|CTR|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3134.038403040031,
+      "filepath": "generated_code/aes_ctr.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "c"
+      },
+      "label": "AES|CTR|c"
+    },
+    {
+      "ok": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_3a64eedd47a04b04b70064b5184dca99.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_3a64eedd47a04b04b70064b5184dca99.cpp:36:49: error: cannot convert ‘size_t*’ {aka ‘long unsigned int*’} to ‘int*’\n   36 |     if (1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, len) ||\n      |                                                 ^~~~\n      |                                                 |\n      |                                                 size_t* {aka long unsigned int*}\nIn file included from /tmp/aicrypto_tester/test_3a64eedd47a04b04b70064b5184dca99.cpp:1:\n/usr/include/openssl/evp.h:762:39: note:   initializing argument 3 of ‘int EVP_EncryptUpdate(EVP_CIPHER_CTX*, unsigned char*, int*, const unsigned char*, int)’\n  762 |                                  int *outl, const unsigned char *in, int inl);\n      |                                  ~~~~~^~~~\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C++实现代码",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 5956.824271584046,
+      "filepath": null,
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_3a64eedd47a04b04b70064b5184dca99.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_3a64eedd47a04b04b70064b5184dca99.cpp:36:49: error: cannot convert ‘size_t*’ {aka ‘long unsigned int*’} to ‘int*’\n   36 |     if (1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, len) ||\n      |                                                 ^~~~\n      |                                                 |\n      |                                                 size_t* {",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "cpp"
+      },
+      "label": "AES|CTR|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1270.5683090259554,
+      "filepath": "generated_code/rsa.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "python"
+      },
+      "label": "RSA|RSA|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1212.0822794470005,
+      "filepath": "generated_code/rsa.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "c"
+      },
+      "label": "RSA|RSA|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1374.431551532005,
+      "filepath": "generated_code/rsa.cpp",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "cpp"
+      },
+      "label": "RSA|RSA|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1067.7214465219295,
+      "filepath": "generated_code/sm4_ecb.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "SM4|ECB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1217.730845146929,
+      "filepath": "generated_code/sm4_ecb.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "SM4|ECB|c"
+    },
+    {
+      "ok": false,
+      "error": "代码执行失败: ",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 5190.228788195993,
+      "filepath": null,
+      "vector_detail": "代码执行失败: ",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "SM4|ECB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1041.5451043549692,
+      "filepath": "generated_code/sm4_cbc.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "python"
+      },
+      "label": "SM4|CBC|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1243.1483402960002,
+      "filepath": "generated_code/sm4_cbc.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "label": "SM4|CBC|c"
+    },
+    {
+      "ok": false,
+      "error": "代码执行失败: ",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 5574.739281423041,
+      "filepath": null,
+      "vector_detail": "代码执行失败: ",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "label": "SM4|CBC|cpp"
+    },
+    {
+      "ok": false,
+      "error": "代码执行失败: Traceback (most recent call last):\n  File \"/tmp/aicrypto_tester/test_85ca6988c5cf484a916c393c0e25e669.py\", line 38, in <module>\n    main()\n    ~~~~^^\n  File \"/tmp/aicrypto_tester/test_85ca6988c5cf484a916c393c0e25e669.py\", line 34, in main\n    ciphertext = sm4_cfb_encrypt(plaintext, key, iv)\n  File \"/tmp/aicrypto_tester/test_85ca6988c5cf484a916c393c0e25e669.py\", line 9, in sm4_cfb_encrypt\n    R = bytes.fromhex(iv)\nTypeError: fromhex() argument must be str, not bytes\n",
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "seconds": 2940.8022060410585,
+      "filepath": null,
+      "vector_detail": "代码执行失败: Traceback (most recent call last):\n  File \"/tmp/aicrypto_tester/test_85ca6988c5cf484a916c393c0e25e669.py\", line 38, in <module>\n    main()\n    ~~~~^^\n  File \"/tmp/aicrypto_tester/test_85ca6988c5cf484a916c393c0e25e669.py\", line 34, in main\n    ciphertext = sm4_cfb_encrypt(plaintext, key, iv)\n  File \"/tmp/aicrypto_tester/test_85ca6988c5cf484a916c393c0e25e669.py\", line 9, in sm4_cfb_encrypt\n    R = bytes.fromhex(iv)\nTypeError: fromhex() argument must be str, not bytes\n",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "python"
+      },
+      "label": "SM4|CFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1466.8279082980007,
+      "filepath": "generated_code/sm4_cfb.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "c"
+      },
+      "label": "SM4|CFB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2612.921324283001,
+      "filepath": "generated_code/sm4_cfb.cpp",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "label": "SM4|CFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 704.280133452965,
+      "filepath": "generated_code/sm4_ofb.py",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "python"
+      },
+      "label": "SM4|OFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 5345.843268326018,
+      "filepath": "generated_code/sm4_ofb.c",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "c"
+      },
+      "label": "SM4|OFB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 1403.570732866996,
+      "filepath": "generated_code/sm4_ofb.cpp",
+      "vector_detail": "",
+      "generation_ok": true,
+      "history_skip": false,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "label": "SM4|OFB|cpp"
+    }
+  ],
+  "results_distill": [
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.3671653009951115,
+      "filepath": "generated_code/des_ecb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "DES|ECB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.705745020066388,
+      "filepath": "generated_code/des_ecb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "DES|ECB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 4.202712511993013,
+      "filepath": "generated_code/des_ecb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "DES|ECB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.268736412981525,
+      "filepath": "generated_code/des_cbc.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      "label": "DES|CBC|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.5064559100428596,
+      "filepath": "generated_code/des_cbc.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "label": "DES|CBC|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.934946885914542,
+      "filepath": "generated_code/des_cbc.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "label": "DES|CBC|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.330222084070556,
+      "filepath": "generated_code/des_cfb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      "label": "DES|CFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.55366797093302,
+      "filepath": "generated_code/des_cfb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      "label": "DES|CFB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.1494390880689025,
+      "filepath": "generated_code/des_cfb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "label": "DES|CFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.392516935011372,
+      "filepath": "generated_code/des_ofb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "python"
+      },
+      "label": "DES|OFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.907566067064181,
+      "filepath": "generated_code/des_ofb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      "label": "DES|OFB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.1553794799838215,
+      "filepath": "generated_code/des_ofb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "DES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "label": "DES|OFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.372601735056378,
+      "filepath": "generated_code/aes_ecb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "AES|ECB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.919109613983892,
+      "filepath": "generated_code/aes_ecb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "AES|ECB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.380621154094115,
+      "filepath": "generated_code/aes_ecb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "AES|ECB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.257362689008005,
+      "filepath": "generated_code/aes_cbc.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "python"
+      },
+      "label": "AES|CBC|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.7300116549013183,
+      "filepath": "generated_code/aes_cbc.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "label": "AES|CBC|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.168615087051876,
+      "filepath": "generated_code/aes_cbc.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "label": "AES|CBC|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.323025857913308,
+      "filepath": "generated_code/aes_cfb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "python"
+      },
+      "label": "AES|CFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.535424544941634,
+      "filepath": "generated_code/aes_cfb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      "label": "AES|CFB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.6526363639859483,
+      "filepath": "generated_code/aes_cfb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "label": "AES|CFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.3312157629989088,
+      "filepath": "generated_code/aes_ofb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "python"
+      },
+      "label": "AES|OFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.539530597976409,
+      "filepath": "generated_code/aes_ofb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      "label": "AES|OFB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.9691480840556324,
+      "filepath": "generated_code/aes_ofb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "label": "AES|OFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 108.87536111997906,
+      "filepath": "generated_code/aes_gcm.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "python"
+      },
+      "label": "AES|GCM|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.8055972430156544,
+      "filepath": "generated_code/aes_gcm.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "c"
+      },
+      "label": "AES|GCM|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.1140889109810814,
+      "filepath": "generated_code/aes_gcm.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "cpp"
+      },
+      "label": "AES|GCM|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.4982726990710944,
+      "filepath": "generated_code/aes_ctr.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "python"
+      },
+      "label": "AES|CTR|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.948101492947899,
+      "filepath": "generated_code/aes_ctr.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "c"
+      },
+      "label": "AES|CTR|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.210917011019774,
+      "filepath": "generated_code/aes_ctr.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "cpp"
+      },
+      "label": "AES|CTR|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.196457176003605,
+      "filepath": "generated_code/rsa.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "python"
+      },
+      "label": "RSA|RSA|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.200857573072426,
+      "filepath": "generated_code/rsa.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "c"
+      },
+      "label": "RSA|RSA|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.1948699810309336,
+      "filepath": "generated_code/rsa.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "cpp"
+      },
+      "label": "RSA|RSA|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.2484154580160975,
+      "filepath": "generated_code/sm4_ecb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "python"
+      },
+      "label": "SM4|ECB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.5534984020050615,
+      "filepath": "generated_code/sm4_ecb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "label": "SM4|ECB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.998420214978978,
+      "filepath": "generated_code/sm4_ecb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "label": "SM4|ECB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.3003389720106497,
+      "filepath": "generated_code/sm4_cbc.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "python"
+      },
+      "label": "SM4|CBC|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.5580483090598136,
+      "filepath": "generated_code/sm4_cbc.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "label": "SM4|CBC|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 3.14813724195119,
+      "filepath": "generated_code/sm4_cbc.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "label": "SM4|CBC|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.2670841299695894,
+      "filepath": "generated_code/sm4_cfb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "python"
+      },
+      "label": "SM4|CFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.8186184079386294,
+      "filepath": "generated_code/sm4_cfb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "c"
+      },
+      "label": "SM4|CFB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.575433343066834,
+      "filepath": "generated_code/sm4_cfb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "label": "SM4|CFB|cpp"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.222292187041603,
+      "filepath": "generated_code/sm4_ofb.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "python"
+      },
+      "label": "SM4|OFB|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.857271632994525,
+      "filepath": "generated_code/sm4_ofb.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "c"
+      },
+      "label": "SM4|OFB|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 2.9886475870152935,
+      "filepath": "generated_code/sm4_ofb.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "label": "SM4|OFB|cpp"
+    }
+  ],
+  "merged": [
+    {
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "python",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "c",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "ECB",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "c",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "CBC",
+      "language": "cpp",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "CFB",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "python",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "c",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "DES",
+      "mode": "OFB",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "ECB",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "ECB",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "ECB",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "CBC",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "CBC",
+      "language": "c",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "CBC",
+      "language": "cpp",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "CFB",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "CFB",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "CFB",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "OFB",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "OFB",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "OFB",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "GCM",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "GCM",
+      "language": "c",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "GCM",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "CTR",
+      "language": "python",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "CTR",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "AES",
+      "mode": "CTR",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "RSA",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "RSA",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "RSA",
+      "language": "cpp",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "ECB",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "ECB",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "ECB",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "CBC",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "CBC",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "CBC",
+      "language": "cpp",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "CFB",
+      "language": "python",
+      "ftpr_baseline": false,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "CFB",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "CFB",
+      "language": "cpp",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "OFB",
+      "language": "python",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "OFB",
+      "language": "c",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    },
+    {
+      "algorithm": "SM4",
+      "mode": "OFB",
+      "language": "cpp",
+      "ftpr_baseline": true,
+      "ftpr_distill": true
+    }
+  ]
+}

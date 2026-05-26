@@ -1,0 +1,10 @@
+# 豆包 · DES-CBC
+supplement: |
+  DES-CBC：K/IV 各 **8 字节**（各 **16 hex**），明文 **16 字节（32 hex）**；`C1 = E_K(P1 ⊕ IV)`，`C2 = E_K(P2 ⊕ C1)`；**无 PKCS**（OpenSSL 须在首次 Update 前 **`EVP_CIPHER_CTX_set_padding(ctx,0)`**）。
+  **自测 golden：** **`5EB15B91506B9AE7CEB65954AE115E03`**（与 PyCryptodome / test_data 一致）。
+
+c: |
+  **禁止** `#define 8 8`、`#define 8 8 // DES块大小为8字节`、`#define 8 8 // 8字节(64位)`；一律 **`#define DES_BLOCK_BYTES 8`**。
+  三元运算必须 **`cond ? a : b`**，禁止 `(i==n-1) len%8 : 8`。
+  **`hex_to_bytes`：** 十六进制字母转数值须 **`+ 10`**（整数字面量），**禁止** **`+ a10`**（未声明标识符）。
+  **S 盒：** 仅整数常量，**禁止** `"6"` 等字符串初始化 `int` 数组。

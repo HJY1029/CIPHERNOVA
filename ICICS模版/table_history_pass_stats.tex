@@ -1,0 +1,23 @@
+% 数据来源：仓库根目录 code_history.db，表 code_history，条件 test_success=1（与 test_data.yaml 标准向量评测一致的成功入库记录）。
+\begin{table}[htbp]
+  \centering
+  \caption{密码学代码生成数据集统计（3095 条；按算法与语言分布）}
+  \label{tab:dataset_stats}
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{p{0.12\textwidth}
+    >{\centering\arraybackslash}p{0.16\textwidth}
+    >{\centering\arraybackslash}p{0.30\textwidth}
+    >{\centering\arraybackslash}p{0.30\textwidth}
+    }
+    \toprule
+    算法 & 测试用例数 & 语言分布 (C/C++/Python) & 标准测试向量来源 \\
+    \midrule
+    DES       & 2520 & 697/693/1130 & FIPS 46-3 \\
+    AES       & 335  & 102/116/117  & FIPS 197 \\
+    SM4       & 184  & 60/63/61     & GM/T 0002-2012 \\
+    RSA       & 56   & 19/19/18     & FIPS 186-4 \\
+    \midrule
+    合计      & 3095 & 878/891/1326 & -- \\
+    \bottomrule
+  \end{tabular}
+\end{table}

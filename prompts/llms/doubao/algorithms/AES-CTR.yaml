@@ -1,0 +1,16 @@
+# 豆包 · AES-CTR（test_data modes.CTR，与默认 AES 向量不同）
+supplement: |
+  **必须使用 `test_data.yaml` → `AES.modes.CTR` 的明文/密钥/计数器（iv 字段）**，不要用默认 AES 段的 32 字节明文向量。
+  **自测 golden：** 按 CTR 段：密文须为 **`874D6191B620E3261BEF6864990DB6CE9806F66B7970FDFF8617187BB9FFFDFF5AE4DF3EDBD5D35E5B4F09020DB03EAB1E031DDA2FBE03D1792170A0F3009CEE`**（128 hex = 64 字节）。
+
+python: |
+  读 **`test_data` → `AES.modes.CTR`** 的明文/密钥/IV（**勿**用默认 AES 段 32B 向量）。
+  `AES.new(key, AES.MODE_CTR, nonce=iv16)`（与 PyCryptodome 计数器语义一致）；**`print("密文:", ct.hex())`**（本测 **128 hex**）。
+
+c: |
+  **IV 长度：** **`AES.modes.CTR`** 为 **16 字节（32 hex）**；**禁止**按 GCM 只用 **12** 字节。
+  **`EVP_aes_128_ctr()`** + **`set_padding(0)`**；输出缓冲 ≥ 明文长；**禁止** `#define 8 8`。
+  golden：**`874D6191B620E3261BEF6864990DB6CE…`**（128 hex）。
+
+cpp: |
+  同 C：**`EVP_aes_128_ctr()`**；**16B IV**；**`printf("密文: ");`** + 连续 hex（总长 **128 hex**）。

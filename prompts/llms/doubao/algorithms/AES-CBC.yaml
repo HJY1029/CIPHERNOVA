@@ -1,0 +1,19 @@
+# 豆包 · AES-128-CBC（test_data 默认 AES 向量）
+supplement: |
+  AES-128-CBC：密钥 / IV 各 **32 hex（16 字节）**；明文 **64 hex（32 字节）**；**`EVP_CIPHER_CTX_set_padding(ctx, 0)`** 与 test_data 一致。
+  **自测 golden（前缀）：** **`9B0048990511252F5E1088663F8CB038A21952EAC6D2C27546369FCA0136BF04`**（64 hex）。
+  **禁止** 手搓 `MixColumns`/`xtime`；**禁止** `#define 8` / `#define 16 16`；块长用 **`AES_BLOCK_BYTES 16`**。
+  **禁止** 把教材句子 ASCII 再 hex 当密文；**必须** `EVP_EncryptUpdate`/`Final` 写入缓冲后打印。
+
+python: |
+  `import os` → `from Crypto.Cipher import AES`；`key/iv/pt = bytes.fromhex(os.getenv(...).strip())`。
+  **`cipher = AES.new(key, AES.MODE_CBC, iv)`** → `encrypt`；**只** `print("密文:", ciphertext.hex())`（**64 hex**）。**禁止** `input()`。
+
+c: |
+  **`EVP_aes_128_cbc()`** + **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**；**16B key + 16B IV**。
+  **`Init_ex` → `EncryptUpdate`（全长明文）→ `Final`**；按 **`ciphertext_len`** 打印 **`密文:`** + 连续 **`%02x`** + **`fflush(stdout)`**。
+  **禁止** `#define 8 8`；**禁止** 未初始化缓冲当密文；**禁止** `Init` 失败后静默 `return` 无输出。
+
+cpp: |
+  与 **C** 相同：**`EVP_aes_128_cbc()`** + **`set_padding(0)`**；**`std::vector<unsigned char>`** 传 Update 时用 **`.data()`** / **`.size()`**。
+  **`printf("密文: ");`** + 连续 hex；golden 前缀 **`9B004899…`**。

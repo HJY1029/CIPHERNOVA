@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}代码模板库 - 织密新星 (CipherNova){% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>📋 代码模板库</h1>
+        <p>保存常用代码模板，快速重用</p>
+    </div>
+    <div class="content">
+        <div id="status" class="status"></div>
+        
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <button type="button" class="btn btn-secondary" onclick="saveTemplate()">保存新模板</button>
+            <button type="button" class="btn btn-secondary" onclick="loadTemplates()">刷新列表</button>
+        </div>
+        
+        <div id="templatesList"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function saveTemplate() {
+        const name = prompt('请输入模板名称：');
+        if (!name) return;
+        
+        const code = prompt('请输入代码：');
+        if (!code) return;
+        
+        const language = prompt('请输入编程语言（python/c/cpp）：', 'python');
+        const algorithm = prompt('请输入算法（可选）：', '');
+        const mode = prompt('请输入模式（可选）：', '');
+        
+        const template = {
+            name: name,
+            code: code,
+            language: language,
+            algorithm: algorithm,
+            mode: mode,
+            timestamp: new Date().toISOString()
+        };
+        
+        let templates = JSON.parse(localStorage.getItem('codeTemplates') || '[]');
+        templates.push(template);
+        localStorage.setItem('codeTemplates', JSON.stringify(templates));
+        
+        showStatus('模板已保存', 'success');
+        loadTemplates();
+    }
+
+    function loadTemplates() {
+        const templates = JSON.parse(localStorage.getItem('codeTemplates') || '[]');
+        const listDiv = document.getElementById('templatesList');
+        
+        if (templates.length === 0) {
+            listDiv.innerHTML = '<p style="color: #666; padding: 20px; text-align: center;">暂无保存的模板</p>';
+            return;
+        }
+        
+        listDiv.innerHTML = templates.map((template, index) => `
+            <div style="background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 8px; padding: 15px; margin: 10px 0; cursor: pointer; transition: all 0.2s;" 
+                 onmouseover="this.style.background='#e9ecef'; this.style.transform='translateX(5px)'" 
+                 onmouseout="this.style.background='#f8f9fa'; this.style.transform='translateX(0)'"
+                 onclick="viewTemplate(${index})">
+                <div style="font-weight: 600; margin-bottom: 5px;">${escapeHtml(template.name)}</div>
+                <div style="font-size: 0.85em; color: #666;">
+                    ${template.algorithm || '未知'} ${template.mode || ''} - ${template.language} | 
+                    ${new Date(template.timestamp).toLocaleString()}
+                </div>
+                <button onclick="event.stopPropagation(); deleteTemplate(${index})" 
+                        style="float: right; background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
+                    删除
+                </button>
+            </div>
+        `).join('');
+    }
+
+    function viewTemplate(index) {
+        const templates = JSON.parse(localStorage.getItem('codeTemplates') || '[]');
+        const template = templates[index];
+        
+        if (template) {
+            alert(`模板代码：\n\n${template.code.substring(0, 500)}${template.code.length > 500 ? '...' : ''}`);
+        }
+    }
+
+    function deleteTemplate(index) {
+        if (!confirm('确定要删除这个模板吗？')) return;
+        
+        let templates = JSON.parse(localStorage.getItem('codeTemplates') || '[]');
+        templates.splice(index, 1);
+        localStorage.setItem('codeTemplates', JSON.stringify(templates));
+        loadTemplates();
+        showStatus('模板已删除', 'success');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadTemplates();
+    });
+</script>
+{% endblock %}
+

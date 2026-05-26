@@ -1,0 +1,107 @@
+# scripts/run_qwen_batch_sm4.py — Qwen 批量失败（仅 SM4）
+# started_utc: 2026-05-20T14:21:47.205685+00:00
+# provider: qwen_coder_local
+# results_json: /mnt/d/aicrypto-helper/experiments/results/qwen_batch_SM4_20260520T142147Z.json
+# configs_count: 8
+# since: 2026-05-04
+# only_pending: True
+# pending_stats: {'input': 12, 'pending': 8, 'no_record': 8, 'retest_fail': 0, 'retest_pass_skip': 4, 'skip_disabled': 0}
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-21T07:18:29.601679+00:00
+provider: qwen_coder_local
+case_id: sm4-cbc-cpp
+config: {"algorithm": "SM4", "mode": "CBC", "language": "cpp"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: /tmp/aicrypto_tester/test_2098805d8c0e43e6b30b28b1cfcaf901.cpp: In function ‘int main()’:
+/tmp/aicrypto_tester/test_2098805d8c0e43e6b30b28b1cfcaf901.cpp:15:28: error: ‘strlen’ was not declared in this scope
+   15 |     size_t plaintext_len = strlen(reinterpret_cast<const char*>(plaintext));
+      |                            ^~~~~~
+/tmp/aicrypto_tester/test_2098805d8c0e43e6b30b28b1cfcaf901.cpp:3:1: note: ‘strlen’ is defined in header ‘<cstring>’; did you forget to ‘#include <cstring>’?
+   
+error:
+编译失败: /tmp/aicrypto_tester/test_2098805d8c0e43e6b30b28b1cfcaf901.cpp: In function ‘int main()’:
+/tmp/aicrypto_tester/test_2098805d8c0e43e6b30b28b1cfcaf901.cpp:15:28: error: ‘strlen’ was not declared in this scope
+   15 |     size_t plaintext_len = strlen(reinterpret_cast<const char*>(plaintext));
+      |                            ^~~~~~
+/tmp/aicrypto_tester/test_2098805d8c0e43e6b30b28b1cfcaf901.cpp:3:1: note: ‘strlen’ is defined in header ‘<cstring>’; did you forget to ‘#include <cstring>’?
+    2 | #include <openssl/evp.h>
+  +++ |+#include <cstring>
+    3 | 
+
+
+提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。
+解决方案：
+1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）
+2. 或者要求LLM生成不依赖OpenSSL的纯C++实现代码
+total_ms: 35500512
+generated_filename: sm4_cbc.cpp
+generated_code:
+```
+#include <iostream>
+#include <openssl/evp.h>
+
+int main() {
+    const char* plaintext_env = std::getenv("TEST_PLAINTEXT");
+    const char* key_env = std::getenv("TEST_KEY");
+    const char* iv_env = std::getenv("TEST_IV");
+
+    if (!plaintext_env || !key_env || !iv_env) {
+        std::cerr << "Environment variables TEST_PLAINTEXT, TEST_KEY, and TEST_IV must be set." << std::endl;
+        return 1;
+    }
+
+    const unsigned char* plaintext = reinterpret_cast<const unsigned char*>(plaintext_env);
+    size_t plaintext_len = strlen(reinterpret_cast<const char*>(plaintext));
+
+    const unsigned char* key = reinterpret_cast<const unsigned char*>(key_env);
+    const unsigned char* iv = reinterpret_cast<const unsigned char*>(iv_env);
+
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) {
+        std::cerr << "Failed to create cipher context." << std::endl;
+        return 1;
+    }
+
+    if (1 != EVP_EncryptInit_ex(ctx, EVP_sm4_cbc(), NULL, key, iv)) {
+        std::cerr << "Failed to initialize encryption." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+
+    unsigned char ciphertext[plaintext_len + EVP_CIPHER_block_size(EVP_sm4_cbc())];
+    int len = 0;
+
+    if (1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len)) {
+        std::cerr << "Failed to encrypt data." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+
+    int ciphertext_len = len;
+
+    if (1 != EVP_EncryptFinal_ex(ctx, ciphertext + len, &len)) {
+        std::cerr << "Failed to finalize encryption." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+
+    ciphertext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    std::cout << "密文: ";
+    for (size_t i = 0; i < ciphertext_len; ++i) {
+        printf("%02x", ciphertext[i]);
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+

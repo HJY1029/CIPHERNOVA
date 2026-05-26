@@ -1,0 +1,51 @@
+# DES-ECB模式的C语言特定内容
+c_specific: |
+  **【仅加密评测 · 禁止解密演示】** 标准测试**只比对加密输出的 hex**。请**不要**生成 `decrypt`/`EVP_DecryptInit_ex`/`EVP_DecryptUpdate`/`EVP_DecryptFinal_ex`，不要 `printf("解密`/`解密后明文`。`main` 在 **`printf("密文: ");` … hex … `fflush(stdout); return 0;`** 结束即可。**禁止**在 `encrypt`/`main` 第一个完整 `}` 之后遗留半段解密代码（会导致 **`expected identifier or '(' before '}'`**）。若用 OpenSSL 且调用 **`ERR_print_errors_fp`**，须 **`#include <openssl/err.h>`**。
+  **`getenv` / 缓冲区：** 需要从 stdin 读入 hex 时，缓冲区必须是 **`char buf[N]`**；**禁止** `const char *t = getenv("TEST_PLAINTEXT");` 再对 **`t`** 做 `strcspn(...) = '\\0'` 等写入（→ **`assignment of read-only location`**）。可复制到 **`char writable[256]; strncpy(writable, t, ...)`** 再处理。
+  **【编译铁律 · 豆包/评测高频】** `#define` 宏名必须是合法标识符。**禁止** `#define 8`、`#define 8 8`、`#define 8 8 // DES块大小为8字节`（`//` 不能使数字变成合法宏名 → `macro names must be identifiers`）。请使用 **`#define DES_BLOCK_BYTES 8`** 或 **`enum { DES_BLK = 8 };`**。
+
+  **使用OpenSSL库的实现要求（C语言）：**
+  1. **`hex_to_bytes`** - 将十六进制字符串转换为字节数组（必须实现！）
+  2. **`main`** - 主函数（必须完整实现！包括：读取环境变量、转换输入、调用OpenSSL函数进行ECB加密、输出密文、return 0）
+  3. **必须使用OpenSSL函数：**
+     - ✅ **正确：包含 `#include <openssl/evp.h>` 和 `#include <openssl/provider.h>`**
+     - ✅ **正确：在main函数开始时加载legacy provider（OpenSSL 3.0需要）：**
+       ```c
+       OSSL_PROVIDER *legacy = OSSL_PROVIDER_load(NULL, "legacy");
+       if (!legacy) {
+           fprintf(stderr, "无法加载legacy provider\n");
+           return 1;
+       }
+       ```
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_des_ecb()` 获取DES-ECB密码对象（会自动尝试legacy provider）**
+     - ✅ **重要：只输出实际加密的数据长度（使用 `ciphertext_len`），不要输出整个缓冲区！**
+     - ❌ **错误：不要使用 `DES_set_key()`、`DES_ncbc_encrypt()`（OpenSSL 3.0已弃用）**
+  4. **编译命令：`gcc -o program program.c -lssl -lcrypto`**
+  
+  **输出长度控制（C语言）：**
+  - ✅ **正确示例（C）：**
+    ```c
+    int len;
+    int ciphertext_len = 0;
+    unsigned char *ciphertext = malloc(plaintext_len + 8);  // 预留填充空间
+    
+    EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);
+    ciphertext_len = len;  // 第一次加密的长度
+    
+    EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
+    ciphertext_len += len;  // 总长度 = Update长度 + Final长度
+    
+    // 只输出 ciphertext_len 长度的数据！
+    printf("密文: ");
+    for (int i = 0; i < ciphertext_len; i++) {  // 使用 ciphertext_len，不是数组大小！
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+    free(ciphertext);
+    ```
+  - ❌ **错误示例（绝对禁止）：**
+    - `for (int i = 0; i < sizeof(ciphertext); i++) { ... }`（会输出整个缓冲区）
+    - `for (int i = 0; i < plaintext_len + 8; i++) { ... }`（会输出额外的8字节）
+    - **关键：`ciphertext_len` 是 `EVP_EncryptUpdate()` 和 `EVP_EncryptFinal_ex()` 返回的长度之和，这是实际加密的数据长度！**
+

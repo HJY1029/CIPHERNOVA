@@ -1,0 +1,80 @@
+# 批量 9 槽之无 DB：DES|cfb|cpp
+generate_pin_cpp: |
+  **DES|cfb|cpp（无 DB）：** 只提交下方 **cpp:** fenced 源码；**legacy** + **`EVP_des_cfb8()`**；**禁止空 `des_encrypt(){}`**；缓冲名 **`out`**；golden **`f70f0158`**。
+
+mandatory: |
+  **DES-CFB-8 only**：**`EVP_des_cfb8()`** + **legacy** + **`set_padding(0)`**。
+  明文 **16B** → 密文 **32 hex**；**golden：`f70f0158…`**
+  **禁止：** 空 **`des_encrypt(){}`**、**ECB 伪 CFB**、**`DES_cfb64`**（64-bit CFB）。
+
+supplement: |
+  **`des-cfb-cpp`：** 空函数 → **`808ce3ff…`**。**`des-cfb-c`：** **`ciphertext` 变量冲突** → 用 **`out`/`ct_buf`**。
+  **日志 des-cfb-cpp（2026-05-13）：** 手写 **hex_string_to_bytes/malloc** → **invalid conversion void\***；须照抄 **stdio C 骨架**（**禁止** C++ 风格 malloc 辅助函数）。
+
+python: |
+  **`DES.new(k,DES.MODE_CFB,iv=iv,segment_size=8)`**；**`print("密文:", ct.hex().lower())`**
+
+c: |
+  **【DES|cfb|c】照抄骨架（cipher=`EVP_des_cfb8()`）：**
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  #include <openssl/provider.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    OSSL_PROVIDER_load(NULL,"legacy");
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;strip(ph);strip(kh);strip(ih);
+    unsigned char pt[16],key[8],iv[8],out[32];
+    if(strlen(ph)!=32||strlen(kh)!=16||strlen(ih)!=16)return 1;
+    if(h2b(ph,pt,16)||h2b(kh,key,8)||h2b(ih,iv,8))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    EVP_EncryptInit_ex(ctx,EVP_des_cfb8(),NULL,key,iv);
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;EVP_EncryptUpdate(ctx,out,&o1,pt,16);EVP_EncryptFinal_ex(ctx,out+o1,&o2);
+    printf("密文: ");for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);printf("\n");
+    EVP_CIPHER_CTX_free(ctx);return 0;}
+  ```
+  **禁止** 与 **`char *ciphertext`** 同名的数组。
+
+cpp: |
+  **【DES|cfb|cpp · 无 DB 落库】照抄：**
+  ```cpp
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  #include <openssl/provider.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    OSSL_PROVIDER_load(NULL,"legacy");
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;strip(ph);strip(kh);strip(ih);
+    unsigned char pt[16],key[8],iv[8],out[32];
+    if(strlen(ph)!=32||strlen(kh)!=16||strlen(ih)!=16)return 1;
+    if(h2b(ph,pt,16)||h2b(kh,key,8)||h2b(ih,iv,8))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    EVP_EncryptInit_ex(ctx,EVP_des_cfb8(),NULL,key,iv);
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;EVP_EncryptUpdate(ctx,out,&o1,pt,16);EVP_EncryptFinal_ex(ctx,out+o1,&o2);
+    printf("密文: ");for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);printf("\n");
+    EVP_CIPHER_CTX_free(ctx);return 0;}
+  ```
+  **禁止** 空 **`des_encrypt(){}`**；缓冲名 **`out`**（勿 **`ciphertext`** 冲突）。
+
+test_feedback_improve: |
+  **DES-CFB-8：** **`EVP_des_cfb8`**（非 cfb64）；golden **`f70f0158`**；明文 **32 hex**
+
+test_feedback_improve_c: |
+  勿 **DES_ecb** 伪 CFB；**`EVP_des_cfb8`**；**`out`** 勿与 **`char*ciphertext`** 冲突；**`密文:`**
+
+test_feedback_improve_cpp: |
+  **无 DB · des-cfb-cpp · 日志：** 删 **des_encrypt/des_cfb_encrypt/malloc 辅助**（**invalid conversion void\***）；整文件照抄 **cpp:** **≤45 行** EVP 骨架；**legacy** + **`EVP_des_cfb8`**；**h2b**；**`out` 缓冲**；golden **`f70f0158`**；**`printf("密文: ");`**

@@ -1,0 +1,19 @@
+# OpenAI · DES-CFB
+supplement: |
+  **致命：** 若 stdout **整行**在 **`密文:`** 之后不是纯 **hex**（而是整句中文/英文提示、照抄题面或评测说明）→ 评测 **无法提取**，必败。**禁止**把任何「说明句」当密文输出；**正确**仅为 **`printf("密文: ");`** + **`%02x`**，**`密文:` 后只能 0-9a-f**。
+  评测须见 **`密文:`** + hex。golden（PyCryptodome 8 位段 CFB，与 test_data 一致）：**`F70F01584ACF4D966ADC143EB240C962`**（**32 hex = 16 字节密文**；明文亦为 **16 字节**）。
+  **整段明文回显错例：** **`4e6574776f726b205365637572697479`** = 与 **`TEST_PLAINTEXT` 完全相同** → **未走 `EVP_des_cfb8` 写密文、直接打印了明文 hex**；须与 golden **`F70F01…`** 不同。
+  **错串 **`4f6475766e736a215264627473687578`**：** 与 golden 无关；**且若程序输出无 `密文:` 前缀**（仅一行 hex）→ 评测易失败，**必须** `printf("密文: ");` 再 **`%02x`**（**禁止**只 `puts`/`printf` 纯 hex 行）。
+
+c: |
+  **截断错例（编译零分）：** `permuted_key[i] = key_bin[PC1[i] - 1` 行末缺 **`]`**、表达式未闭合 → **`expected ']' at end of input`**；**禁止**在 `generate_keys`/`PC1` 等手搓路径上截断 —— **整文件只用** **`EVP_des_cfb8()`** + legacy，**不要**自写 PC1/子密钥表。
+  **禁止**出现 **`des_encrypt_block`** / **`expansion_permutation`** / **`feistel`** 等手搓 DES 符号 —— 极易在 **`expansion_permutation(right, expanded_right);`** 处**文件截断** → **`expected declaration or statement at end of input`**。**整文件只允许 OpenSSL EVP：** **`EVP_des_cfb8()`**，**不得**实现 DES 轮函数。
+  **禁止**在 **`generate_subkeys`/`PC2`** 等处留下**截断的位移表达式**（如 **`>> (7 -`** 无右操作数）→ **`expected expression at end of input`**；**宁可只用 `EVP_des_cfb8()` 完整路径**，也不要半套手搓密钥编排。
+  **无输出 = 评测失败：** 必须从 **`getenv("TEST_PLAINTEXT")`/`TEST_KEY`/`TEST_IV`** 读入（勿 **`scanf`/无限 `getchar`**）；`main` 末尾必须 **`printf("密文: ");`** … **`printf("\n"); fflush(stdout); return 0;`**。**禁止** 仅 `stderr` 提示而 **stdout 无 `密文:`**。**禁止**在 **`密文:`** 后打印**题面/评测说明整句**（CFB 与 AES 任务同禁）。
+  **`main` 内先声明再使用：** `int len = 0, ciphertext_len = 0;` `unsigned char *ciphertext = malloc(plaintext_len);`（或等价栈数组），**然后** `EVP_EncryptUpdate`/`Final`，**再** `for (i=0;i<ciphertext_len;i++) printf("%02x",ciphertext[i]);`。**禁止** `ciphertext`/`ciphertext_len` 未声明就打印。
+  **绝对禁止**自写 **`des_encrypt_block`/`sbox_output[4]`** 手搓 DES（易在 **`unsigned char sbox_output[4] = {0};`** 前截断 → **编译失败**）。**只用** **`EVP_des_cfb8()`** + legacy + **`set_padding(0)`** 完成 golden **`F70F01584ACF4D966ADC143EB240C962`**。
+  **长度：** 若密文只有 **16 hex（8 字节）**如 **`190c181b06130673`**，多为 **`EncryptUpdate` 只处理了 8 字节**、误用 **`EVP_des_cfb1`**、或未把 **整段 `plaintext_len`** 送入 Update/Final — **须输出与明文等长的 32 hex**。
+  **禁止**把 **明文 hex** 当密文输出。若得到 **`4f6475766e736a215264627473687578`**（与 golden **`F70F0158…`** 无关）→ **仍非 8 位 CFB**：须 **`EVP_des_cfb8()`** + **`EncryptUpdate` 一次传入 `plaintext` 与完整 `plaintext_len`**，**禁止** `EVP_des_cfb64`/`EVP_des_ofb` 冒充 CFB。
+  **全 `0` 错例 **`00000000000000000000000000000000`**：** 与 golden **`F70F0158…`** 完全不符 → **未向 `out` 写入**、**`ciphertext_len` 恒 0 仍打印**、**`Update` 未执行** 或 **legacy/ctx 未初始化**；须检查 **`OSSL_PROVIDER_load` + `EVP_des_cfb8` + 返回值**。
+  **`hex` 解码：** **禁止** `if (c >= 'A' and c <= 'F')`、`while (*hex and num_bytes < …)`（Python **`and`** → C 须 **`&&`**），否则报 **`expected ')' before 'and'`**（评测亦可能对 `*ptr and id` 自动替换）。
+  **禁止** `#define 8`。

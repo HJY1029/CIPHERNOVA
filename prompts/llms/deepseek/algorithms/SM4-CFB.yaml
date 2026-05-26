@@ -1,0 +1,9 @@
+supplement: |
+  SM4-CFB-128：密钥 **32 hex**、IV **32 hex**，块 128 位。优先 **`EVP_sm4_cfb128()`**，Update 前 **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**。
+  若报错「8 bytes」或 **"DES key must be 8 bytes"**，属把 **DES 校验**套到 SM4；须 **32 hex → 16 字节** 密钥与 IV。
+  **模式语义：** keystream = `E_K(寄存器)`，`C = P ⊕ keystream`，**下一寄存器 = 密文块 C**（勿用 OFB 的 R←O）。
+  **自测 golden（test_data，16 字节明文向量）：** **`2754B10C806AEF23698989882D80903A`**（可与 `openssl enc -sm4-cfb -nopad` 对照）。
+
+c: |
+  **禁止**按 8 字节解析密钥；**禁止**错误信息中出现 **DES** / **"DES key"**。
+  校验：`TEST_KEY`/`TEST_IV` hex 各 **32** 字符（或解码后各 **16** 字节）。**`EVP_sm4_cfb128()`**；不可用时手写 CFB-128 状态机，语义同上。

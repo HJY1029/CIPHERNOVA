@@ -1,0 +1,18 @@
+# Claude · AES-GCM（compact 上下文下仍须把 AAD 写死讲清）
+supplement: |
+  评测向量见 `test_data.yaml` → `AES.modes.GCM`：**AES-256**、nonce **12 字节**（`TEST_IV` 24 hex）、**AAD 固定 16 字节**。
+  **诊断：** 密文 `F7264413A84C0E7CD536867EB9F21736` 已正确但 tag 非 `67BA0510262AE487D737EE6298F77E0C` → **AAD 未传入或字节与向量不一致**（与「漏 tag」不同，此处 tag 长度对但值错）。
+
+python: |
+  `aad = bytes.fromhex(os.getenv("TEST_AAD", "4D23C3CEC334B49BDB370C437FEC78DE").strip())`
+  PyCryptodome：`cipher = AES.new(key, AES.MODE_GCM, nonce=nonce); cipher.update(aad); ct, tag = cipher.encrypt_and_digest(plaintext)`；打印 **`(ct + tag).hex()`**。
+  **禁止**在 `update(aad)` 之前 `encrypt`，**禁止**省略 `update`（否则 tag 必错）。
+
+c: |
+  `EVP_aes_256_gcm()`；**在明文 Update 之前**：对 AAD 调用 `EVP_EncryptUpdate(ctx, NULL, &len, aad, (int)aad_len)`，其中 `aad_len == 16`，`aad` 为上述 hex 解码结果（或从 `TEST_AAD` 读入后解码）。
+  再 Update 明文 → Final_ex → `EVP_CIPHER_CTX_ctrl(..., EVP_CTRL_GCM_GET_TAG, 16, tag)`；输出 hex(ct)∥hex(tag)。
+
+cpp: |
+  **须写 AAD：** `std::getenv("TEST_AAD")` → hex 解码得 `std::vector<unsigned char> aad`（长度 16）。
+  **顺序：** `EVP_EncryptUpdate(ctx, nullptr, &len, aad.data(), (int)aad.size());` → 再明文 `EVP_EncryptUpdate(ctx, out, &len, pt, ptlen);` → `EncryptFinal_ex` → `EVP_CTRL_GCM_GET_TAG`。
+  详细顺序与片段见 **`prompts/algorithms/cpp/AES-GCM.yaml`**（已强制 AAD Update）；**nonce 12 字节**（`TEST_IV` 24 hex）。输出 **64 hex** = ct∥tag。

@@ -1,0 +1,20 @@
+# OpenAI · AES-CFB-128
+supplement: |
+  标准测试为 **CFB-128**。**自测 golden（32B 明文）：** **`EAC2DD6334E8FA07FDAB477ABA1628A93AFAAAD753B7E05CD59548A2927BDA97`**。
+  **`TEST_KEY`/`TEST_IV`：** 各 **32 hex → 16 字节（AES-128）**。**禁止** stderr：**`错误：DES密钥必须为8字节（16个十六进制字符）`**、**`错误：DES密钥长度必须为8字节（64位)`**、**`key must be exactly 8 bytes (16 hex chars) for DES`**、**`DES key must…`** —— 本题 **仅** **`EVP_aes_128_cfb128`**；**禁止** 中文 **「DES密钥」**、英文 **`for DES`**。密文错（如 **`fa8019a9…`**）常伴随误校验。
+  **全 0 密文**（**64 个 0**）= **`EVP_EncryptUpdate` 未写入、`ciphertext_len` 未累加**，或未把 keystream 与明文 XOR；评测必败。
+  **错例：** **`43727970746f67726170687920616e64204e6574776f726b5365637572697479`** = 把 **ASCII/明文再转 hex** 当密文，**与 golden 完全不符**。
+
+c: |
+  **本题是 AES CFB-128，禁止**粘贴 **DES** 的 **`IP`/`FP`/`S_BOX`/`PC1`** 或手写 Feistel（批量评测曾把 AES-CFB 整文件写成 DES → 向量必败）。**唯一**主路径：**`EVP_aes_128_cfb128()`** + **`EVP_CIPHER_CTX_set_padding(ctx,0)`**。
+  **`main` 内：** **`int len`**、**`ciphertext_len`** **只声明一次**；两段 **`EVP_EncryptUpdate`/`Final`** **共用**同一组变量或改用 **`outl`/`u_len`**，**禁止**在中间再次 **`int len`**（→ **`redeclaration of 'len'`**）。
+  **禁止**调用 **`des_cfb_encrypt`** / **`DES_cfb_encrypt`** / 任意 **`des_*`**（→ **`implicit declaration` / `undefined reference to des_cfb_encrypt`**）。
+  **禁止**在 **`substitution`/`shift_rows`** 等处输出 **`col |= ((input[(i *`** 并在下一行结束文件 → **`expected expression at end of input`**。**本题仅用 **`EVP_aes_128_cfb128()`** + **`set_padding(0)`** + **`EncryptUpdate`/`Final`**，**禁止**手搓 AES 状态表。**无输出 = 评测失败：** **`getenv("TEST_*")`** → **`EVP_aes_128_cfb128`** → **`printf("密文: ");`** + hex + **`printf("\n"); fflush(stdout); return 0;`**。**stdout 须含 `密文`/`ciphertext`**；**禁止** `scanf`/`getchar`、**禁止**所有成功路径在 **`printf("密文:")` 前 `return`**。
+  **说明：** 若误把**题面/报错里的长句**写进 **`printf`/`sprintf` 格式串**，评测端会尝试清洗，**但仍须**后续 **`%02x`** 打印 **EVP 缓冲中的字节**，否则仍失败。
+  **必须用** **`EVP_aes_128_cfb128()`**（**禁止** `EVP_aes_256_cfb128`、`cfb64`、`cfb8` 却仍期望本测 golden）。**`EVP_CIPHER_CTX_set_padding(ctx,0)`**。**密钥校验：** 解码后 **`key_len==16`**；**禁止** **`key_len==8`** / **`!=8`**；**禁止** stderr 含 **`DES`** / **`for DES`** / **「十六进制字符」**（当与 **8 字节密钥** 绑定时）。
+  **「无法提取密文」：** **禁止**在 **`密文:`** 后输出**任何**中文说明、引号包裹的提示词或评测报错摘录（模型极易照抄）。**`密文:` 后只能 **0-9a-f**。正确：** **`printf("密文: ");`** 再 **`%02x`** 循环；禁止 **sprintf(buf,"…整句中文…")** 当密文行。
+  `EVP_EncryptInit_ex` 传入 **16 字节 IV**（**`TEST_IV` 32 hex**）；`Update`/`Final` 后按 **`ciphertext_len`** 打印。
+  **golden 前缀：** **`EAC2DD63…`**。若得到 **`13001c1e000604177270746720676a73523e111357081818015b726625616c61`**、**`fa8019a9…`**、**`22c63471…`/`ca9a7217…`** 等与 golden 几乎全不符，多为 **手搓/错密钥流**、**密钥按 DES 只解 8 字节**、**`EVP_aes_256_cfb128`**、**非 cfb128**、**IV 长度错**、或 **未一次 `Update` 全明文**。
+  **全 `0` 密文** = 未 **`EncryptUpdate`**。**禁止**把明文当 ASCII 拼 hex（曾出现 **`42737871…`**）。
+  **禁止**把 **任意英文句子的 UTF-8/ASCII 字节再 `.hex()`** 当密文（会得到 **`43727970746f67726170687920616e64204e6574776f726b5365637572697479`** = *Cryptography and NetworkSecurity* 的 ASCII hex，与 golden **`EAC2DD63…`** 完全不符）；CFB 输出必须来自 **`EVP_EncryptUpdate`/`Final` 写入的 `unsigned char` 缓冲**，**禁止** `printf`/`sprintf` 明文 ASCII 再当密文。
+  **`getenv("TEST_*")`**；**`printf("密文: ");`** + hex + **`fflush(stdout);`**。

@@ -1,0 +1,156 @@
+# 本地批量：为 true 时，自下述日期（含）起若历史已有同用例成功则跳过生成
+local_batch_skip_enabled: true
+local_batch_skip_if_success_since: "2026-05-04"
+
+llm_providers:
+  openai:
+    enabled: true
+    model: "gpt-4-turbo"  # 使用gpt-4-turbo，支持128K上下文，适合生成长代码
+    api_key_env: "OPENAI_API_KEY"
+    base_url: "https://api.openai-proxy.org/v1"
+    max_tokens: 16384  # 最大token数，确保代码不会被截断
+    # 未知模型名时的上下文默认（仅当模型不在适配器内置表时生效）；长 prompt 可调大
+    max_context: 128000
+
+  # GPT-5 Codex 等：经 CloseAI（或其它）OpenAI 兼容网关；密钥与 Base URL 以控制台为准（通常 Base 以 /v1 结尾）
+  # 提示词复用 prompts/llms/openai/（与 openai 线路相同模板栈）
+  codex:
+    enabled: true
+    model: "gpt-5-codex"
+    api_key_env: "CLOSEAI_API_KEY"
+    base_url: "https://api.openai-proxy.org/v1"
+    max_tokens: 16384
+    max_context: 256000
+    # 许多 Codex 兼容接口不允许传 temperature，否则会 400
+    omit_temperature: true
+    # 代码生成较慢时可酌情调大（秒）
+    request_timeout_seconds: 1200
+  
+  deepseek:
+    enabled: true
+    model: "deepseek-chat"
+    api_key_env: "DEEPSEEK_API_KEY"
+    base_url: "https://api.deepseek.com/v1"
+    max_tokens: 16384  # 最大token数，确保代码不会被截断
+    max_context: 64000  # 输入+输出总上下文上限（tokens），避免长 prompt 被误判为 8k
+  
+  claude:
+    enabled: true
+    # 须与聚合平台「可用模型」一致；旧 ID（如 claude-3-5-sonnet-20241022）常被下架
+    model: "claude-sonnet-4-6"
+    api_key_env: "ANTHROPIC_API_KEY"
+    # Anthropic 原生网关：填「API 根」，不要带 /v1/messages（SDK 会自动追加）。
+    # OpenAI 兼容：填 .../v1（与 OpenAI 相同前缀时常用）
+    base_url: "https://api.openai-proxy.org/v1"
+    max_tokens: 16384  # 最大token数，确保代码不会被截断
+    # Sonnet 4.6 官方约 1M；若代理上限更小，改为实际上限以免误判可用输出长度
+    max_context: 1000000
+  
+  # 本地 Ollama：先执行 ollama pull qwen2.5-coder:7b，并保证 http://127.0.0.1:11434 可访问
+  qwen_coder_local:
+    enabled: true
+    model: "qwen2.5-coder:7b"
+    api_key_env: "OLLAMA_API_KEY"
+    api_key_optional: true
+    api_key_placeholder: "ollama"
+    base_url: "http://127.0.0.1:11434/v1"
+    max_tokens: 8192
+    # HTTP 读/写/pool 超时（秒，见 openai_adapter 中 httpx.Timeout）。长 prompt + 大 max_tokens 在 CPU 上可能需 30min+；
+    # 此前 pool 单独 300s 会导致约 5min 即 Request timed out，已与 read 对齐为同值。
+    request_timeout_seconds: 7200
+    # SDK 层重试（多数场景已由适配器对 Connection error 做指数退避，此处保持 0 以免双重等待）
+    max_retries: 0
+
+  doubao:
+    enabled: true
+    # 注意：豆包模型名称通常是 endpoint ID 格式（如 ep-xxx），请根据你的实际 endpoint ID 修改
+    # 如果使用豆包，请将下面的模型名称替换为你的实际 endpoint ID
+    # endpoint ID 获取方法：
+    # 1. 登录火山引擎控制台
+    # 2. 进入模型推理的在线推理
+    # 3. 创建或查看你的推理接入点，就能看到 endpoint，获取 endpoint ID（格式如：ep-20241201-xxxxx）
+    # 4. 将 config.yaml 中的 model: "ep-20241201-xxxxx" 替换为你的实际 endpoint ID
+    # 例如：model: "ep-20250801183246-np5vg"
+    model: "ep-20250801183246-np5vg"  # 这是我的endpoint ID，请替换为你的实际 endpoint ID
+    api_key_env: "DOUBAO_API_KEY"
+    base_url: "https://ark.cn-beijing.volces.com/api/v3"
+    max_tokens: 16384  # 最大token数，确保代码不会被截断
+
+default_provider: "deepseek"  # 默认提供商
+
+# 当 API 返回余额不足（402/403、文中含「余额不足」等）时，是否自动改试其他已启用的 LLM。
+# false = 不切换，立即失败（便于固定只用当前提供商）；true = 保留旧行为自动切换。
+switch_llm_on_insufficient_balance: false
+
+crypto_algorithms:
+  - DES
+  - AES
+  - RSA
+  - SM4
+
+des_modes:
+  - ECB
+  - CBC
+  - CFB
+  - OFB
+
+aes_modes:
+  - ECB
+  - CBC
+  - CFB
+  - OFB
+  - GCM
+  - CTR
+
+output_dir: "./generated_code"
+
+# Self-Refine：迭代自我反馈改进生成代码（参见 https://github.com/madaan/self-refine）
+# - max_refine_rounds：单次「大轮」尝试内，标准测试失败时最多连续 improve 的次数（无需每次从头 generate）
+# - critic_before_test: true 时，在跑编译/标准测试前多一轮「模型自我审稿 + 修正」（额外 2 次 LLM 调用）
+self_refine:
+  enabled: true
+  max_refine_rounds: 3
+  critic_before_test: false
+
+# C/C++ 写盘清洗：是否允许用 OpenSSL canonical 模板整文件替换模型输出。
+# true：旧行为，易拉高通过率；false：仅轻量修正 + 测试失败后的 improve/重试（更贴近真实 agent 能力）。
+generation:
+  use_canonical_openssl_whole_file: false
+
+# 支持的编程语言
+supported_languages:
+  - python
+  - c
+  - cpp
+
+# 代码验证设置
+validation:
+  enabled: true
+  timeout: 30  # 验证超时时间（秒）
+
+# 批量/单页生成对「本地 Ollama」线路的全局并发上限（1=串行，避免 40+ 路同时打爆导致 Request timed out）
+local_batch_concurrency: 1
+
+# 面向本地模型的知识蒸馏（检索-注入）：本地 qwen_coder_local 从 dataset_path 读教师示例；
+# 云端 LLM 跑通标准测试后可自动把通过代码追加进教师池（auto_collect_cloud_teachers）。
+distillation:
+  enabled: true
+  dataset_path: "./data/distillation_teacher.jsonl"
+  # 云端（非 local_providers）通过后写入教师 JSONL，供后续本地 Qwen 少样本/改进阶段引用
+  auto_collect_cloud_teachers: true
+  max_few_shot_examples: 2
+  # 注入教师/参考代码的最大字符数（本地 7B 上下文）；缺省或 0 表示不截断
+  max_teacher_code_chars: 8000
+  max_teacher_refs_improve: 2
+  min_quality_score_for_retrieval: 0.0
+  # 非空时仅保留 code 匹配任一正则的样本（白名单）
+  whitelist_patterns: []
+  blacklist_patterns: []
+  # 留空则匹配所有 provider 名含 local 的项（如 qwen_coder_local）
+  local_providers:
+    - qwen_coder_local
+  # baseline | error_conditioned | hard_negative | process_trajectory | full
+  ablation_mode: full
+  freshness_half_life_days: 0
+  static_provider_weights:
+    default: 1.0

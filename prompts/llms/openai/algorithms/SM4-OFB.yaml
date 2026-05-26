@@ -1,0 +1,166 @@
+# OpenAI · SM4-OFB-128
+supplement: |
+  OFB：**寄存器更新为 SM4 输出 O**，`C=P⊕O`，**非**输出明文。golden：**`2754B10C806AEF23698989882D80903A`**（与 test_data 16 字节明文向量一致）。  
+  **禁止**把未加密的明文 hex 当作密文输出。
+  **高危回显：** 若 `密文:` 后为 **`0123456789abcdeffedcba9876543210`**（与 **密钥/IV 测试向量**相同），说明**完全未加密或把密钥/IV 当密文打印**，评测必败；正确须为 **`2754B10C806AEF23698989882D80903A`**，**禁止** `printf` **密钥 hex** 或 **IV+密钥拼接** 冒充密文。
+  **禁止** `getenv("TEST_PLAINTEXT")` 为 NULL 时仍用 **`0123456789ABCDEFFEDCBA9876543210`** 等**与默认密钥相同**的串凑数（易 **未加密** 或 **打印错字段**）；**须**读入失败则 **`fprintf(stderr,...); return 1;`**。
+  **C 源码禁止**在代码中间写 **`# 中文`** 或 **`# SM4…`**（`#` 会被预处理器当指令 → **`invalid preprocessing directive`**）；说明文字只用 **`/* … */`** 或单独英文注释。
+
+c: |
+  **【强制】SM4-OFB C：必须用 OpenSSL `EVP_sm4_ofb128()`（`-lcrypto`），禁止手搓 OFB 状态机除非题目要求完整实现。**
+  **`#include <openssl/evp.h>`** → **`EVP_EncryptInit_ex(..., EVP_sm4_ofb128(), ...)`** → **`EVP_CIPHER_CTX_set_padding(ctx, 0)`** → Update/Final。
+  **`EVP_sm4_ofb128()`** + **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**；**`EncryptUpdate`/`Final` 后**只打印 **16 字节密文 hex**（golden **`2754B10C806AEF23698989882D80903A`**）。**`main` 内变量（`len`/`ciphertext_len`/缓冲指针）只声明一次**，避免 **`redefinition of 'ciphertext_len'`**（典型：先 **`int len=0, ciphertext_len=0`**，后又写 **`int i, ciphertext_len=0`** —— **禁止**；后续循环只 **`int i`** 或复用已有变量）。
+  **禁止自拟 `_aicrypto_ct_buf` / `_aicrypto_*`：** 易与评测注入冲突；**禁止** **`unsigned char *ciphertext = _aicrypto_…`** 再声明 **`uint8_t ciphertext[32]`**（→ **`conflicting types for 'ciphertext'`**）。密文只用 **`unsigned char out[…]`** 或 **`uint8_t ctbuf[…]`** 等**单一**缓冲名。
+  **再犯（本批 `sm4-ofb-c`）：** 同上 **`_aicrypto_ct_buf`** 后又声明 **`uint8_t ciphertext[1024]`** —— **`conflicting types for 'ciphertext'`**。**勿模仿评测占位符**；输出缓冲只用一组命名。
+  **本批指纹错密文 `3519adbb8e0f65f23e36f730b4e1d7a4`：** **`key_expansion` 使用 `for(i=0..31){ temp=K[i%4]^L(tau(K[(i+1)%4]^…^CK[i])); rk[i]=temp; K[i%4]=temp; }`**（**非**国标 **`K[i+4]=K[i]^T′(…)`** 链）+ **`sm4_ofb_encrypt` 内层 `for(j=0..15){ ct[i]=p[i]^out[j]; feedback[j]=out[j]; }`** —— **轮密钥错** 且 **OFB 寄存器被逐字节改写**。**须 `EVP_sm4_ofb128`** 或 **国标 `T′` + 整块 `memcpy(feedback,output,16)`**。
+  **同指纹另一类错误代码：** **`memcpy(K, FK, sizeof(FK))`** 初始化 **`K`**、再 **`rk[i]=K[i+4]=K[i]^L(T(tmp))`** —— **误把 `L`（加密轮线性层）用于密钥扩展**（须 **`L′`**），且 **`memcpy(FK)` 非** **`MK[i]^FK[i]`** 国标写法 → **轮密钥全错**，仍得 **`3519adbb…`**。**禁止**；**须 EVP** 或 **`K[i+4]=K[i]^T′(…)`**。
+  **本批错密文 `94029f8e136e96755809aa789df6dbe4`：** 代码注释「**每次只使用加密结果的第一个字节**」+ **`ciphertext[i] ^= output_block[0]`** + **`memmove(feedback, feedback+1, 15); feedback[15]=output_block[0]`** —— **OFB-8 移位寄存器**，与 **`EVP_sm4_ofb128`（OFB-128）** **永远对不上 `2754…`**。**禁止**；**须** 每 **16 字节明文** 只用 **一次** `sm4_encrypt_block(feedback,O,rk)`，**本块** `ct[k]=p[k]^O[k]`（**k 覆盖 16B**），再 **`memcpy(feedback,O,16)`**，或 **只用 EVP**。
+  **本批指纹 `0123456789abcdeffedcba98e5e434b6`：** **`main` 写死** **`unsigned char key[]={0x01,0x23,…}`** + **`plaintext[32]` 两段重复教材字节** + **无 `getenv`**；**`rk[i]=K[i%4]=F(K[0],K[1],K[2],K[3], CK[i])`** —— **误把常量 `CK[i]` 当轮密钥**，且 **`F`/`T` 非国标 `T′` / `L(τ(B))`**；配 **`sm4_ofb` 内层 `feedback[j]=output[j]`**（OFB-8）。**须 `EVP_sm4_ofb128`** + **`getenv` + hex_to_bytes**。**禁止** **`F(..., CK[i])` 生成 rk**。
+  **`key_expansion` 禁止 `for(i=0..31) { temp = K[i+1]^K[i+2]^K[i+3]^CK[i]; … }` 且只有 `unsigned int K[4]`：** **`i≥1` 起访问 `K[5]`… → 越界 / 未定义**；国标须 **`K[36]`** 递推 **`K[i+4]=K[i]^T′(K[i+1]^K[i+2]^K[i+3]^CK[i])`** 或 **EVP**。**禁止** 32 轮加密写成 **`X` 四字移位 + `X[3]=F(tmp,X0,X1,X2,rk[i])`**（**非** **`X[i+4]=X[i]^L(τ(B))`**，`B` 含 **`rk[i]`**）—— 本批 `sm4_encrypt_block` 即此误型。
+  **密钥扩展须 `T′=L′∘τ`，禁止误用加密轮的 `L`：** **`K[i+4]=K[i]^L(tau(K[i+1]^K[i+2]^K[i+3]^CK[i]))`** 把 **加密轮线性层 `L`** 塞进密钥扩展 → **轮密钥错误**（须 **`L′`**：**<<<13、<<<23**）。
+  **手写 OFB 致命错（批量 `e9aa7988…`/`3519adbb…` ≠ `2754B10C…`）：** **`for (i=0;i<len;i++){ sm4_encrypt_block(feedback,O,rk); ct[i]=p[i]^O[i%16]; memcpy(feedback,O,16); }`** —— **每字节都把 feedback 换成 O** → **错误 keystream**。**正确：** 按 **16 字节块**：`sm4_encrypt_block(feedback,O,rk)` **一次** → **本块 16 字节** `ct[i]^=O[i]` → **再** `memcpy(feedback,O,16)` **一次**；或 **只用 EVP**。
+  **就地加密反馈（批量 `198b36dd…` ≠ `2754…`）：** **`sm4_encrypt(feedback, feedback, rk)`** —— **输入输出同一缓冲**，块函数会**覆盖 IV/寄存器**，再 XOR 时 keystream 已错。**必须** **`unsigned char O[16]; sm4_encrypt(feedback, O, rk);` 再 XOR，最后 `memcpy(feedback, O, 16)`**。
+  **密钥扩展 vs 加密轮（批量 `7e082b6d…` / `c16511f3…` / `fbd9bf9d…` / `3519adbb…`）：** **密钥扩展**须 **SM4 标准 `T'`**：**τ** 后用 **`L'`（<<<13、<<<23）**；**加密轮**用 **`T=L∘τ`**：**`X[i+4]=X[i]^L(τ(B))`**。**禁止** 把 **`T_prime` 误定义为 `L(T(x))`**（错把加密轮 **`L`** 套在 **`T`** 外），又用于 **加密轮** **`X[i+4]=X[i]^T_prime(...)`** —— **`T'` 仅用于密钥扩展**，**加密轮不能用同一套 `T_prime`**。**禁止** **`X[i+4]=X[i]^T_prime(X[i+1]^…^rk[i])`** 冒充国标轮函数。**禁止** **`K[i+4]=K[i]^T(rotate_left(K[i+1]^K[i+2]^K[i+3]^CK[i],13))`** ——将加密轮的 **`T`**（应用 **`Sbox`**）误塞进密钥扩展链；亦**禁止** **`sm4_round` 写成 `X[0]^T(X[1]^X[2]^X[3]^rk)`**（**缺少国标加密轮的 `L(τ(B))`**）。**禁止** 在 **`key_expansion` 里对 `K[i+1]^…^CK[i]` 误套 **加密轮的 `L∘τ`**（无 **`L'`**）→ **轮密钥错**。**禁止** 加密轮写成 **`τ(X[i]^X[i+1]^X[i+2]^X[i+3])`** 或 **`X[i+4]=X[i]^L(τ(temp)^rk)`**；正确为 **`B=X[i+1]^X[i+2]^X[i+3]^rk[i]`**，**`X[i+4]=X[i]^L(τ(B))`**（**rk 在进 τ 之前与三字异或**）。**OFB-8**（**仅 `output[0]`** + **`memmove(feedback)`**）与 **`EVP_sm4_ofb128`** 不符；**`main` 禁止** 写死 **`key[]={0x01,0x23,…}` / `plaintext[]={…}`** 不读 **`TEST_*`**。
+  **OFB-8 + 错误轮函数（批量 `7b78ecc81167c7d73a7df681a64f417f`）：** **`for(i<len){ sm4_encrypt_block(feedback,ks,rk); ct[i]^=ks[0]; memmove(feedback,...); }`** —— 与 **`EVP_sm4_ofb128`（OFB-128）** 不符；且 **`key_expansion` 误写 `K[i+4]=K[i]^T(K[i+1]^…^CK[i])`（应用 `T` 而非 `T′`）**、**加密轮误写 `X[i+4]=X[i]^T(X[i+1]^…^rk[i])`（缺 `L(τ(B))`）** → **轮密钥与 keystream 全错**。**优先 EVP**。
+  **`main` 未解析 hex（批量 `f3e61722…`）：** 注释 **`// 十六进制转字节实现略`**、**仅 `strlen(env)/2` 得到长度却不对 `key`/`iv`/`plaintext` 做 `sscanf`/hex 解码** → **缓冲未初始化仍加密**。**必须** 在 **`sm4_ofb_encrypt` 之前**完成 **`hex_to_bytes(TEST_*)`**。
+  **错误密钥扩展示例：** **`rk[i]=K[0]^T(rotate_left(K[1]^K[2]^K[3]^CK[i],13))`** —— **非**国标 SM4（应为 **L'(τ(…))** 链），轮密钥全错。
+  **`main` 禁止** env 为空时默认 **`env_plaintext = env_key = "0123456789ABCDEFFEDCBA9876543210"`**（本批实测）；缺省须 **`return 1`**。
+  **禁止** `printf("密文: %s", key_hex)` **把密钥/明文块 `0123456789abcdeffedcba9876543210` 当密文**。**禁止**手写 OFB 状态错误（会得到 **`adf72247…`/`c9eb8daf…`** 等与 golden 不符）。**禁止**把 **`EVP_sm4_ecb` 单块输出**不经 XOR 当密文（OFB 须 **`C = P ⊕ O`**）。**`fflush(stdout);`**
+  即使用 EVP，若 **`main` 调用 `hex_to_bytes` 解析 `TEST_*`**，仍须在 **`main` 上方**写 **`static` 完整实现**（见下条），**禁止**只声明不定义 → **`undefined reference to hex_to_bytes`**。
+  **手写须完整 `CK[32]`：** **绝对禁止** `0x88...`、`…` 省略（→ **`too many decimal points`**）。须与 OpenSSL 一致，例如：  
+  `0x00070E15,0x1C232A31,0x383F464D,0x545B6269,0x70777E85,0x8C939AA1,0xA8AFB6BD,0xC4CBD2D9,0xE0E7EEF5,0xFC030A11,0x181F262D,0x343B4249,0x50575E65,0x6C737A81,0x888F969D,0xA4ABB2B9,0xC0C7CED5,0xDCE3EAF1,0xF8FF060D,0x141B2229,0x30373E45,0x4C535A61,0x686F767D,0x848B9299,0xA0A7AEB5,0xBCC3CAD1,0xD8DFE6ED,0xF4FB0209,0x10171E25,0x2C333A41,0x484F565D,0x646B7279`  
+  **`FK[4]`：** `0xa3b1bac6,0x56aa3350,0x677d9197,0xb27022dc`。**能 EVP 就不要手写。**
+  **手写时顺序：** **`rotate_left` 原型先于 `L_key`**。
+  **`hex_to_bytes`（链接错误高频）：** 在 **`main` 之前** 必须出现**完整函数体**，例如签名 **`static int hex_to_bytes(const char *hex, unsigned char *out, int max_out)`**：循环 `while (*hex && *hex+1)` 每对 `sscanf`/`isxdigit` 转 1 字节写入 `out`，返回字节数；**禁止**仅有调用、**禁止**把实现放在 **`main` 之后** 或另文件 → **`undefined reference to hex_to_bytes`**。
+  **OpenAI 批量实测：** **`main` 禁止** 写死 **`unsigned char key[16]={0x01,…}`**、**全零 IV**、**`unsigned char pt[]="0123456789ABCDEFFEDCBA9876543210"`**（ASCII 串 ≠ 评测 **hex 解码**明文）；**必须** **`getenv("TEST_*")` + `hex_to_bytes`**，否则与 golden **`2754…`** **永远对不上**。
+  **链接 `undefined reference to 'main'`：** 交卷文件 **仅含 S 盒/密钥扩展、无 `int main`**（截断或漏写入口）→ 评测无法链接。**必须** 完整 **`main`**：`getenv` → `hex_to_bytes` → `EVP_sm4_ofb128` Update/Final → **`printf("密文: …")`**。
+  **禁止** **`Sbox[16][16]` 二维表 + 错误 `T()` 索引**（非标准 SM4 字节 S 盒）；**优先 EVP**，手写须 **一维 `Sbox[256]`** 且与国标一致。
+  **`K[4]` 越界写 → `stack smashing`（本批 `sm4-ofb-c`）：** **`unsigned int K[4]`**（仅四字初始 **MK**）却在密钥扩展循环里写 **`K[i+4]=rk[i]`（i=0…31）`** —— **持续越界写栈** → **`*** stack smashing detected ***`**。**必须** 使用 **`unsigned int K[36]`**（或 **`MK[4]` + `rk[32]`** 且不向 **`K` 四字数组**写 **`K[4..]`**），按国标 **`K[i+4]=K[i]^T′(K[i+1]^K[i+2]^K[i+3]^CK[i])`**；**禁止** 四字数组硬撑 36 轮。**能 EVP 就不要手写。**
+  **错 `T()`（二维 `Sbox[row][col]` 拼字）+ 加密轮仅 `X[i+4]=X[i]^T(...)`：** **非** **`L(τ(B))`**，与 OpenSSL **`EVP_sm4_ofb128`** 不符；常与上条 **越界 `key_expansion`** 同现。**须 EVP** 或 **国标一维 τ + `L`**。
+  **密钥扩展「四字轮转」伪国标（本批 `sm4-ofb-c` 生成模式）：** **`K[4]`** + **`for(i=0..31){ K[i%4]^=T(K[(i+1)%4]^…^CK[i]); rk[i]=K[i%4]; }`** —— **不是** **`K[i+4]=K[i]^T′(…)`** 递推链，**轮密钥全错**；配 **加密轮 `X[i%4]^=T(tmp)`**、**二维 `Sbox[][]`** → **与 `2754B10C…` 无关**。**须 EVP**。
+  **非标结构（批量 `00a75c3162c595939815d1939b1344c7`）：** 将加密写成 **四字寄存器轮转 + `X[0]^=T(...)`**（类 DES Feistel），或 **`key_expansion` 里 `K` 错误移位链**，**均非国标 SM4 32 轮 `X[i+4]=X[i]^L(τ(B))`**。**OFB 禁止** 在内层 **`for(j=0..15)`** 里边 XOR **边** **`feedback[j]=output[j]`** 破坏寄存器 —— 须 **整块 `sm4_encrypt_block(feedback,O,rk)` 后**再 **`memcpy(feedback,O,16)`**，或 **只用 EVP**。
+  **完整正确参考（EVP SM4-128-OFB-128，与 golden `2754B10C…` 同源；链接 `-lcrypto`，OpenSSL 需启用 SM4）：**
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <openssl/evp.h>
+
+  static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {
+      int n = 0;
+      while (*hex && *(hex + 1) && n < max_out) {
+          unsigned int v;
+          if (sscanf(hex, "%2x", &v) != 1) break;
+          out[n++] = (unsigned char)v;
+          hex += 2;
+      }
+      return n;
+  }
+
+  int main(void) {
+      const char *ep = getenv("TEST_PLAINTEXT");
+      const char *ek = getenv("TEST_KEY");
+      const char *ei = getenv("TEST_IV");
+      if (!ep || !ek || !ei) return 1;
+
+      unsigned char pt[8192], key[16], iv[16];
+      int pt_len = hex_to_bytes(ep, pt, (int)sizeof pt);
+      int k_len = hex_to_bytes(ek, key, (int)sizeof key);
+      int iv_len = hex_to_bytes(ei, iv, (int)sizeof iv);
+      if (pt_len <= 0 || k_len != 16 || iv_len != 16) return 1;
+
+      EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+      if (!ctx) return 1;
+      unsigned char obuf[8192 + 32];
+      int ol = 0, tl = 0;
+
+      if (EVP_EncryptInit_ex(ctx, EVP_sm4_ofb128(), NULL, key, iv) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      EVP_CIPHER_CTX_set_padding(ctx, 0);
+      if (EVP_EncryptUpdate(ctx, obuf, &ol, pt, pt_len) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      if (EVP_EncryptFinal_ex(ctx, obuf + ol, &tl) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      ol += tl;
+      EVP_CIPHER_CTX_free(ctx);
+
+      printf("密文: ");
+      for (int i = 0; i < ol; i++) printf("%02x", obuf[i]);
+      printf("\n");
+      fflush(stdout);
+      return 0;
+  }
+  ```
+
+cpp: |
+  **【强制】OpenAI 批量：仅用 OpenSSL `EVP_sm4_ofb128()`（可用库），禁止手写半套 SM4 + 错误反馈链。**
+  **本批 C 同款：** **`ct[i]^=O[0]`** + **`memmove(feedback)`**（OFB-8）→ **`94029f8e…`** 类错密文；**`K[i+1]^K[i+2]^K[i+3]` 仅四轮数组** → **越界/错 rk**。→ **须 EVP** 或 **国标完整 `K[36]`/`X[36]` 递推**。
+  **编译错高频：** 函数参数**禁止**写成 **`the std::vector<uint32_t>& rk`**（多打 **`the`**）→ **`'the' has not been declared`**；须 **`const std::vector<uint32_t>& rk`**。
+  **`#include <openssl/evp.h>`**，**`EVP_sm4_ofb128()`** + **`EVP_CIPHER_CTX_set_padding(ctx,0)`**；**禁止** 手工 **`P^IV`** 或 **`std::cout` 拼密钥状 hex** 冒充密文；golden **`2754B10C806AEF23698989882D80903A`**。
+  **手写 OFB 禁止**在**逐字节**循环里每轮 **`feedback.assign(O.begin(),O.end())`**；须 **整块 16B** keystream 后再更新 feedback（同 C 条），否则与 golden **不符**。
+  **OpenAI 批量错密文示例 `053e3071…` / `e5ba979a…`：** `for (i = 0; i < plaintext.size(); ++i) { sm4_encrypt_block(feedback, O, rk); ct[i]=p[i]^O[i%16]; … }` 或 **`encrypt_sm4_ofb` 内每轮 `sm4_round(feedback, block, rk); ciphertext[i]=…; feedback = block;`** —— **每字节都重新算块密文且每字节刷新 feedback** → keystream 全错；**须** **每 16 字节只调用一次块加密**，**本块内共用同一 `O`，块末再 `feedback = O`**（或 **只用 EVP**）。**禁止** 用 **`K[i%4]` / `X[i%4]`** 糊弄 **32 轮密钥扩展与轮函数**（与 OpenSSL 向量不一致）。
+  **`std::cout << "密文: ";`** 仅输出 **`Update`/`Final`** 写入缓冲的 **16 字节** hex；**`std::cout.flush();`**
+  **完整正确参考（EVP SM4-128-OFB，与 C 同源）：**
+  ```cpp
+  #include <cstdio>
+  #include <cstdlib>
+  #include <cstring>
+  #include <openssl/evp.h>
+
+  static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {
+      int n = 0;
+      while (*hex && *(hex + 1) && n < max_out) {
+          unsigned int v;
+          if (std::sscanf(hex, "%2x", &v) != 1) break;
+          out[n++] = static_cast<unsigned char>(v);
+          hex += 2;
+      }
+      return n;
+  }
+
+  int main() {
+      const char *ep = std::getenv("TEST_PLAINTEXT");
+      const char *ek = std::getenv("TEST_KEY");
+      const char *ei = std::getenv("TEST_IV");
+      if (!ep || !ek || !ei) return 1;
+
+      unsigned char pt[8192], key[16], iv[16];
+      int pt_len = hex_to_bytes(ep, pt, (int)sizeof pt);
+      int k_len = hex_to_bytes(ek, key, (int)sizeof key);
+      int iv_len = hex_to_bytes(ei, iv, (int)sizeof iv);
+      if (pt_len <= 0 || k_len != 16 || iv_len != 16) return 1;
+
+      EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+      if (!ctx) return 1;
+      unsigned char obuf[8192 + 32];
+      int ol = 0, tl = 0;
+
+      if (EVP_EncryptInit_ex(ctx, EVP_sm4_ofb128(), NULL, key, iv) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      EVP_CIPHER_CTX_set_padding(ctx, 0);
+      if (EVP_EncryptUpdate(ctx, obuf, &ol, pt, pt_len) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      if (EVP_EncryptFinal_ex(ctx, obuf + ol, &tl) != 1) {
+          EVP_CIPHER_CTX_free(ctx);
+          return 1;
+      }
+      ol += tl;
+      EVP_CIPHER_CTX_free(ctx);
+
+      std::printf("密文: ");
+      for (int i = 0; i < ol; i++) std::printf("%02x", obuf[i]);
+      std::printf("\n");
+      std::fflush(stdout);
+      return 0;
+  }
+  ```

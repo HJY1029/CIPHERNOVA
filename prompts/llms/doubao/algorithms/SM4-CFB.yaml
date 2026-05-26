@@ -1,0 +1,47 @@
+# 豆包 · SM4-CFB-128（test_data golden 2754B10C…）
+mandatory: |
+  **C/C++ 禁止手写 SM4**（禁止 `Sbox[]`/`tau`/`sm4_cfb_encrypt`/`memmove(feedback,…)` 整页实现）。
+  **唯一路径：** **`EVP_sm4_cfb128()`** + **`set_padding(0)`** + 一次 **Update(16B 明文)** + **Final**。
+  golden **`2754b10c806aef23698989882d80903a`**；错例 **`e1c289ae…`** / **`27f3e626…`** = 手写 CFB 或误用 **ofb128**/**cfb**（无 128）。
+
+supplement: |
+  **（编译）SM4 题禁止 `#define 8` / `#define 8 8`；块长用 `SM4_BLOCK_BYTES 16`。**
+  **（编译）禁止 `uint8_t a, 0x0B, 0x0C, d`；SM4 题优先只写 EVP，不要手写 `tau`。**
+  SM4-CFB-128：密钥/IV 各 **32 hex（16 字节）**；明文 **16 字节** → 密文 **32 hex**。
+  **自测 golden：** **`2754B10C806AEF23698989882D80903A`**（`openssl enc -sm4-cfb -nopad`）。
+  **批量实测错串：** **`e1c289ae526dab14a72a5132ebfb7038`** = 手写 CFB-128 反馈移位（**禁止**）；**`27f3e626…`** = **`EVP_sm4_ofb128`** 或 **`EVP_sm4_cfb`**（缺 128）。
+
+python: |
+  **`gmssl.sm4`** 或 **`cryptography`** 等价 **SM4-CFB**；**`print("密文:", ct.hex().lower())`** → **`2754b10c…`**。
+
+c: |
+  **仅 `openssl/evp.h`**；**`EVP_sm4_cfb128()`** + **`set_padding(0)`**。
+  **`Init_ex` → `EncryptUpdate(ctx, out, &len, pt, 16)` → `Final`**；**禁止** 手写 SM4 轮函数。
+  **`printf("密文: ");`** + **32 hex** + **`fflush(stdout)`**。
+
+cpp: |
+  **【批量 20260519】禁止输出含 `const uint8_t Sbox[256]`、`sm4_encrypt_block`、`sm4_cfb_encrypt`、`memmove(feedback` 的源码——一律改为 ≤80 行纯 EVP。**
+  **`#include <openssl/evp.h> <cstdio> <cstdlib> <cstring> <cctype>`**（无 `remove_if` 则勿加 `<algorithm>`）。
+  **骨架（勿删改 API 名）：**
+  ```cpp
+  EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+  EVP_EncryptInit_ex(ctx, EVP_sm4_cfb128(), NULL, key16, iv16);
+  EVP_CIPHER_CTX_set_padding(ctx, 0);
+  int outl = 0, fin = 0;
+  unsigned char out[32];
+  EVP_EncryptUpdate(ctx, out, &outl, pt, 16);
+  EVP_EncryptFinal_ex(ctx, out + outl, &fin);
+  // printf("密文: "); 打印 outl+fin 字节 hex
+  EVP_CIPHER_CTX_free(ctx);
+  ```
+  **`std::getenv("TEST_*")`**；**禁止** `cin`；IV 默认全零与 test_data 一致。
+
+test_feedback_improve: |
+  **【豆包 · SM4-CFB】** 密文非 **`2754b10c…`**：**整文件删除**手写 SM4，只保留 **`EVP_sm4_cfb128()`**。
+  若见 **`e1c289ae…`**：勿用手写 **`memmove`/`feedback` 移位** CFB。
+
+test_feedback_improve_c: |
+  仅 **`EVP_sm4_cfb128`** + **`密文:`**；删 S 盒表。
+
+test_feedback_improve_cpp: |
+  删 **`Sbox`/`tau`/`sm4_cfb_encrypt`**；**`EVP_sm4_cfb128()`** 单路径，**`CTX_free` 一次**。

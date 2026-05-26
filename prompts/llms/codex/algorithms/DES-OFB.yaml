@@ -1,0 +1,34 @@
+# Codex / CloseAI — DES-OFB
+# 与 openai 合并时由 prompt_loader 置前（先于 openai 长篇），请务必短答、仅用 EVP。
+supplement: |
+  **【置顶 · gpt-5-codex】本任务唯一合规解法：`#include <openssl/evp.h>` + `OSSL_PROVIDER_load(NULL,"legacy")`（若运行环境需要）+ `EVP_des_ofb()` + `EncryptUpdate`/`Final`，外加一个完整 `int main`。禁止手写 DES 轮函数/S 盒/IP/EP。**
+
+c: |
+  **链接失败 `undefined reference to main`：** 输出里**没有** **`int main`** → ** gcc 无法链接**。正文**第一段可执行代码**建议就是 **`#include` 接着写 `int main(void){ ... }` 骨架**，再写辅助函数；**禁止**先输出 500 行表再截断导致无入口。
+  **禁止手搓 DES（本批实测 700+ 行仍编译失败）：** 若出现 **`P_TABLE`/`S_BOXES`/`SHIFT_SCHEDULE`/`des_f_function`/`permute`/`generate_subkeys`/`pkcs7_pad`** —— **一律删除**，改 **≤120 行** 的 **EVP_des_ofb** 程序。**禁止** `main` **内部**再写 **`static void foo`**（嵌套函数非法 C，合并续写易产生 **`expected expression before 'if'`**）。
+  **`static const int P_TABLE[32] = { ...`** 必须以 **`};`** 收束后再写下一语句；**禁止**在初始化列表中途起新行 **`int byte_index = ...`**（→ **`expected '}' before 'int'`**，GCC 指向未闭合的 **`{`**）。
+  **禁止** **`get_env_or_stdin`**、**从 stdin 读密文**、**超长 `hex_to_bytes` 双份合并**：评测只注入 **`getenv("TEST_PLAINTEXT"|"TEST_KEY"|"TEST_IV")`**。**OFB 测评无须 PKCS7**，勿写 **`pkcs7_pad`**。
+  **占位注释禁令：** **`/* 初始置换表 */`** 等且无数据 → 后续 **`expected '}' before 'int'`**、**数组未闭合**。**不要**任何占位表头。
+  **`main` 内语法：** 每个 **`if/for`** 必须落在 **`main` 的大括号内**；续写合并后若出现 **顶层 `if` 紧跟未闭合 `{`** → **`expected expression before 'if'`**。**交卷前自检括号配对**。
+  **最短心智：** 单文件 **`openssl/evp.h`** + **`EVP_des_ofb`** + **`printf("密文: ");`** + **`fflush`**；**不要第二套加密实现**。
+  **骨架（仅此规模；自行实现 `hex_to_bytes` 或内联 sscanf 循环）：**
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <openssl/evp.h>
+  int main(void) {
+      const char *tp = getenv("TEST_PLAINTEXT");
+      const char *tk = getenv("TEST_KEY");
+      const char *ti = getenv("TEST_IV");
+      if (!tp || !tk || !ti) return 1;
+      /* decode hex → EVP_des_ofb EncryptUpdate/Final → */
+      printf("密文: ");
+      /* print ciphertext hex */
+      printf("\n"); fflush(stdout);
+      return 0;
+  }
+  ```
+
+cpp: |
+  与 C：**禁止** 巨型手搓 DES；**仅 `EVP_des_ofb`**；**必须** **`int main()`**。

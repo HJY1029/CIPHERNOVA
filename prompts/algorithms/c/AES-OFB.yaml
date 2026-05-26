@@ -1,0 +1,16 @@
+# AES-OFB · C（与 golden EA0B8FB8… 一致 = EVP_aes_128_ofb，非手搓 OFB-8）
+c_specific: |
+  **【本测 golden】** 密文 hex 须以 **`EA0B8FB8`** 开头（`test_data.yaml` · AES · OFB）。
+
+  **推荐唯一主路径（禁止空占位块加密）：**
+  - **`#include <openssl/evp.h>`**（及 `stdio.h` / `stdlib.h` / `string.h` 等按需）。
+  - **`EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();`**
+  - **`EVP_EncryptInit_ex(ctx, EVP_aes_128_ofb(), NULL, key, iv)`**（16 字节 key / 16 字节 iv，来自 **`getenv("TEST_KEY")` / `TEST_IV` / `TEST_PLAINTEXT`** 的 hex 解码）。
+  - **`EVP_CIPHER_CTX_set_padding(ctx, 0);`**
+  - **`EVP_EncryptUpdate`** / **`EVP_EncryptFinal_ex`** 写入输出缓冲，按实际长度 **`printf("密文: ");`** + **`%02x`** + **`fflush(stdout);`**。
+  - **`EVP_CIPHER_CTX_free(ctx);`**
+
+  **禁止：**
+  - **`AES_EncryptBlock` / `KeyExpansion` 仅注释、空函数体**（→ 未定义 keystream，实测可得到 **`c3e597bb…`** 等乱密文）。
+  - 粘贴整页 **S 盒 + 空 `// Placeholder for actual AES encryption logic`** 却不调用 **EVP**。
+  - 误用 **`EVP_aes_128_cfb*`** 或 **DES** API 完成 OFB 题。

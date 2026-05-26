@@ -1,0 +1,19 @@
+supplement: |
+  DES-CBC（test_data）：K/IV/明文均为 **hex 解码后的二进制**：密钥 8 字节、IV 8 字节、明文 16 字节；密文输出 **32 个 hex**（**无 PKCS**；与 PyCryptodome `DES.new(..., MODE_CBC, iv).encrypt(plain)` 一致）。在 **第一次 `EVP_EncryptUpdate` 之前** 必须 `EVP_CIPHER_CTX_set_padding(ctx, 0)`；OpenSSL 3 须先 `OSSL_PROVIDER_load(NULL, "legacy")` 再 `EVP_des_cbc()`。
+  CBC：第一块 = **E_K(P1 ⊕ IV)**，第二块 = **E_K(P2 ⊕ C1)**（先对明文块与链值异或，**再**进 DES；**禁止** `E_K(P1) ⊕ IV`、`C1 = E_K(P1) ⊕ IV`、或两块独立 **ECB**）。
+  **OpenSSL `EVP_des_cbc`：** `EVP_EncryptUpdate` 传入的必须是**原始明文字节**，**禁止**先把第一块做成 `P ⊕ IV` 再送入（EVP 内部已做 CBC，再异或会错）。**手搓**单块 `DES_encrypt` 时：`in = P ^ chain`（首块 chain=IV），`C = DES_K(in)`，`chain = C`。
+  **自检：** 同一向量若误做成 **ECB**，密文会以 **`958920B1358EF197`** 开头（test_data DES-ECB）；CBC 正确应为 **`5EB15B91506B9AE7`** 开头。
+  **stdout 只输出密文 hex，禁止输出 IV**（评测会把多余 hex 当成密文导致「结果不匹配」或长度错误）。
+  **自测 golden：** 密钥 `57696C6C69616D53`、IV `5072656E74696365`、明文 `4E6574776F726B205365637572697479` → **`5EB15B91506B9AE7CEB65954AE115E03`**。若首块错、次块接近对，多为 **IV 未 XOR 进第一块**、**链值错用明文**、或 **EVP 与手搓异或重复**。若得到 **48 hex**，多为未关填充多出一整块。
+  OpenSSL：`openssl enc -des-cbc -nopad -provider default -provider legacy -K 57696C6C69616D53 -iv 5072656E74696365 -in plain.bin`。
+  **若通用算法模板强调「PKCS 填充」与本段冲突：以本段 nopad 为准。**
+
+python: |
+  注释仅用 `#` 与半角 ASCII 标点，禁用全角 `：`（U+FF1A）。
+
+c: |
+  密文仅一段 hex，长度与 **明文 hex 相同**（本测例 32）；勿打印交互提示到 stdout。
+  hex 转二进制：密钥 **16 hex**、IV **16 hex**、明文 **32 hex** → 8+8+16 字节；**禁止**短缓冲截断。
+  **`EVP_des_cbc()`** + legacy + **`set_padding(0)`**，**禁止** `EVP_des_ecb`。`EVP_EncryptInit_ex(ctx, EVP_des_cbc(), NULL, key, iv)`：**key、iv 各指向 8 字节**；**Update 明文为未异或的 P**（勿手动 `P^IV` 再 Update）。
+  **禁止**对两个 8 字节块各调用一次 ECB 式 `DES_encrypt` 而**不**维护 `chain`（那是 ECB，首 8 字节会对成 `958920B1358EF197`，与 CBC golden 不符）。
+  若 `algorithms/c/DES-CBC.yaml` 与上文冲突，**nopad + EVP_des_cbc + 原始明文 Update** 优先；输出总长 **32 hex**。

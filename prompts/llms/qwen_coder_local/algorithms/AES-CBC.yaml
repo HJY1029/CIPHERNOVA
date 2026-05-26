@@ -1,0 +1,71 @@
+# 未过槽：AES|cbc|c、AES|cbc|cpp（batch 2026-05-20：56min 仍错 — 用了 aes_256_cbc、无 set_padding(0)）
+mandatory: |
+  **AES-128-CBC only**：**`EVP_aes_128_cbc()`**（**禁止** **`EVP_aes_256_cbc` / `EVP_aes_192_cbc`** — TEST_KEY 仅 **32 hex=16B**）。
+  **`EVP_CIPHER_CTX_set_padding(ctx, 0)`** 必须在 **Update 前**（与 test_data 一致，**禁止** 默认 PKCS）。
+  key/iv 各 **16B**（各 **32 hex**）；明文 **32B**（**64 hex**）→ 密文 **64 hex**。
+  **golden 前缀：`9b004899`**（全串 **`9b0048990511252f5e1088663f8cb038a21952eac6d2c27546369fca0136bf04`**）。
+  **错例（必改）：** 前缀 **`afe3e274`** = 误用 **256-bit CBC** 或未 **set_padding(0)** / 手搓 AES。
+  **禁止：** `des.h`、`DES_*`、`KEY_SIZE 8`、`MixColumns`/`S_BOX` 手搓表、**`scanf`**、仅 **`ciphertext:`**、**>120 行**。
+
+supplement: |
+  **整文件 ≤80 行**：只保留 **getenv → hex→bytes → EVP 五步 → `printf("密文: ")+hex`**。
+  **日志 aes-cbc-c/cpp：** **`memcpy(plaintext_env,…)`** 未 **hex 解码** → 密文全错；**`fatal error: openssl/evp.h`**（Windows）→ 删 `<openssl/` 改纯 C 或 WSL+libssl-dev。
+  **C/C++ 禁止** 根据 `strlen(key_hex)` 自动选 **aes_256**；本题固定 **128-bit**。
+  stdout **必须** **`printf("密文: ");`** 再 **`%02x` 循环**（禁止只打裸 hex 无标签）。
+
+c: |
+  **【AES|cbc|c】照抄下列骨架，仅允许改变量名；cipher 行必须是 `EVP_aes_128_cbc()`：**
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;
+    strip(ph);strip(kh);strip(ih);
+    if(strlen(ph)!=64||strlen(kh)!=32||strlen(ih)!=32)return 1;
+    unsigned char pt[32],key[16],iv[16],out[32];
+    if(h2b(ph,pt,32)||h2b(kh,key,16)||h2b(ih,iv,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!ctx)return 1;
+    if(!EVP_EncryptInit_ex(ctx,EVP_aes_128_cbc(),NULL,key,iv))return 1;
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;
+    if(!EVP_EncryptUpdate(ctx,out,&o1,pt,32))return 1;
+    if(!EVP_EncryptFinal_ex(ctx,out+o1,&o2))return 1;
+    printf("密文: ");
+    for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+  **禁止** 改成 **`EVP_aes_256_cbc()`**；**禁止** 省略 **`set_padding(0)`**。
+
+cpp: |
+  **【AES|cbc|cpp】** 照抄本题 **`c:`** 段 fenced 骨架（逻辑完全相同）；头文件加 **`<cctype>`**。
+  **必须** **`EVP_aes_128_cbc()`** + **`set_padding(0)`** + **`printf("密文: ");`**；密文缓冲 **`out`**（勿 **`ciphertext`** 指针/数组同名）。
+
+python: |
+  ```python
+  import os
+  from Crypto.Cipher import AES
+  k=bytes.fromhex(os.getenv("TEST_KEY","").strip())
+  iv=bytes.fromhex(os.getenv("TEST_IV","").strip())
+  pt=bytes.fromhex(os.getenv("TEST_PLAINTEXT","").strip())
+  print("密文:", AES.new(k,AES.MODE_CBC,iv).encrypt(pt).hex().lower())
+  ```
+
+test_feedback_improve: |
+  **AES-CBC：** 改 **`EVP_aes_128_cbc()`**（非 256）；补 **`EVP_CIPHER_CTX_set_padding(ctx,0)`**；stdout **`密文:`**；golden **`9b004899`**
+
+test_feedback_improve_c: |
+  **日志 aes-cbc-c：** 若见 **`memcpy(key_env)`/`memcpy(plaintext_env)`** → **整文件改照抄骨架 `h2b`**，勿把 hex 当 ASCII 加密。若 **`EVP_aes_256_cbc`** 或前缀 **`afe3e274`** → 改 **`EVP_aes_128_cbc()`** + **`set_padding(0)`**。若 **`fatal error: openssl/evp.h`** → 无头则纯 C 实现。
+
+test_feedback_improve_cpp: |
+  **日志 aes-cbc-cpp：** 同 c；另：**`#include <cstring>`**；**`std::memcpy(env)`** 必改为 **hex 解码**；**`printf("密文: ");`**。

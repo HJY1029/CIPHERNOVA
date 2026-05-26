@@ -1,0 +1,156 @@
+{
+  "protocol": "DES_12_grid_ECB_CBC_CFB_OFB_x_python_c_cpp",
+  "arm": "test_empty",
+  "inputs_dir": "D:\\aicrypto-helper\\experiments\\rw_empty_test",
+  "rates_percent": {
+    "GSR": 0.0,
+    "VPR": 0.0,
+    "FTPR": 0.0
+  },
+  "rows": [
+    {
+      "task_id": "DES_ECB_python",
+      "mode": "ECB",
+      "language": "python",
+      "file": "experiments\\rw_empty_test\\des_ecb.py",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_ECB_c",
+      "mode": "ECB",
+      "language": "c",
+      "file": "experiments\\rw_empty_test\\des_ecb.c",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_ECB_cpp",
+      "mode": "ECB",
+      "language": "cpp",
+      "file": "experiments\\rw_empty_test\\des_ecb.cpp",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CBC_python",
+      "mode": "CBC",
+      "language": "python",
+      "file": "experiments\\rw_empty_test\\des_cbc.py",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CBC_c",
+      "mode": "CBC",
+      "language": "c",
+      "file": "experiments\\rw_empty_test\\des_cbc.c",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CBC_cpp",
+      "mode": "CBC",
+      "language": "cpp",
+      "file": "experiments\\rw_empty_test\\des_cbc.cpp",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CFB_python",
+      "mode": "CFB",
+      "language": "python",
+      "file": "experiments\\rw_empty_test\\des_cfb.py",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CFB_c",
+      "mode": "CFB",
+      "language": "c",
+      "file": "experiments\\rw_empty_test\\des_cfb.c",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_CFB_cpp",
+      "mode": "CFB",
+      "language": "cpp",
+      "file": "experiments\\rw_empty_test\\des_cfb.cpp",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_OFB_python",
+      "mode": "OFB",
+      "language": "python",
+      "file": "experiments\\rw_empty_test\\des_ofb.py",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_OFB_c",
+      "mode": "OFB",
+      "language": "c",
+      "file": "experiments\\rw_empty_test\\des_ofb.c",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    },
+    {
+      "task_id": "DES_OFB_cpp",
+      "mode": "OFB",
+      "language": "cpp",
+      "file": "experiments\\rw_empty_test\\des_ofb.cpp",
+      "missing": true,
+      "gsr": false,
+      "vpr": false,
+      "ftpr": false,
+      "validation_hint": "文件不存在",
+      "test_hint": null
+    }
+  ]
+}

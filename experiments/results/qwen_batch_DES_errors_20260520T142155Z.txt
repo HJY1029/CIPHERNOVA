@@ -1,0 +1,127 @@
+# scripts/run_qwen_batch_des.py — Qwen 批量失败（仅 DES）
+# started_utc: 2026-05-20T14:21:55.100407+00:00
+# provider: qwen_coder_local
+# results_json: /mnt/d/aicrypto-helper/experiments/results/qwen_batch_DES_20260520T142155Z.json
+# configs_count: 7
+# since: 2026-05-04
+# only_pending: True
+# pending_stats: {'input': 12, 'pending': 7, 'no_record': 7, 'retest_fail': 0, 'retest_pass_skip': 5, 'skip_disabled': 0}
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-20T19:31:42.334903+00:00
+provider: qwen_coder_local
+case_id: des-ecb-c
+config: {"algorithm": "DES", "mode": "ECB", "language": "c"}
+success: False
+generation_ok: False
+vector_status: —
+error:
+输入内容过长，超过了模型的上下文限制。输入tokens (37653) 超过或等于上下文限制 (32768)。请减少prompt长度或使用支持更大上下文的模型（如gpt-4-turbo，支持128K上下文）。
+total_ms: 18979024
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-21T10:23:30.455547+00:00
+provider: qwen_coder_local
+case_id: des-cbc-cpp
+config: {"algorithm": "DES", "mode": "CBC", "language": "cpp"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: /tmp/aicrypto_tester/test_86963a442d0946ccb452aca25e40b23e.cpp: In function ‘int main()’:
+/tmp/aicrypto_tester/test_86963a442d0946ccb452aca25e40b23e.cpp:16:28: error: ‘strlen’ was not declared in this scope
+   16 |     size_t plaintext_len = strlen(plaintext_env);
+      |                            ^~~~~~
+/tmp/aicrypto_tester/test_86963a442d0946ccb452aca25e40b23e.cpp:4:1: note: ‘strlen’ is defined in header ‘<cstring>’; did you forget to ‘#include <cstring>’?
+    3 | #include <openssl/evp.
+error:
+编译失败: /tmp/aicrypto_tester/test_86963a442d0946ccb452aca25e40b23e.cpp: In function ‘int main()’:
+/tmp/aicrypto_tester/test_86963a442d0946ccb452aca25e40b23e.cpp:16:28: error: ‘strlen’ was not declared in this scope
+   16 |     size_t plaintext_len = strlen(plaintext_env);
+      |                            ^~~~~~
+/tmp/aicrypto_tester/test_86963a442d0946ccb452aca25e40b23e.cpp:4:1: note: ‘strlen’ is defined in header ‘<cstring>’; did you forget to ‘#include <cstring>’?
+    3 | #include <openssl/evp.h>
+  +++ |+#include <cstring>
+    4 | 
+/tmp/aicrypto_tester/test_86963a442d0946ccb452aca25e40b23e.cpp:17:5: error: ‘memcpy’ was not declared in this scope
+   17 |     memcpy(plaintext, plaintext_env, plaintext_len);
+      |     ^~~~~~
+/tmp/aicrypto_tester/test_86963a442d0946ccb452aca25e40b23e.cpp:17:5: note: ‘memcpy’ is defined in header ‘<cstring>’; did you forget to ‘#include <cstring>’?
+
+
+提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。
+解决方案：
+1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）
+2. 或者要求LLM生成不依赖OpenSSL的纯C++实现代码
+total_ms: 30793646
+generated_filename: des_cbc.cpp
+generated_code:
+```
+#include <iostream>
+#include <iomanip>
+#include <openssl/evp.h>
+
+int main() {
+    const char* plaintext_env = std::getenv("TEST_PLAINTEXT");
+    const char* key_env = std::getenv("TEST_KEY");
+    const char* iv_env = std::getenv("TEST_IV");
+
+    if (!plaintext_env || !key_env || !iv_env) {
+        std::cerr << "Environment variables not set." << std::endl;
+        return 1;
+    }
+
+    unsigned char plaintext[256];
+    size_t plaintext_len = strlen(plaintext_env);
+    memcpy(plaintext, plaintext_env, plaintext_len);
+
+    unsigned char key[32];
+    size_t key_len = strlen(key_env);
+    memcpy(key, key_env, key_len);
+
+    unsigned char iv[16];
+    size_t iv_len = strlen(iv_env);
+    memcpy(iv, iv_env, iv_len);
+
+    EVP_CIPHER_CTX* ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) {
+        std::cerr << "Failed to create cipher context." << std::endl;
+        return 1;
+    }
+
+    if (1 != EVP_EncryptInit_ex(ctx, EVP_des_cbc(), NULL, key, iv)) {
+        std::cerr << "Failed to initialize encryption." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+
+    unsigned char ciphertext[256];
+    int len;
+    if (1 != EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len)) {
+        std::cerr << "Failed to update encryption." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+    int ciphertext_len = len;
+
+    if (1 != EVP_EncryptFinal_ex(ctx, ciphertext + len, &len)) {
+        std::cerr << "Failed to finalize encryption." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+    ciphertext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    for (size_t i = 0; i < ciphertext_len; ++i) {
+        std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(ciphertext[i]);
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+

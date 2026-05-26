@@ -1,0 +1,597 @@
+{
+  "started_at_utc": "2026-05-08T09:39:28.656113+00:00",
+  "providers": [
+    "openai"
+  ],
+  "configs_count": 45,
+  "results": [
+    {
+      "provider": "openai",
+      "cases": [
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 23237,
+          "case_id": "des-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 33273,
+          "case_id": "des-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 41372,
+          "case_id": "des-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 19569,
+          "case_id": "des-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": false,
+          "error": "测试失败：结果不匹配\n实际结果: 4e6574776f726b205365637572697479\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=4e6574776f726b205365637572697479, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 4e6574776f726b205365637572697479\n",
+          "vector_status": "未通过",
+          "total_ms": 142528,
+          "case_id": "des-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 34849,
+          "case_id": "des-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 17765,
+          "case_id": "des-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 29657,
+          "case_id": "des-cfb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 36029,
+          "case_id": "des-cfb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 17670,
+          "case_id": "des-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "无法从输出中提取密文。\n程序输出:\n密文: \n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+          "vector_status": "未通过",
+          "total_ms": 117460,
+          "case_id": "des-ofb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "DES",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "测试失败：结果不匹配\n实际结果: 4940464e4c4c5f120317061b0600171c\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=4940464e4c4c5f120317061b0600171c, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n匹配度分析：\n  - 匹配字符数: 2/32\n  - 匹配率: 6.2%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 4940464e4c4c5f120317061b0600171c\n",
+          "vector_status": "未通过",
+          "total_ms": 149787,
+          "case_id": "des-ofb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 18816,
+          "case_id": "aes-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "程序执行成功，但没有产生任何输出。\n可能的原因：\n1. 程序在等待输入（但应该从环境变量读取）\n2. 程序没有输出密文或明文\n3. 程序输出格式不正确（没有包含'密文'、'ciphertext'等关键词）",
+          "vector_status": "未通过",
+          "total_ms": 289432,
+          "case_id": "aes-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 39046,
+          "case_id": "aes-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 19011,
+          "case_id": "aes-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 32982,
+          "case_id": "aes-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 34970,
+          "case_id": "aes-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 22783,
+          "case_id": "aes-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /usr/bin/ld: /tmp/ccqEHfJN.o: in function `aes_encrypt':\ntest_ce74fa60f06546d5859b732f3fb3b47c.c:(.text+0x123): undefined reference to `KeyExpansion'\n/usr/bin/ld: test_ce74fa60f06546d5859b732f3fb3b47c.c:(.text+0x1c5): undefined reference to `Cipher'\ncollect2: error: ld returned 1 exit status\n",
+          "vector_status": "未通过",
+          "total_ms": 241117,
+          "case_id": "aes-cfb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "测试失败：结果不匹配\n实际结果: 44574b49575153407e4653423e585a1d334e796a7769767c7a7467601b667933\n预期结果: EAC2DD6334E8FA07FDAB477ABA1628A93AFAAAD753B7E05CD59548A2927BDA97\n(规范化后: 实际=44574b49575153407e4653423e585a1d334e796a7769767c7a7467601b667933, 预期=eac2dd6334e8fa07fdab477aba1628a93afaaad753b7e05cd59548a2927bda97)\n\n匹配度分析：\n  - 匹配字符数: 2/64\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 44574b49575153407e4653423e585a1d334e796a7769767c7a7467601b667933\n",
+          "vector_status": "未通过",
+          "total_ms": 121412,
+          "case_id": "aes-cfb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 17050,
+          "case_id": "aes-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_0f095d7c9a0243fe815daa82e867a5c5.c: In function ‘main’:\n/tmp/aicrypto_tester/test_0f095d7c9a0243fe815daa82e867a5c5.c:184:27: error: ‘ctx’ undeclared (first use in this function)\n  184 |         EVP_EncryptUpdate(ctx, keystream_block, &len, feedback, 16);\n      |                           ^~~\n/tmp/aicrypto_tester/test_0f095d7c9a0243fe815daa82e867a5c5.c:184:27: note: each undeclared identifier is reported only once for each function it appears in\n",
+          "vector_status": "未通过",
+          "total_ms": 403480,
+          "case_id": "aes-ofb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "测试失败：结果不匹配\n实际结果: e4a9a8aaa9a5b7caddb2b0a192bda4c5de0a583231444f60634627316923456d\n预期结果: EA0B8FB83A7EE32B2EA6995768424EC2864696B095F418FDE8848B72CA0D8130\n(规范化后: 实际=e4a9a8aaa9a5b7caddb2b0a192bda4c5de0a583231444f60634627316923456d, 预期=ea0b8fb83a7ee32b2ea6995768424ec2864696b095f418fde8848b72ca0d8130)\n\n匹配度分析：\n  - 匹配字符数: 3/64\n  - 匹配率: 4.7%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: e4a9a8aaa9a5b7caddb2b0a192bda4c5de0a583231444f60634627316923456d\n",
+          "vector_status": "未通过",
+          "total_ms": 518145,
+          "case_id": "aes-ofb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 30415,
+          "case_id": "aes-gcm-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c: In function ‘MixColumns’:\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:119:35: error: ‘mul2’ undeclared (first use in this function)\n  119 |         temp[0] = (unsigned char)(mul2[state[0 + i * 4]] ^ mul3[state[1 + i * 4]] ^ state[2 + i * 4] ^ state[3 + i * 4]);\n      |                                   ^~~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:119:35: note: each undeclared identifier is reported only once for each function it appears in\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:119:60: error: ‘mul3’ undeclared (first use in this function)\n  119 |         temp[0] = (unsigned char)(mul2[state[0 + i * 4]] ^ mul3[state[1 + i * 4]] ^ state[2 + i * 4] ^ state[3 + i * 4]);\n      |                                                            ^~~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c: In function ‘main’:\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:175:53: warning: passing argument 2 of ‘hex_to_bytes’ from incompatible pointer type [-Wincompatible-pointer-types]\n  175 |     int plaintext_len = hex_to_bytes(plaintext_hex, &plaintext);\n      |                                                     ^~~~~~~~~~\n      |                                                     |\n      |                                                     unsigned char **\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:5:57: note: expected ‘unsigned char *’ but argument is of type ‘unsigned char **’\n    5 | static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {\n      |                                          ~~~~~~~~~~~~~~~^~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:175:25: error: too few arguments to function ‘hex_to_bytes’\n  175 |     int plaintext_len = hex_to_bytes(plaintext_hex, &plaintext);\n      |                         ^~~~~~~~~~~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:5:12: note: declared here\n    5 | static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {\n      |            ^~~~~~~~~~~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:176:41: warning: passing argument 2 of ‘hex_to_bytes’ from incompatible pointer type [-Wincompatible-pointer-types]\n  176 |     int key_len = hex_to_bytes(key_hex, &key);\n      |                                         ^~~~\n      |                                         |\n      |                                         unsigned char **\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:5:57: note: expected ‘unsigned char *’ but argument is of type ‘unsigned char **’\n    5 | static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {\n      |                                          ~~~~~~~~~~~~~~~^~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:176:19: error: too few arguments to function ‘hex_to_bytes’\n  176 |     int key_len = hex_to_bytes(key_hex, &key);\n      |                   ^~~~~~~~~~~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:5:12: note: declared here\n    5 | static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {\n      |            ^~~~~~~~~~~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:177:39: warning: passing argument 2 of ‘hex_to_bytes’ from incompatible pointer type [-Wincompatible-pointer-types]\n  177 |     int iv_len = hex_to_bytes(iv_hex, &iv);\n      |                                       ^~~\n      |                                       |\n      |                                       unsigned char **\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:5:57: note: expected ‘unsigned char *’ but argument is of type ‘unsigned char **’\n    5 | static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {\n      |                                          ~~~~~~~~~~~~~~~^~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:177:18: error: too few arguments to function ‘hex_to_bytes’\n  177 |     int iv_len = hex_to_bytes(iv_hex, &iv);\n      |                  ^~~~~~~~~~~~\n/tmp/aicrypto_tester/test_b56d2cbccffa434698fdd5b857f8e885.c:5:12: note: declared here\n    5 | static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {\n      |            ^~~~~~~~~~~~\n",
+          "vector_status": "未通过",
+          "total_ms": 387412,
+          "case_id": "aes-gcm-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "GCM",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 57192,
+          "case_id": "aes-gcm-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 48805,
+          "case_id": "aes-ctr-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "c"
+          },
+          "success": false,
+          "error": "测试失败：结果不匹配\n实际结果: b04e5907f21bbbc7ba33916286a1a6e975a26db2c25888cdcdb980dfb09d3e6deb47fba37f07c040b6f52e6aef38e2d22d10c3a00314bf46fe25ae08135e872e\n预期结果: 874D6191B620E3261BEF6864990DB6CE9806F66B7970FDFF8617187BB9FFFDFF5AE4DF3EDBD5D35E5B4F09020DB03EAB1E031DDA2FBE03D1792170A0F3009CEE\n(规范化后: 实际=b04e5907f21bbbc7ba33916286a1a6e975a26db2c25888cdcdb980dfb09d3e6deb47fba37f07c040b6f52e6aef38e2d22d10c3a00314bf46fe25ae08135e872e, 预期=874d6191b620e3261bef6864990db6ce9806f66b7970fdff8617187bb9fffdff5ae4df3edbd5d35e5b4f09020db03eab1e031dda2fbe03d1792170a0f3009cee)\n\n匹配度分析：\n  - 匹配字符数: 7/128\n  - 匹配率: 5.5%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: b04e5907f21bbbc7ba33916286a1a6e975a26db2c25888cdcdb980dfb09d3e6deb47fba37f07c040b6f52e6aef38e2d22d10c3a00314bf46fe25ae08135e872e\n",
+          "vector_status": "未通过",
+          "total_ms": 108439,
+          "case_id": "aes-ctr-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "AES",
+            "mode": "CTR",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 35194,
+          "case_id": "aes-ctr-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 23197,
+          "case_id": "rsa-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 35345,
+          "case_id": "rsa-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "RSA",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 32353,
+          "case_id": "rsa-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 18036,
+          "case_id": "sm4-ecb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 23026,
+          "case_id": "sm4-ecb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "ECB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 31399,
+          "case_id": "sm4-ecb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 16740,
+          "case_id": "sm4-cbc-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "c"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 25243,
+          "case_id": "sm4-cbc-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CBC",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 30128,
+          "case_id": "sm4-cbc-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 18839,
+          "case_id": "sm4-cfb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "测试失败：结果不匹配\n实际结果: 2e2b2d54bd69048c25d412fb5ee3ca82\n预期结果: 2754B10C806AEF23698989882D80903A\n(规范化后: 实际=2e2b2d54bd69048c25d412fb5ee3ca82, 预期=2754b10c806aef23698989882d80903a)\n\n匹配度分析：\n  - 匹配字符数: 2/32\n  - 匹配率: 6.2%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 2e2b2d54bd69048c25d412fb5ee3ca82\n",
+          "vector_status": "未通过",
+          "total_ms": 282783,
+          "case_id": "sm4-cfb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "CFB",
+            "language": "cpp"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 33379,
+          "case_id": "sm4-cfb-cpp",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "python"
+          },
+          "success": true,
+          "error": null,
+          "vector_status": "通过",
+          "total_ms": 18072,
+          "case_id": "sm4-ofb-python",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "c"
+          },
+          "success": false,
+          "error": "编译失败: /tmp/aicrypto_tester/test_9b35aa358373406596bba20acc67e45a.c: In function ‘main’:\n/tmp/aicrypto_tester/test_9b35aa358373406596bba20acc67e45a.c:108:47: error: conflicting types for ‘ciphertext’; have ‘uint8_t[1024]’ {aka ‘unsigned char[1024]’}\n  108 |     uint8_t key[16], iv[16], plaintext[1024], ciphertext[1024];\n      |                                               ^~~~~~~~~~\n/tmp/aicrypto_tester/test_9b35aa358373406596bba20acc67e45a.c:102:20: note: previous definition of ‘ciphertext’ with type ‘unsigned char *’\n  102 |     unsigned char *ciphertext = _aicrypto_ct_buf;\n      |                    ^~~~~~~~~~\n",
+          "vector_status": "未通过",
+          "total_ms": 293721,
+          "case_id": "sm4-ofb-c",
+          "generation_ok": true
+        },
+        {
+          "config": {
+            "algorithm": "SM4",
+            "mode": "OFB",
+            "language": "cpp"
+          },
+          "success": false,
+          "error": "代码执行失败: *** stack smashing detected ***: terminated\n",
+          "vector_status": "未通过",
+          "total_ms": 303783,
+          "case_id": "sm4-ofb-cpp",
+          "generation_ok": true
+        }
+      ]
+    }
+  ],
+  "finished_at_utc": "2026-05-08T10:56:57.776423+00:00"
+}

@@ -1,0 +1,1007 @@
+{% extends "base.html" %}
+
+{% block title %}批量生成 - 织密新星 (CipherNova){% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>🚀 批量生成</h1>
+        <p>一次生成多个算法/模式的代码，提高效率</p>
+    </div>
+    <div class="content">
+        <div id="status" class="status"></div>
+        <div id="llmProviderSwitchLog" style="display:none; background:#fff8e6; border:1px solid #e6c200; color:#5c4a00; margin-bottom:14px; padding:10px 14px; border-radius:8px; max-height:140px; overflow-y:auto; font-size:0.9em;">
+            <strong>LLM 线路变更记录</strong>
+            <div id="llmProviderSwitchLogLines" style="margin-top:8px;"></div>
+        </div>
+        
+        <div class="form-group">
+            <label>LLM提供商</label>
+            <select id="provider" class="form-control">
+                <option value="">加载中...</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label>选择要生成的配置（可多选）</label>
+            <div style="margin-bottom: 10px; display: flex; gap: 10px;">
+                <button type="button" class="btn btn-secondary" onclick="selectAllBatchConfigs()" style="padding: 8px 16px; font-size: 0.9em;">全选</button>
+                <button type="button" class="btn btn-secondary" onclick="deselectAllBatchConfigs()" style="padding: 8px 16px; font-size: 0.9em;">取消全选</button>
+            </div>
+            <div id="batchConfigs" style="max-height: 400px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; background: #f8f9fa;">
+                <!-- 动态生成配置项 -->
+            </div>
+        </div>
+        <button type="button" class="btn" onclick="batchGenerate()">开始批量生成</button>
+        <div id="batchProgressArea" style="display:none; margin-top: 20px;">
+            <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <span id="batchProgressLabel" style="font-weight: 600;">准备中…</span>
+                <span id="batchProgressFraction" style="color:#666; font-size: 0.9em;">0 / 0</span>
+            </div>
+            <div style="background:#e9ecef; border-radius: 8px; height: 14px; overflow: hidden;">
+                <div id="batchProgressFill" style="height:100%; width:0%; background: linear-gradient(90deg,#4a90d9,#67b26f); transition: width 0.2s ease;"></div>
+            </div>
+            <div id="batchProgressCurrent" style="margin-top: 10px; font-size: 0.88em; color:#555; min-height: 1.4em; word-break: break-all;"></div>
+            <div id="batchLiveTableWrap" style="display:none; margin-top:16px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px;">
+                    <div style="font-weight:700; color:#1f2937;">实时明细</div>
+                    <label style="font-size:12px;color:#6b7280;display:flex;align-items:center;gap:6px;cursor:pointer;">
+                        <input type="checkbox" id="batchHidePendingToggle" checked onchange="applyLiveTableRowVisibility()" />
+                        隐藏待调度
+                    </label>
+                </div>
+                <div style="overflow-x:auto; border:1px solid #e5e7eb; border-radius:10px;">
+                <table style="width:100%; border-collapse:separate; border-spacing:0; font-size:0.82em; background:#fff;">
+                    <thead>
+                        <tr style="background:#f8fafc;">
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:left;">序号</th>
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:left;">线路</th>
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:left;">算法</th>
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:left;">模式</th>
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:left;">语言</th>
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:left;">case_id</th>
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:left;">生成</th>
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:left;">向量</th>
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:right;">耗时</th>
+                            <th style="position:sticky;top:0;z-index:1;border-bottom:1px solid #e5e7eb; padding:8px 10px; text-align:left;">代码</th>
+                        </tr>
+                    </thead>
+                    <tbody id="batchLiveTbody"></tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+        <div id="batchResult" style="margin-top: 20px; display: none;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const BATCH_PROVIDER_SESSION_KEY = 'batchPageProviderChoice';
+
+    function appendBatchProviderSwitchLog(message) {
+        const wrap = document.getElementById('llmProviderSwitchLog');
+        const lines = document.getElementById('llmProviderSwitchLogLines');
+        if (!wrap || !lines) return;
+        wrap.style.display = 'block';
+        const row = document.createElement('div');
+        row.style.cssText = 'margin:4px 0;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06);word-break:break-all;';
+        row.textContent = message;
+        lines.insertBefore(row, lines.firstChild);
+        while (lines.children.length > 12) lines.removeChild(lines.lastChild);
+    }
+
+    function logBatchProviderSwitch(fromVal, toVal, reason) {
+        const ts = new Date().toLocaleString();
+        const line = '[' + ts + '] ' + (fromVal || '（未选）') + ' → ' + (toVal || '（未选）') + ' — ' + reason;
+        appendBatchProviderSwitchLog(line);
+        console.log('[批量页 LLM线路]', line);
+    }
+
+    function initBatchConfigs() {
+        const container = document.getElementById('batchConfigs');
+        const algorithms = ['DES', 'AES', 'RSA', 'SM4'];
+        const modes = { 
+            'DES': ['ECB', 'CBC', 'CFB', 'OFB'], 
+            'AES': ['ECB', 'CBC', 'CFB', 'OFB', 'GCM', 'CTR'], 
+            'SM4': ['ECB', 'CBC', 'CFB', 'OFB'] 
+        };
+        const languages = ['python', 'c', 'cpp'];
+        
+        let html = '';
+        algorithms.forEach(alg => {
+            if (modes[alg]) {
+                modes[alg].forEach(mode => {
+                    languages.forEach(lang => {
+                        const config = { algorithm: alg, mode: mode, language: lang };
+                        html += `
+                            <div style="display: flex; align-items: center; padding: 10px; margin: 5px 0; background: white; border-radius: 6px;">
+                                <input type="checkbox" value='${JSON.stringify(config)}' style="margin-right: 10px; width: 20px; height: 20px;">
+                                <label style="cursor: pointer; flex: 1;">${alg} ${mode} - ${lang}</label>
+                            </div>
+                        `;
+                    });
+                });
+            } else {
+                languages.forEach(lang => {
+                    const config = { algorithm: alg, language: lang };
+                    html += `
+                        <div style="display: flex; align-items: center; padding: 10px; margin: 5px 0; background: white; border-radius: 6px;">
+                            <input type="checkbox" value='${JSON.stringify(config)}' style="margin-right: 10px; width: 20px; height: 20px;">
+                            <label style="cursor: pointer; flex: 1;">${alg} - ${lang}</label>
+                        </div>
+                    `;
+                });
+            }
+        });
+        container.innerHTML = html;
+    }
+
+    async function loadProviders() {
+        try {
+            const response = await fetch('/api/providers');
+            const data = await response.json();
+            
+            if (data.success) {
+                const select = document.getElementById('provider');
+                const prevBefore = (select.value && select.value !== '加载中') ? select.value : '';
+                select.innerHTML = '<option value="">请选择 LLM 提供商</option>';
+                
+                data.providers.forEach(provider => {
+                    const option = document.createElement('option');
+                    option.value = provider.name;
+                    if (provider.enabled === false) {
+                        option.disabled = true;
+                    }
+                    const off = (provider.enabled === false) ? ' [config未启用]' : '';
+                    option.textContent = provider.display_name + off +
+                        (provider.is_default ? ' [配置默认]' : '') +
+                        (provider.has_api_key ? ' ✓' : ' ⚠');
+                    select.appendChild(option);
+                });
+
+                const nameSet = new Set(
+                    [...select.options].map(o => o.value).filter(Boolean)
+                );
+                const savedSession = sessionStorage.getItem(BATCH_PROVIDER_SESSION_KEY) || '';
+                let chosen = '';
+                let reason = '';
+                if (savedSession && nameSet.has(savedSession)) {
+                    chosen = savedSession;
+                    reason = '恢复本页上次选择（同标签页会话）';
+                } else if (prevBefore && nameSet.has(prevBefore)) {
+                    chosen = prevBefore;
+                    reason = '保持刷新前已选线路';
+                }
+                if (chosen) {
+                    const before = prevBefore || '（未选）';
+                    select.value = chosen;
+                    if (before !== chosen) {
+                        logBatchProviderSwitch(before, chosen, reason);
+                    }
+                }
+            }
+        } catch (error) {
+            showStatus('加载提供商列表失败: ' + error.message, 'error');
+        }
+    }
+
+    function batchResultConfigLabel(result) {
+        const c = result.config;
+        const m = c.mode ? ` ${c.mode}` : '';
+        return `${c.algorithm}${m} - ${c.language}`;
+    }
+
+    function buildBatchResultHTML(results, successCount, failCount) {
+        const failed = results.map((r, i) => ({ r, i })).filter(x => x.r && !x.r.success);
+        let genOkCount = 0;
+        for (const r of results) {
+            if (r && r.generation_ok) genOkCount++;
+        }
+        const summary = `
+            <p style="margin:0 0 12px; padding:10px 12px; background:#e7f3ff; border-radius:8px; font-size:0.88em; color:#0c5460; border-left:4px solid #17a2b8;">
+                <strong>统计说明：</strong>「标准测试通过」= 编译+golden 比对成功，不是「任务是否跑完」。全部失败时此处可为 0。「代码已生成」= 模型已产出并保存文件。
+            </p>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; margin-bottom:16px;">
+                <div style="background:#d4edda; border-radius:8px; padding:16px; border-left:4px solid #28a745;">
+                    <div style="font-size:1.75rem; font-weight:700; color:#155724;">${successCount}</div>
+                    <div style="color:#155724;">标准测试通过</div>
+                </div>
+                <div style="background:#f8d7da; border-radius:8px; padding:16px; border-left:4px solid #dc3545;">
+                    <div style="font-size:1.75rem; font-weight:700; color:#721c24;">${failCount}</div>
+                    <div style="color:#721c24;">未通过测试</div>
+                </div>
+                <div style="background:#fff3cd; border-radius:8px; padding:16px; border-left:4px solid #ffc107;">
+                    <div style="font-size:1.75rem; font-weight:700; color:#856404;">${genOkCount}</div>
+                    <div style="color:#856404;">代码已生成</div>
+                </div>
+            </div>`;
+        let failSection = '';
+        if (failed.length > 0) {
+            failSection = `<div style="margin-bottom:16px; padding:12px 14px; background:#fff5f5; border-radius:8px; border:1px solid #f5c6cb;">
+                <strong style="color:#721c24;">失败清单（${failed.length}）</strong>
+                <p style="margin:8px 0 6px; font-size:0.88em; color:#495057;">修改本地 prompt（如 <code>prompts/</code> 下 YAML）后<strong>无需刷新本页</strong>，点击下列按钮会重新加载最新模板。</p>
+                <p style="margin:0 0 10px; font-size:0.88em; color:#495057;"><strong>一键全部重跑</strong>：点下方红色按钮可<strong>一次重试当前所有失败项</strong>；页面上方的<strong>进度条、当前项、实时明细表</strong>会同步更新，结束后下方成功/失败统计与卡片也会刷新。</p>
+                <div style="margin:10px 0 12px;">
+                    <button type="button" class="btn" data-retry-all-failed="1" style="padding:8px 16px; font-size:0.95em; background:#c82333; color:#fff; border:none; border-radius:6px; cursor:pointer;">🔄 一键重新生成全部失败项（${failed.length}）</button>
+                </div>
+                <ul style="margin:8px 0 0 0; padding:0; list-style:none; line-height:1.6;">${failed.map(({ r, i }) =>
+                    `<li style="display:flex; flex-wrap:wrap; align-items:flex-start; gap:8px 12px; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #f1c2c7;">
+                        <span style="flex:1; min-width:200px;"><strong>${escapeHtml(batchResultConfigLabel(r))}</strong> — <span style="color:#721c24;">${escapeHtml(r.error || '未知错误')}</span></span>
+                        <button type="button" class="btn btn-secondary btn-sm" data-retry-index="${i}" style="padding:6px 12px; font-size:0.9em; white-space:nowrap;">🔄 重新生成</button>
+                    </li>`
+                ).join('')}</ul>
+            </div>`;
+        }
+        const cards = results.map((result, i) => {
+            const configLabel = batchResultConfigLabel(result);
+            let retryHtml = '';
+            if (!result.success) {
+                retryHtml = `<div style="margin-top: 10px;">
+                    <button type="button" class="btn btn-secondary btn-sm" data-retry-index="${i}" style="padding: 6px 12px; font-size: 0.9em;">🔄 失败项重新生成</button>
+                </div>`;
+            }
+            let actionsHtml = '';
+            if (result.success && result.code) {
+                actionsHtml = `
+                    <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="viewBatchCode(${i})" style="padding: 6px 12px; font-size: 0.9em;">👁️ 查看代码</button>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="saveBatchToHistory(${i})" style="padding: 6px 12px; font-size: 0.9em;">💾 保存到历史</button>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="copyBatchCode(${i})" style="padding: 6px 12px; font-size: 0.9em;">📋 复制代码</button>
+                    </div>
+                    <div id="batchCodeViewer_${i}" style="display: none; margin-top: 10px; padding: 15px; background: #f8f9fa; border-radius: 6px; border: 1px solid #dee2e6;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <strong>代码预览 (${result.config.language.toUpperCase()})</strong>
+                            <button type="button" onclick="document.getElementById('batchCodeViewer_${i}').style.display='none'" style="background: #dc3545; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer;">✕ 关闭</button>
+                        </div>
+                        <pre style="background: #fff; padding: 10px; border-radius: 4px; overflow-x: auto; max-height: 300px; overflow-y: auto; font-size: 0.9em; white-space: pre-wrap; word-wrap: break-word;"><code id="batchCodeContent_${i}">${escapeHtml(result.code)}</code></pre>
+                    </div>`;
+            }
+            return `
+                <div style="margin: 10px 0; padding: 15px; background: ${result.success ? '#d4edda' : '#f8d7da'}; border-radius: 8px; border-left: 4px solid ${result.success ? '#28a745' : '#dc3545'};">
+                    <strong>${escapeHtml(configLabel)}</strong>
+                    <div style="margin-top: 5px;">
+                        ${result.success ? '✓ 标准测试通过' : ('✗ 未通过: ' + escapeHtml(result.error || '未知错误'))}
+                    </div>
+                    ${retryHtml}
+                    ${actionsHtml}
+                </div>`;
+        }).join('');
+        return summary + failSection + `<h4 style="margin:12px 0 8px; color:#333;">全部明细（${results.length}）</h4><div style="max-height: 400px; overflow-y: auto;">${cards}</div>`;
+    }
+
+    function rebuildBatchResultPanel() {
+        const results = window.batchResults;
+        const resultDiv = document.getElementById('batchResult');
+        if (!results || !results.length || !resultDiv) return;
+        let successCount = 0;
+        let failCount = 0;
+        for (const r of results) {
+            if (r && r.success) successCount++;
+            else failCount++;
+        }
+        resultDiv.innerHTML = buildBatchResultHTML(results, successCount, failCount);
+        const frac = document.getElementById('batchProgressFraction');
+        if (frac) {
+            let g = 0;
+            for (const x of results) {
+                if (x && x.generation_ok) g++;
+            }
+            frac.textContent = `测试通过 ${successCount} / 未通过 ${failCount} · 已生成 ${g}（已更新）`;
+        }
+    }
+
+    window.batchRetryRunning = false;
+
+    async function resolveProviderForBatchRetry() {
+        const sel = document.getElementById('provider');
+        if (!sel) return '';
+        if (sel.value) return sel.value;
+        try {
+            const r = await fetch('/api/providers');
+            const d = await r.json();
+            if (!d.success || !d.default_provider) return '';
+            const def = d.default_provider;
+            const opt = [...sel.options].find(o => o.value === def && !o.disabled);
+            if (opt) {
+                sel.value = def;
+                showStatus('未选择线路：本次重新生成已临时使用配置默认「' + def + '」', 'info');
+                return def;
+            }
+        } catch (e) {
+            console.warn(e);
+        }
+        return '';
+    }
+
+    function attachBatchResultClickDelegation() {
+        const el = document.getElementById('batchResult');
+        if (!el || el.dataset.batchClickBound === '1') return;
+        el.dataset.batchClickBound = '1';
+        el.addEventListener('click', function (e) {
+            if (e.target.closest('[data-retry-all-failed]')) {
+                e.preventDefault();
+                retryBatchAllFailed();
+                return;
+            }
+            const btn = e.target.closest('[data-retry-index]');
+            if (!btn) return;
+            e.preventDefault();
+            const idx = parseInt(btn.getAttribute('data-retry-index'), 10);
+            if (!Number.isNaN(idx)) retryBatchItem(idx);
+        });
+    }
+
+    async function retryBatchAllFailed() {
+        if (window.batchRetryRunning) {
+            showStatus('已有重新生成任务进行中，请稍候', 'info');
+            return;
+        }
+        if (!window.batchResults || !window.batchResults.length) {
+            showStatus('没有可重新生成的批量结果', 'error');
+            return;
+        }
+        const failedEntries = window.batchResults.map((r, i) => ({ r, i })).filter(x => x.r && !x.r.success);
+        if (failedEntries.length === 0) {
+            showStatus('当前没有失败项', 'info');
+            return;
+        }
+        const providerValue = await resolveProviderForBatchRetry();
+        if (!providerValue) {
+            showStatus('请先在下拉框选择 LLM 提供商，或在 config.yaml 配置 default_provider', 'error');
+            return;
+        }
+        const indices = failedEntries.map(x => x.i);
+        const configs = failedEntries.map(x => JSON.parse(JSON.stringify(x.r.config)));
+        window.batchRetryRunning = true;
+        const progressArea = document.getElementById('batchProgressArea');
+        const curEl = document.getElementById('batchProgressCurrent');
+        const fracEl = document.getElementById('batchProgressFraction');
+        const fillEl = document.getElementById('batchProgressFill');
+        const labelEl = document.getElementById('batchProgressLabel');
+        if (progressArea) {
+            progressArea.style.display = 'block';
+            try { progressArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) { /* ignore */ }
+        }
+        if (fillEl) fillEl.style.width = '0%';
+        if (labelEl) labelEl.textContent = '正在重新生成失败项…';
+        if (fracEl) fracEl.textContent = `0 / ${configs.length}`;
+        ensureBatchLiveTbodyRowCount(window.batchResults.length);
+        showStatus(`正在一键重新生成 ${configs.length} 个失败项（见上方进度条与实时明细）…`, 'info');
+        try {
+            const response = await fetch('/api/batch-generate-stream', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ configs, provider: providerValue })
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP错误: ${response.status} ${response.statusText}`);
+            }
+            const complete = await consumeBatchStream(response, (data) => {
+                const origIdx = indices[data.index];
+                if (handleBatchStreamProgressData(data, origIdx)) return;
+                if (data && curEl) {
+                    const mark = data.success ? '✓' : '✗';
+                    let line = `[${data.completed}/${data.total}] ${mark} ${data.label || ''}`;
+                    if (!data.success && data.error) line += ` — ${data.error}`;
+                    curEl.textContent = line;
+                }
+                if (data && origIdx !== undefined) {
+                    updateBatchLiveRow(Object.assign({}, data, { index: origIdx }));
+                }
+                if (fillEl && data.total) {
+                    fillEl.style.width = Math.min(100, (data.completed / data.total) * 100) + '%';
+                }
+                if (labelEl) labelEl.textContent = '失败项重跑中…';
+                if (fracEl && data.total) {
+                    fracEl.textContent = `${data.completed} / ${data.total}（失败项重跑）`;
+                }
+            });
+            if (!complete.results || complete.results.length !== configs.length) {
+                throw new Error('服务器返回结果数量与请求不一致');
+            }
+            for (let k = 0; k < complete.results.length; k++) {
+                const origIdx = indices[k];
+                window.batchResults[origIdx] = complete.results[k];
+                window.batchPartialCodes = window.batchPartialCodes || {};
+                if (complete.results[k].success && complete.results[k].code) {
+                    window.batchPartialCodes[origIdx] = complete.results[k].code;
+                } else if (window.batchPartialCodes && window.batchPartialCodes[origIdx]) {
+                    delete window.batchPartialCodes[origIdx];
+                }
+            }
+            if (fillEl) fillEl.style.width = '100%';
+            if (labelEl) labelEl.textContent = '重新生成已完成';
+            rebuildBatchResultPanel();
+            uncheckPassedBatchConfigCheckboxes(complete.results);
+            const ok = complete.results.filter(x => x && x.success).length;
+            showStatus(`一键重新生成结束：${ok} / ${complete.results.length} 成功`, ok === complete.results.length ? 'success' : 'error');
+        } catch (error) {
+            console.error('一键重新生成错误:', error);
+            showStatus('一键重新生成失败: ' + (error.message || '网络或服务器错误'), 'error');
+            if (curEl) curEl.textContent = '';
+            if (labelEl) labelEl.textContent = '已中断';
+        } finally {
+            window.batchRetryRunning = false;
+        }
+    }
+
+    async function retryBatchItem(index) {
+        if (window.batchRetryRunning) {
+            showStatus('已有重新生成任务进行中，请稍候', 'info');
+            return;
+        }
+        if (!window.batchResults || index < 0 || index >= window.batchResults.length) {
+            showStatus('无法重新生成：缺少批量结果或索引无效', 'error');
+            return;
+        }
+        const row = window.batchResults[index];
+        if (!row || !row.config) {
+            showStatus('无法重新生成：该条没有配置信息', 'error');
+            return;
+        }
+        const providerValue = await resolveProviderForBatchRetry();
+        if (!providerValue) {
+            showStatus('请先在下拉框选择 LLM 提供商，或在 config.yaml 配置 default_provider', 'error');
+            return;
+        }
+        const config = JSON.parse(JSON.stringify(row.config));
+        const label = batchResultConfigLabel(row);
+        window.batchRetryRunning = true;
+        showStatus(`正在重新生成：${label} …（已保存的 prompt 修改将自动生效；见上方进度）`, 'info');
+        const progressArea = document.getElementById('batchProgressArea');
+        const curEl = document.getElementById('batchProgressCurrent');
+        const fracEl = document.getElementById('batchProgressFraction');
+        const fillEl = document.getElementById('batchProgressFill');
+        const labelEl = document.getElementById('batchProgressLabel');
+        if (progressArea) {
+            progressArea.style.display = 'block';
+            try { progressArea.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) { /* ignore */ }
+        }
+        if (fillEl) fillEl.style.width = '0%';
+        if (labelEl) labelEl.textContent = '正在重新生成…';
+        if (fracEl) fracEl.textContent = '0 / 1';
+        ensureBatchLiveTbodyRowCount(window.batchResults.length);
+        if (curEl) curEl.textContent = `⟳ 重新生成：${label}`;
+
+        try {
+            const response = await fetch('/api/batch-generate-stream', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ configs: [config], provider: providerValue })
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP错误: ${response.status} ${response.statusText}`);
+            }
+            const complete = await consumeBatchStream(response, (data) => {
+                if (handleBatchStreamProgressData(data, index)) return;
+                if (data && curEl) {
+                    const mark = data.success ? '✓' : '✗';
+                    let line = `${mark} ${data.label || label}`;
+                    if (!data.success && data.error) line += ` — ${data.error}`;
+                    curEl.textContent = line;
+                }
+                if (data) {
+                    updateBatchLiveRow(Object.assign({}, data, { index: index }));
+                }
+                if (fillEl && data.total) {
+                    fillEl.style.width = Math.min(100, (data.completed / data.total) * 100) + '%';
+                }
+                if (fracEl && data.total) {
+                    fracEl.textContent = `${data.completed} / ${data.total}`;
+                }
+            });
+            if (!complete.results || !complete.results[0]) {
+                throw new Error('服务器未返回有效结果');
+            }
+            window.batchResults[index] = complete.results[0];
+            window.batchPartialCodes = window.batchPartialCodes || {};
+            if (complete.results[0].success && complete.results[0].code) {
+                window.batchPartialCodes[index] = complete.results[0].code;
+            } else if (window.batchPartialCodes && window.batchPartialCodes[index]) {
+                delete window.batchPartialCodes[index];
+            }
+            if (fillEl) fillEl.style.width = '100%';
+            if (labelEl) labelEl.textContent = '重新生成已完成';
+            rebuildBatchResultPanel();
+            const r = complete.results[0];
+            if (r.success && r.config) {
+                uncheckBatchConfigCheckboxForConfig(r.config);
+            }
+            showStatus(
+                r.success ? `✓ 重新生成成功：${label}` : `重新生成仍未通过：${label}`,
+                r.success ? 'success' : 'error'
+            );
+        } catch (error) {
+            console.error('重新生成错误:', error);
+            showStatus('重新生成失败: ' + (error.message || '网络或服务器错误'), 'error');
+            if (curEl) curEl.textContent = '';
+            if (labelEl) labelEl.textContent = '已中断';
+        } finally {
+            window.batchRetryRunning = false;
+        }
+    }
+
+    window.retryBatchItem = retryBatchItem;
+    window.retryBatchAllFailed = retryBatchAllFailed;
+
+    function formatMsPretty(msVal) {
+        const n = Number(msVal);
+        if (!Number.isFinite(n) || n < 0) return '—';
+        if (n < 1000) return `${Math.round(n)} ms`;
+        return `${(n / 1000).toFixed(2)} s`;
+    }
+
+    function getLiveTableHidePending() {
+        const ck = document.getElementById('batchHidePendingToggle');
+        return !ck || !!ck.checked;
+    }
+
+    function applyLiveTableRowVisibility() {
+        const tb = document.getElementById('batchLiveTbody');
+        if (!tb) return;
+        const hidePending = getLiveTableHidePending();
+        tb.querySelectorAll('tr').forEach((tr) => {
+            const isPending = tr.dataset.pending === '1';
+            tr.style.display = (hidePending && isPending) ? 'none' : '';
+        });
+    }
+
+    function renderBatchLivePendingRow(i) {
+        return `<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#94a3b8;">${i}</td><td colspan="9" style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#94a3b8;font-style:italic;">待调度…</td>`;
+    }
+
+    function initBatchLiveTable(n) {
+        window.batchPartialCodes = {};
+        const wrap = document.getElementById('batchLiveTableWrap');
+        const tb = document.getElementById('batchLiveTbody');
+        if (!wrap || !tb) return;
+        wrap.style.display = 'block';
+        tb.innerHTML = '';
+        for (let i = 0; i < n; i++) {
+            const tr = document.createElement('tr');
+            tr.dataset.i = String(i);
+            tr.dataset.pending = '1';
+            tr.innerHTML = renderBatchLivePendingRow(i);
+            tb.appendChild(tr);
+        }
+        applyLiveTableRowVisibility();
+    }
+
+    /** 重新生成时保证实时表行数与 batchResults 一致（不清空 batchPartialCodes） */
+    function ensureBatchLiveTbodyRowCount(n) {
+        const wrap = document.getElementById('batchLiveTableWrap');
+        const tb = document.getElementById('batchLiveTbody');
+        if (!wrap || !tb || !n || n < 1) return;
+        wrap.style.display = 'block';
+        const cur = tb.querySelectorAll('tr').length;
+        if (cur === n) return;
+        tb.innerHTML = '';
+        for (let i = 0; i < n; i++) {
+            const tr = document.createElement('tr');
+            tr.dataset.i = String(i);
+            tr.dataset.pending = '1';
+            tr.innerHTML = renderBatchLivePendingRow(i);
+            tb.appendChild(tr);
+        }
+        applyLiveTableRowVisibility();
+    }
+
+    function updateBatchLiveRow(p) {
+        const tb = document.getElementById('batchLiveTbody');
+        if (!tb) return;
+        const tr = tb.querySelector(`tr[data-i="${p.index}"]`);
+        if (!tr) return;
+        if (p.phase === 'running') {
+            const cellStr = (v) => (v !== undefined && v !== null && String(v).trim() !== '') ? String(v) : '—';
+            const mode = cellStr(p.mode);
+            const lang = cellStr(p.language);
+            const alg = cellStr(p.algorithm);
+            const caseId = cellStr(p.case_id);
+            const line = escapeHtml(p.provider_line || '');
+            const td = 'style="padding:8px 10px; vertical-align:top; border-bottom:1px solid #f1f5f9;"';
+            const tdR = 'style="padding:8px 10px; vertical-align:top; text-align:right; border-bottom:1px solid #f1f5f9; white-space:nowrap;"';
+            const tdMono = 'style="padding:8px 10px; vertical-align:top; font-family:ui-monospace,monospace; font-size:0.92em; border-bottom:1px solid #f1f5f9;"';
+            const runBadge = '<span style="display:inline-block;padding:2px 8px;border-radius:999px;background:#fef3c7;color:#b45309;font-weight:600;font-size:12px;">运行中…</span>';
+            tr.dataset.pending = '1';
+            tr.style.background = '#fffbeb';
+            tr.innerHTML = `<td ${td}>${p.index}</td>
+                <td ${td}>${line}</td>
+                <td ${td}>${escapeHtml(alg)}</td>
+                <td ${td}>${escapeHtml(mode)}</td>
+                <td ${td}>${escapeHtml(lang)}</td>
+                <td ${tdMono}>${escapeHtml(caseId)}</td>
+                <td ${td}>${runBadge}</td>
+                <td ${td} title="等待本项整段完成">—</td>
+                <td ${tdR}>—</td>
+                <td ${td}><span style="color:#cbd5e1;">—</span></td>`;
+            applyLiveTableRowVisibility();
+            return;
+        }
+        // 算法/模式/语言/case_id 来自当条 config，与是否生成成功无关；勿用 row_crypt_missing 清空（旧逻辑会在 LLM 失败时误打成 —）
+        const cellStr = (v) => (v !== undefined && v !== null && String(v).trim() !== '') ? String(v) : '—';
+        const mode = cellStr(p.mode);
+        const lang = cellStr(p.language);
+        const alg = cellStr(p.algorithm);
+        const caseId = cellStr(p.case_id);
+        let genHtml = escapeHtml(p.gen || '—');
+        if (p.success === false && p.error) {
+            const errEsc = escapeHtmlAttr(String(p.error));
+            genHtml = `<span style="color:#c92a2a;cursor:help;" title="${errEsc}">${escapeHtml(p.gen || '失败')}</span>`;
+        }
+        const vec = escapeHtml(p.vector || '—');
+        const vdetRaw = [p.vector_detail || '', (p.success === false && p.error) ? String(p.error) : ''].filter(Boolean).join('\n');
+        const vdet = escapeHtmlAttr(vdetRaw);
+        const ms = formatMsPretty(p.total_ms);
+        const line = escapeHtml(p.provider_line || '');
+        let hasCode = !!p.has_code;
+        if (p.success && p.code) {
+            window.batchPartialCodes = window.batchPartialCodes || {};
+            window.batchPartialCodes[p.index] = p.code;
+            hasCode = true;
+        }
+        const prevBtn = hasCode
+            ? `<button type="button" class="btn btn-secondary btn-sm" onclick="previewBatchTableCode(${p.index})" style="padding:3px 8px;font-size:12px;border-radius:999px;">预览</button>`
+            : `<span style="color:#cbd5e1;">—</span>`;
+        const genBadge = p.success
+            ? `<span style="display:inline-block;padding:2px 8px;border-radius:999px;background:#dcfce7;color:#166534;font-weight:600;font-size:12px;">${genHtml}</span>`
+            : `<span style="display:inline-block;padding:2px 8px;border-radius:999px;background:#fee2e2;color:#991b1b;font-weight:600;font-size:12px;">${genHtml}</span>`;
+        const vecBadge = (p.vector === '通过')
+            ? `<span style="display:inline-block;padding:2px 8px;border-radius:999px;background:#dcfce7;color:#166534;font-weight:600;font-size:12px;">${vec}</span>`
+            : (p.vector === '未通过'
+                ? `<span style="display:inline-block;padding:2px 8px;border-radius:999px;background:#fff7ed;color:#9a3412;font-weight:600;font-size:12px;">${vec}</span>`
+                : `<span style="display:inline-block;padding:2px 8px;border-radius:999px;background:#f1f5f9;color:#334155;font-weight:600;font-size:12px;">${vec}</span>`);
+        const td = 'style="padding:8px 10px; vertical-align:top; border-bottom:1px solid #f1f5f9;"';
+        const tdR = 'style="padding:8px 10px; vertical-align:top; text-align:right; border-bottom:1px solid #f1f5f9; white-space:nowrap;"';
+        const tdMono = 'style="padding:8px 10px; vertical-align:top; font-family:ui-monospace,monospace; font-size:0.92em; border-bottom:1px solid #f1f5f9;"';
+        tr.dataset.pending = '0';
+        tr.style.background = (Number(p.index) % 2 === 0) ? '#ffffff' : '#fcfcfd';
+        tr.innerHTML = `<td ${td}>${p.index}</td>
+            <td ${td}>${line}</td>
+            <td ${td}>${escapeHtml(alg)}</td>
+            <td ${td}>${escapeHtml(mode)}</td>
+            <td ${td}>${escapeHtml(lang)}</td>
+            <td ${tdMono}>${escapeHtml(caseId)}</td>
+            <td ${td}>${genBadge}</td>
+            <td ${td} title="${vdet}">${vecBadge}</td>
+            <td ${tdR}>${escapeHtml(ms)}</td>
+            <td ${td}>${prevBtn}</td>`;
+        applyLiveTableRowVisibility();
+    }
+
+    function previewBatchTableCode(i) {
+        const r = window.batchResults && window.batchResults[i];
+        const code = (r && r.code) || (window.batchPartialCodes && window.batchPartialCodes[i]);
+        if (!code) {
+            showStatus('暂无代码可预览', 'error');
+            return;
+        }
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:10040;display:flex;align-items:center;justify-content:center;padding:16px;';
+        const esc = escapeHtml(code);
+        overlay.innerHTML = `<div style="background:#fff;max-width:min(920px,96vw);max-height:88vh;overflow:auto;border-radius:8px;padding:16px;box-shadow:0 8px 32px rgba(0,0,0,.2);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:12px;">
+                <strong>代码 #${i}</strong>
+                <button type="button" class="btn btn-secondary btn-sm" id="batchPreviewClose">关闭</button>
+            </div>
+            <pre style="margin:0;font-size:12px;white-space:pre-wrap;word-break:break-word;background:#f8f9fa;padding:12px;border-radius:6px;border:1px solid #dee2e6;">${esc}</pre></div>`;
+        const close = () => overlay.remove();
+        overlay.querySelector('#batchPreviewClose').onclick = close;
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) close(); });
+        document.body.appendChild(overlay);
+    }
+
+    function handleBatchStreamProgressData(data, rowIndexOverride) {
+        if (!data || data.type !== 'progress' || data.phase !== 'running') return false;
+        const total = data.total || 1;
+        const done = data.completed;
+        const fillPct = Math.min(99, ((done + 0.12) / total) * 100);
+        const fill = document.getElementById('batchProgressFill');
+        const frac = document.getElementById('batchProgressFraction');
+        const cur = document.getElementById('batchProgressCurrent');
+        if (fill) fill.style.width = fillPct + '%';
+        if (frac) frac.textContent = `${done}/${total} 已完成 · 进行中：${data.label || ''}`;
+        if (cur) cur.textContent = '⏳ 本地推理中（终端可见日志；此项含生成+测试，完成后「已完成」才会+1）：' + (data.label || '');
+        const idx = rowIndexOverride !== undefined ? rowIndexOverride : data.index;
+        updateBatchLiveRow(Object.assign({}, data, { index: idx }));
+        return true;
+    }
+
+    async function consumeBatchStream(response, onProgress) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            for (;;) {
+                const sep = buffer.indexOf('\n\n');
+                if (sep < 0) break;
+                const raw = buffer.slice(0, sep).trim();
+                buffer = buffer.slice(sep + 2);
+                    if (!raw.startsWith('data:')) continue;
+                    let data;
+                    try {
+                        data = JSON.parse(raw.slice(5).trim());
+                    } catch (e) {
+                        console.warn('批量 SSE 单行解析失败，已跳过该帧', e);
+                        continue;
+                    }
+                    if (data.type === 'progress') onProgress(data);
+                else if (data.type === 'complete') return data;
+                else if (data.type === 'error') throw new Error(data.message || '批量生成失败');
+            }
+        }
+        throw new Error('流式连接在完成前断开，请重试');
+    }
+
+    async function batchGenerate() {
+        const checked = document.querySelectorAll('#batchConfigs input[type="checkbox"]:checked');
+        if (checked.length === 0) {
+            showStatus('请至少选择一个配置', 'error');
+            return;
+        }
+        const provider = document.getElementById('provider');
+        if (!provider) {
+            showStatus('找不到LLM提供商选择框', 'error');
+            return;
+        }
+        const providerValue = provider.value;
+        if (!providerValue) {
+            showStatus('请选择LLM提供商', 'error');
+            return;
+        }
+        const btn = document.querySelector('button[onclick="batchGenerate()"]');
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = '正在生成...';
+        }
+        const resultDiv = document.getElementById('batchResult');
+        const progressArea = document.getElementById('batchProgressArea');
+        if (!resultDiv) {
+            showStatus('页面元素错误，请刷新页面重试', 'error');
+            if (btn) { btn.disabled = false; btn.textContent = '开始批量生成'; }
+            return;
+        }
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '';
+        if (progressArea) {
+            progressArea.style.display = 'block';
+            document.getElementById('batchProgressFill').style.width = '0%';
+            document.getElementById('batchProgressLabel').textContent = '正在生成…';
+            document.getElementById('batchProgressFraction').textContent = `0 / ${checked.length}`;
+            document.getElementById('batchProgressCurrent').textContent = '';
+        }
+        showStatus('正在批量生成（实时进度）…', 'info');
+
+        const configs = Array.from(checked).map(cb => {
+            try { return JSON.parse(cb.value); } catch (e) { return null; }
+        }).filter(c => c !== null);
+
+        initBatchLiveTable(configs.length);
+
+        try {
+            const response = await fetch('/api/batch-generate-stream', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ configs, provider: providerValue })
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP错误: ${response.status} ${response.statusText}`);
+            }
+            const complete = await consumeBatchStream(response, (data) => {
+                if (handleBatchStreamProgressData(data)) return;
+                const pct = (data.completed / data.total) * 100;
+                document.getElementById('batchProgressFill').style.width = pct + '%';
+                document.getElementById('batchProgressFraction').textContent = `${data.completed} / ${data.total}`;
+                const mark = data.success ? '✓' : '✗';
+                let line = `${mark} ${data.label}`;
+                if (!data.success && data.error) line += ` — ${data.error}`;
+                document.getElementById('batchProgressCurrent').textContent = line;
+                updateBatchLiveRow(data);
+            });
+            window.batchResults = complete.results;
+            window.batchPartialCodes = {};
+            resultDiv.innerHTML = buildBatchResultHTML(
+                complete.results,
+                complete.success_count,
+                complete.fail_count
+            );
+            uncheckPassedBatchConfigCheckboxes(complete.results);
+            if (progressArea) {
+                document.getElementById('batchProgressFill').style.width = '100%';
+                document.getElementById('batchProgressLabel').textContent = '已完成';
+                const gok = typeof complete.generation_ok_count === 'number' ? complete.generation_ok_count : '';
+                document.getElementById('batchProgressFraction').textContent =
+                    `${complete.total ?? complete.results?.length ?? '?'} 项已结束 · 标准测试通过 ${complete.success_count} · 代码已生成 ${gok}`;
+            }
+            const okAll = complete.fail_count === 0;
+            const gok2 = typeof complete.generation_ok_count === 'number' ? complete.generation_ok_count : '';
+            showStatus(
+                `批量生成结束：标准测试通过 ${complete.success_count}，未通过 ${complete.fail_count}（代码已生成 ${gok2} 项）`,
+                okAll ? 'success' : 'error'
+            );
+        } catch (error) {
+            console.error('批量生成错误:', error);
+            resultDiv.innerHTML = `<div class="status error">批量生成失败: ${escapeHtml(error.message || '网络错误或服务器错误')}</div>`;
+            showStatus('批量生成失败: ' + (error.message || '网络错误或服务器错误'), 'error');
+            if (progressArea) {
+                document.getElementById('batchProgressLabel').textContent = '已中断';
+            }
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = '开始批量生成';
+            }
+        }
+    }
+
+    function selectAllBatchConfigs() {
+        const checkboxes = document.querySelectorAll('#batchConfigs input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.checked = true);
+    }
+
+    function deselectAllBatchConfigs() {
+        const checkboxes = document.querySelectorAll('#batchConfigs input[type="checkbox"]');
+        checkboxes.forEach(cb => cb.checked = false);
+    }
+
+    function _normBatchConfig(c) {
+        if (!c || typeof c !== 'object') return null;
+        const algorithm = String(c.algorithm || '').trim().toUpperCase();
+        const language = String(c.language || '').trim().toLowerCase();
+        let mode = c.mode;
+        if (mode === undefined || mode === null || String(mode).trim() === '') {
+            mode = '';
+        } else {
+            mode = String(mode).trim().toUpperCase();
+        }
+        return { algorithm, mode, language };
+    }
+
+    function batchConfigsMatch(a, b) {
+        const x = _normBatchConfig(a);
+        const y = _normBatchConfig(b);
+        if (!x || !y) return false;
+        return x.algorithm === y.algorithm && x.mode === y.mode && x.language === y.language;
+    }
+
+    /** 标准测试「通过」的项取消左侧勾选，便于下次只选未通过项 */
+    function uncheckPassedBatchConfigCheckboxes(results) {
+        const root = document.getElementById('batchConfigs');
+        if (!root || !results || !results.length) return;
+        const boxes = root.querySelectorAll('input[type="checkbox"]');
+        results.forEach((r) => {
+            if (!r || !r.success || !r.config) return;
+            boxes.forEach((cb) => {
+                try {
+                    const cfg = JSON.parse(cb.value);
+                    if (batchConfigsMatch(cfg, r.config)) cb.checked = false;
+                } catch (e) { /* ignore */ }
+            });
+        });
+    }
+
+    function uncheckBatchConfigCheckboxForConfig(config) {
+        if (!config) return;
+        const root = document.getElementById('batchConfigs');
+        if (!root) return;
+        root.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+            try {
+                const cfg = JSON.parse(cb.value);
+                if (batchConfigsMatch(cfg, config)) cb.checked = false;
+            } catch (e) { /* ignore */ }
+        });
+    }
+
+    // 查看批量生成的代码
+    function viewBatchCode(index) {
+        if (!window.batchResults || !window.batchResults[index] || !window.batchResults[index].code) {
+            showStatus('无法查看代码：该条没有可展示的代码', 'error');
+            return;
+        }
+        
+        const viewer = document.getElementById(`batchCodeViewer_${index}`);
+        if (viewer) {
+            viewer.style.display = viewer.style.display === 'none' ? 'block' : 'none';
+            
+            // 如果显示，高亮代码
+            if (viewer.style.display === 'block') {
+                const codeElement = document.getElementById(`batchCodeContent_${index}`);
+                if (codeElement && typeof hljs !== 'undefined') {
+                    const language = window.batchResults[index].config.language || 'python';
+                    codeElement.className = `language-${language}`;
+                    hljs.highlightElement(codeElement);
+                }
+            }
+        }
+    }
+
+    // 保存批量生成的代码到历史记录
+    function saveBatchToHistory(index) {
+        if (!window.batchResults || !window.batchResults[index] || !window.batchResults[index].success) {
+            showStatus('无法保存：该配置生成失败或代码不存在', 'error');
+            return;
+        }
+        
+        const result = window.batchResults[index];
+        const config = result.config;
+        
+        // 构建历史记录项
+        const historyItem = {
+            provider: document.getElementById('provider').value,
+            algorithm: config.algorithm,
+            mode: config.mode || null,
+            language: config.language,
+            operation: '加密解密', // 批量生成默认操作
+            enable_validation: false,
+            requirements: null,
+            code: result.code,
+            codePreview: result.code.substring(0, 200),
+            timestamp: new Date().toISOString()
+        };
+        
+        // 从localStorage读取历史记录
+        let codeHistory = JSON.parse(localStorage.getItem('codeHistory') || '[]');
+        codeHistory.push(historyItem);
+        
+        // 只保留最近20条
+        if (codeHistory.length > 20) {
+            codeHistory = codeHistory.slice(-20);
+        }
+        
+        // 保存回localStorage
+        localStorage.setItem('codeHistory', JSON.stringify(codeHistory));
+        
+        showStatus(`✓ 已保存到历史记录: ${config.algorithm} ${config.mode || ''} - ${config.language}`, 'success');
+    }
+
+    // 复制批量生成的代码
+    function copyBatchCode(index) {
+        if (!window.batchResults || !window.batchResults[index] || !window.batchResults[index].code) {
+            showStatus('无法复制：该条没有可复制的代码', 'error');
+            return;
+        }
+        
+        const code = window.batchResults[index].code;
+        navigator.clipboard.writeText(code).then(() => {
+            showStatus('✓ 代码已复制到剪贴板', 'success');
+        }).catch(err => {
+            showStatus('复制失败: ' + err.message, 'error');
+        });
+    }
+
+    // HTML转义函数
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function escapeHtmlAttr(text) {
+        return String(text)
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\r?\n/g, '&#10;');
+    }
+
+    document.addEventListener('DOMContentLoaded', async () => {
+        await loadProviders();
+        const provSel = document.getElementById('provider');
+        if (provSel) {
+            provSel.addEventListener('change', function () {
+                const v = this.value;
+                if (v) sessionStorage.setItem(BATCH_PROVIDER_SESSION_KEY, v);
+                else sessionStorage.removeItem(BATCH_PROVIDER_SESSION_KEY);
+            });
+        }
+        initBatchConfigs();
+        attachBatchResultClickDelegation();
+    });
+</script>
+{% endblock %}
+

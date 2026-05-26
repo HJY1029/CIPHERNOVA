@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}性能分析 - 织密新星 (CipherNova){% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="header">
+        <h1>📊 性能分析</h1>
+        <p>分析代码的执行时间、内存使用和性能指标</p>
+    </div>
+    <div class="content">
+        <div id="status" class="status"></div>
+        
+        <div class="form-group">
+            <label>代码（从首页生成代码后，粘贴到这里）</label>
+            <textarea id="codeInput" class="form-control" rows="15" placeholder="请粘贴要分析的代码..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>编程语言</label>
+            <select id="language" class="form-control">
+                <option value="python">Python</option>
+                <option value="c">C</option>
+                <option value="cpp">C++</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>测试数据大小（字节）</label>
+            <input type="number" id="dataSize" value="1024" min="1" max="10485760" class="form-control">
+        </div>
+        <div class="form-group">
+            <label>测试次数</label>
+            <input type="number" id="iterations" value="10" min="1" max="100" class="form-control">
+        </div>
+        <button type="button" class="btn" onclick="analyzePerformance()">开始分析</button>
+        <div id="analyzeResult" style="margin-top: 20px; display: none;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    async function analyzePerformance() {
+        const code = document.getElementById('codeInput').value.trim();
+        if (!code) {
+            showStatus('请先输入代码', 'error');
+            return;
+        }
+        
+        const language = document.getElementById('language').value;
+        const dataSize = parseInt(document.getElementById('dataSize').value);
+        const iterations = parseInt(document.getElementById('iterations').value);
+        
+        const resultDiv = document.getElementById('analyzeResult');
+        resultDiv.style.display = 'block';
+        resultDiv.innerHTML = '<div class="status info">正在分析性能...</div>';
+        
+        try {
+            const response = await fetch('/api/analyze-performance', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    code: code,
+                    language: language,
+                    data_size: dataSize,
+                    iterations: iterations
+                })
+            });
+            
+            const data = await response.json();
+            if (data.success) {
+                resultDiv.innerHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
+                        <div style="background: linear-gradient(135deg, #0066aa 0%, #009977 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 0.9em; opacity: 0.9;">平均执行时间</div>
+                            <div style="font-size: 2em; font-weight: bold; margin: 10px 0;">${data.metrics.avg_time.toFixed(2)}ms</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #0066aa 0%, #009977 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 0.9em; opacity: 0.9;">最小执行时间</div>
+                            <div style="font-size: 2em; font-weight: bold; margin: 10px 0;">${data.metrics.min_time.toFixed(2)}ms</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #0066aa 0%, #009977 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 0.9em; opacity: 0.9;">最大执行时间</div>
+                            <div style="font-size: 2em; font-weight: bold; margin: 10px 0;">${data.metrics.max_time.toFixed(2)}ms</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #0066aa 0%, #009977 100%); color: white; padding: 20px; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 0.9em; opacity: 0.9;">吞吐量</div>
+                            <div style="font-size: 2em; font-weight: bold; margin: 10px 0;">${(dataSize / data.metrics.avg_time * 1000).toFixed(2)} B/s</div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultDiv.innerHTML = `<div class="status error">分析失败: ${data.error}</div>`;
+            }
+        } catch (error) {
+            resultDiv.innerHTML = `<div class="status error">分析失败: ${error.message}</div>`;
+        }
+    }
+</script>
+{% endblock %}
+

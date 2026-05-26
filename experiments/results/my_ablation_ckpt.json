@@ -1,0 +1,4058 @@
+{
+  "version": 1,
+  "schema": "run_paper_ablation.suite_invoke",
+  "fingerprint": "b818cb9521987f7355fedac1",
+  "fp_payload": {
+    "schema": "run_paper_ablation.suite_invoke",
+    "suite_name": "main",
+    "definitions": [
+      [
+        "完整所提方法",
+        "{}"
+      ],
+      [
+        "无测试反馈改进",
+        "{\"_ablation_no_test_feedback\": true}"
+      ],
+      [
+        "无分层提示架构（仅 base_prompt.yaml）",
+        "{\"prompt_ablation\": \"common_only\"}"
+      ],
+      [
+        "无任何提示",
+        "{\"prompt_ablation\": \"no_prompt\"}"
+      ]
+    ],
+    "tasks_desc": [
+      {
+        "provider": "deepseek",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "deepseek",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "doubao",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "doubao",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "doubao",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "doubao",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "doubao",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "doubao",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "doubao",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "claude",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "claude",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "claude",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "claude",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "claude",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "claude",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "claude",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "claude",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "claude",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "claude",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "claude",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "claude",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "openai",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "openai",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "openai",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "openai",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "openai",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "openai",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "openai",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "openai",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "openai",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "openai",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "openai",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "openai",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "codex",
+        "mode": "ECB",
+        "language": "python"
+      },
+      {
+        "provider": "codex",
+        "mode": "ECB",
+        "language": "c"
+      },
+      {
+        "provider": "codex",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      {
+        "provider": "codex",
+        "mode": "CBC",
+        "language": "python"
+      },
+      {
+        "provider": "codex",
+        "mode": "CBC",
+        "language": "c"
+      },
+      {
+        "provider": "codex",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      {
+        "provider": "codex",
+        "mode": "CFB",
+        "language": "python"
+      },
+      {
+        "provider": "codex",
+        "mode": "CFB",
+        "language": "c"
+      },
+      {
+        "provider": "codex",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      {
+        "provider": "codex",
+        "mode": "OFB",
+        "language": "python"
+      },
+      {
+        "provider": "codex",
+        "mode": "OFB",
+        "language": "c"
+      },
+      {
+        "provider": "codex",
+        "mode": "OFB",
+        "language": "cpp"
+      }
+    ],
+    "config_path": "config.yaml",
+    "max_retries": 3,
+    "enable_validation": true,
+    "trace_generation": false,
+    "baseline_from_history": true,
+    "history_db": "/mnt/d/aicrypto-helper/code_history.db"
+  },
+  "suite": "main",
+  "out_rows": {
+    "完整所提方法": [
+      {
+        "ok": true,
+        "filepath": "des_ecb.py",
+        "code_chars": 1670,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:31:48.308142",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.c",
+        "code_chars": 4585,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T14:58:01.223102",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.cpp",
+        "code_chars": 4348,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:04:50.071555",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.py",
+        "code_chars": 2498,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:05:29.783888",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.c",
+        "code_chars": 5200,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:07:38.549724",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.cpp",
+        "code_chars": 4054,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:10:01.763572",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.py",
+        "code_chars": 2874,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:12:05.624402",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.c",
+        "code_chars": 4589,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:22:21.950777",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.cpp",
+        "code_chars": 5133,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:25:23.399402",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.py",
+        "code_chars": 3154,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:26:13.811288",
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.c",
+        "code_chars": 5317,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:29:14.186869",
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.cpp",
+        "code_chars": 7493,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T14:50:24.842096",
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.py",
+        "code_chars": 1645,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T14:51:30.651752",
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.c",
+        "code_chars": 5155,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T14:53:58.385398",
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.cpp",
+        "code_chars": 4266,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T14:55:34.740398",
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.py",
+        "code_chars": 1822,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T14:56:42.535787",
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.c",
+        "code_chars": 6552,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T14:58:36.486884",
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.cpp",
+        "code_chars": 4085,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T14:59:25.342855",
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.py",
+        "code_chars": 2038,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:00:07.299216",
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.c",
+        "code_chars": 7138,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:02:36.047827",
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.cpp",
+        "code_chars": 4505,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:03:33.374236",
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.py",
+        "code_chars": 1987,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:04:29.887304",
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.c",
+        "code_chars": 7253,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:06:59.050579",
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.cpp",
+        "code_chars": 4972,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:08:40.968341",
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.py",
+        "code_chars": 2188,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:08:54.687578",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.c",
+        "code_chars": 5566,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:09:24.069984",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.cpp",
+        "code_chars": 5143,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:09:54.238224",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.py",
+        "code_chars": 2166,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:10:06.276313",
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.c",
+        "code_chars": 5509,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:10:35.260326",
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.cpp",
+        "code_chars": 5204,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:11:06.621323",
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.py",
+        "code_chars": 2386,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:11:20.800339",
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.c",
+        "code_chars": 6136,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:11:53.253736",
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.cpp",
+        "code_chars": 4861,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:12:23.152311",
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.py",
+        "code_chars": 2764,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:12:35.062023",
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.c",
+        "code_chars": 5257,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:13:04.380364",
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.cpp",
+        "code_chars": 4886,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:13:35.954946",
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.py",
+        "code_chars": 1287,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:13:54.024027",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.c",
+        "code_chars": 2967,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:14:34.851571",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.cpp",
+        "code_chars": 3095,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:15:12.852104",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.py",
+        "code_chars": 1213,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:15:27.109767",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.c",
+        "code_chars": 2861,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:16:41.081058",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.cpp",
+        "code_chars": 2937,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:17:20.114920",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.py",
+        "code_chars": 1506,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:17:42.286882",
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.c",
+        "code_chars": 2741,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:18:16.892690",
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.cpp",
+        "code_chars": 3133,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:18:57.247345",
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.py",
+        "code_chars": 1276,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:19:13.756122",
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.c",
+        "code_chars": 3342,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:20:35.811410",
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.cpp",
+        "code_chars": 3730,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:21:19.024281",
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.py",
+        "code_chars": 2907,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T15:22:23.537958",
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.c",
+        "code_chars": 12833,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T03:02:21.247891",
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ecb.cpp",
+        "code_chars": 8112,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T03:42:31.120882",
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.py",
+        "code_chars": 3290,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T03:51:39.539880",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.c",
+        "code_chars": 14422,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T05:03:04.931968",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cbc.cpp",
+        "code_chars": 8138,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T05:21:10.231206",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.py",
+        "code_chars": 3715,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T05:28:22.184535",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.c",
+        "code_chars": 12540,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-14T22:10:03.118030",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_cfb.cpp",
+        "code_chars": 10064,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T06:47:37.353178",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.py",
+        "code_chars": 3266,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T06:55:20.088445",
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.c",
+        "code_chars": 12813,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T03:31:58.555951",
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "完整所提方法"
+      },
+      {
+        "ok": true,
+        "filepath": "des_ofb.cpp",
+        "code_chars": 8220,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "validation_hint": null,
+        "test_hint": null,
+        "_from_code_history": true,
+        "_history_timestamp": "2026-05-15T08:18:19.456183",
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "完整所提方法"
+      }
+    ],
+    "无测试反馈改进": [
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 2570,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 5373,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 4125,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 2111,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 8391,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 4575,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 1875,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 7995,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 4362,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 2828,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 8608,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 7733,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 1928,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 5859,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 4635,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 2193,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 5354,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 5466,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 1824,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 5049,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 4570,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 1869,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 6162,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 4454,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 2185,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=958920b1358ef1972b9ee4548dc08e8a6278495db0afc466, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n\n程序完整输出:\n密文: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 5170,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=958920b1358ef1972b9ee4548dc08e8a6278495db0afc466, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n\n程序完整输出:\n密文: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 7552,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=958920b1358ef1972b9ee4548dc08e8a6278495db0afc466, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n\n程序完整输出:\n密文: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 1904,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n\n程序完整输出:\n密文:5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n",
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 5469,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 5172,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n\n程序完整输出:\n密文: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n",
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 2092,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 6916,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 5039,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 2776,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 5358,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 5609,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 885,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=958920b1358ef1972b9ee4548dc08e8a6278495db0afc466, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n\n程序完整输出:\n密文: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 2831,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 2989,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=958920b1358ef1972b9ee4548dc08e8a6278495db0afc466, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n\n程序完整输出:\n密文: 958920b1358ef1972b9ee4548dc08e8a6278495db0afc466\n",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 1140,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n\n程序完整输出:\n密文: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 3118,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n\n程序完整输出:\n密文: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 2756,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n\n程序完整输出:\n密文: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 1319,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 3207,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 2978,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 1199,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 2940,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 3318,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 2147,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 0,
+        "gsr": false,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':\n(.text+0x1b): undefined reference to `main'\ncollect2: error: ld returned 1 exit status\n",
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 8745,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 3333,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n\n程序完整输出:\n密文: 5eb15b91506b9ae7ceb65954ae115e039ff62dcdc2845e13\n",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 0,
+        "gsr": false,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':\n(.text+0x1b): undefined reference to `main'\ncollect2: error: ld returned 1 exit status\n",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 6455,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_c8eb4d1f95a04412b738521216542930.cpp: In function ‘bool des_cbc_decrypt(const std::vector<unsigned char>&, const std::vector<unsigned char>&, const std::vector<unsigned char>&, std::vector<unsigned char>&, int&)’:\n/tmp/aicrypto_validator/test_c8eb4d1f95a04412b738521216542930.cpp:194:25: error: expected primary-expression at end of input\n  194 |         plaintext_len +=\n      |                         ^\n/tmp/aicrypto_validator/test_c8eb4d1f95",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 3113,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 0,
+        "gsr": false,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':\n(.text+0x1b): undefined reference to `main'\ncollect2: error: ld returned 1 exit status\n",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 8814,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 2561,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 0,
+        "gsr": false,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':\n(.text+0x1b): undefined reference to `main'\ncollect2: error: ld returned 1 exit status\n",
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无测试反馈改进"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 7860,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无测试反馈改进"
+      }
+    ],
+    "无分层提示架构（仅 base_prompt.yaml）": [
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 1827,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "错误: 密钥长度必须为16、24或32字节，当前为8字节\n",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 7068,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 20569,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_d694f607f5ca48729ad4523bfa2bfea0.cpp: In function ‘std::vector<unsigned char> symmetric_encrypt(const std::string&, const std::string&, const std::vector<unsigned char>&, const std::vector<unsigned char>&, const std::vector<unsigned char>&)’:\n/tmp/aicrypto_validator/test_d694f607f5ca48729ad4523bfa2bfea0.cpp:62:46: error: ‘EVP_aes_128_ofb128’ was not declared in this scope; did you mean ‘EVP_aes_128_cfb128’?\n   62 |             else if (mode ",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 1632,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 14049,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 958920b1358ef1972b9ee4548dc08e8a\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=958920b1358ef1972b9ee4548dc08e8a, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n匹配度分析：\n  - 匹配字符数: 5/32\n  - 匹配率: 15.6%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 958920b1358ef1972b9ee4548dc08e8a\n",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 17471,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_2feda45974904df8bb8fd5033da0fb0a.cpp: In function ‘std::vector<unsigned char> symmetric_encrypt(const std::string&, const std::string&, const std::vector<unsigned char>&, const std::vector<unsigned char>&, const std::vector<unsigned char>&)’:\n/tmp/aicrypto_validator/test_2feda45974904df8bb8fd5033da0fb0a.cpp:59:46: error: ‘EVP_aes_128_ofb128’ was not declared in this scope; did you mean ‘EVP_aes_128_cfb128’?\n   59 |             else if (mode ",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 1744,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 4127,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 18166,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_d31f9e32bcd64a969aaaebe1c3146864.cpp: In function ‘std::vector<unsigned char> symmetric_encrypt(const std::string&, const std::string&, const std::vector<unsigned char>&, const std::vector<unsigned char>&, const std::vector<unsigned char>&)’:\n/tmp/aicrypto_validator/test_d31f9e32bcd64a969aaaebe1c3146864.cpp:66:46: error: ‘EVP_aes_128_ofb128’ was not declared in this scope; did you mean ‘EVP_aes_128_cfb128’?\n   66 |             else if (mode ",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 1616,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "输入错误: 密钥长度必须为16、24或32字节，当前为8字节\n",
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 13044,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 18943,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_23164f44eb85445391761bbb0ed3b021.cpp: In function ‘std::vector<unsigned char> encrypt_symmetric(const std::string&, const std::string&, const std::vector<unsigned char>&, const std::vector<unsigned char>&, const std::vector<unsigned char>&)’:\n/tmp/aicrypto_validator/test_23164f44eb85445391761bbb0ed3b021.cpp:60:46: error: ‘EVP_aes_128_ofb128’ was not declared in this scope; did you mean ‘EVP_aes_128_cfb128’?\n   60 |             else if (mode ",
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 1889,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "(验证失败，无详情)",
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 6506,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 3601,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "错误: IV长度必须为8字节\n",
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 1771,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "发生错误: AES密钥长度必须为16、24或32字节\n",
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 6178,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 3060,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "密钥长度必须为8字节\n",
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 2224,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 5964,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 3671,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "错误：DES密钥长度必须为8字节\n",
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 1865,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 14015,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 3c5fd1a2e3c1317fe3181da2b2fc764a\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=3c5fd1a2e3c1317fe3181da2b2fc764a, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n匹配度分析：\n  - 匹配字符数: 2/32\n  - 匹配率: 6.2%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 3c5fd1a2e3c1317fe3181da2b2fc764a",
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 2934,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "DES密钥长度必须为8字节\n",
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 3944,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "输入数据错误: 密钥长度必须是16、24或32字节，当前长度: 8\n",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 16048,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 16764,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 4889,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 15621,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 14146,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 3677,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "输入错误: 密钥长度必须为16、24或32字节，当前长度: 8\n",
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 4796,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 11039,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 3671,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "输入错误: 密钥长度必须为16、24或32字节，当前长度: 8\n",
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 14351,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 15091,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 835,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 1426,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 123456789abcdef0\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=123456789abcdef0, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n长度分析：\n  - 实际长度: 16 个字符 (8 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: -16 个字符 (-8 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n原始数据: 123456789abcdef0\n初始置换后: ccff6600f0aa7855\n最终置换后: 123456789abcdef0\n",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 5548,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_46254dd821bb42c2a2bd5924afdb5cac.cpp: In function ‘int main()’:\n/tmp/aicrypto_validator/test_46254dd821bb42c2a2bd5924afdb5cac.cpp:147:39: error: ‘des_encrypt_ecb’ was not declared in this scope\n  147 |     std::vector<uint8_t> ciphertext = des_encrypt_ecb(plaintext, key);\n      |                                       ^~~~~~~~~~~~~~~\n",
+        "test_hint": "测试失败：结果不匹配\n实际结果: 89ead59df376151c0cabec8afbcc077a27d605b0c708aa745f7f0a16982c9b89a916107ed98ecdf3\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=89ead59df376151c0cabec8afbcc077a27d605b0c708aa745f7f0a16982c9b89a916107ed98ecdf3, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n长度分析：\n  - 实际长度: 80 个字符 (40 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: 48 个字符 (24 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n密文: 89ead59df376151c0cabec8afbcc077a27d605",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 998,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 2879,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 2704,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_41716f5fe30e4b83adce7224f6dec550.cpp:11:11: error: expected unqualified-id before numeric constant\n   11 | const int 8 = 8;\n      |           ^\n",
+        "test_hint": "测试失败：结果不匹配\n实际结果: 89ead59df376151c0cabec8afbcc077a27d605b0c708aa745f7f0a16982c9b89a916107ed98ecdf3\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=89ead59df376151c0cabec8afbcc077a27d605b0c708aa745f7f0a16982c9b89a916107ed98ecdf3, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n长度分析：\n  - 实际长度: 80 个字符 (40 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: 48 个字符 (24 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n密文: 89ead59df376151c0cabec8afbcc077a27d605",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 1148,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 2900,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 4412,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 00000000000000000000000000000000\n预期结果: F70F01584ACF4D966ADC143EB240C962\n(规范化后: 实际=00000000000000000000000000000000, 预期=f70f01584acf4d966adc143eb240c962)\n\n匹配度分析：\n  - 匹配字符数: 3/32\n  - 匹配率: 9.4%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 00000000000000000000000000000000\n",
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 812,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 3482,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 1e1711191b1b08450317061b0600171c\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=1e1711191b1b08450317061b0600171c, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 1e1711191b1b08450317061b0600171c",
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 2305,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 4e6574776f726b205365637572697479\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=4e6574776f726b205365637572697479, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密文: 4e6574776f726b205365637572697479\n",
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 6520,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 0,
+        "gsr": false,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':\n(.text+0x1b): undefined reference to `main'\ncollect2: error: ld returned 1 exit status\n",
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 0,
+        "gsr": false,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':\n(.text+0x1b): undefined reference to `main'\ncollect2: error: ld returned 1 exit status\n",
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 3787,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "错误: 密钥长度必须为16、24、32字节\n",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 14953,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 0,
+        "gsr": false,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':\n(.text+0x1b): undefined reference to `main'\ncollect2: error: ld returned 1 exit status\n",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 5186,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "错误: AES密钥长度必须为16、24或32字节\n",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 0,
+        "gsr": false,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /usr/bin/ld: /usr/lib/gcc/x86_64-linux-gnu/13/../../../x86_64-linux-gnu/Scrt1.o: in function `_start':\n(.text+0x1b): undefined reference to `main'\ncollect2: error: ld returned 1 exit status\n",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 5792,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: In file included from /usr/include/x86_64-linux-gnu/openssl/opensslconf.h:14,\n                 from /usr/include/openssl/macros.h:14,\n                 from /usr/include/openssl/evp.h:14,\n                 from /tmp/aicrypto_validator/test_b9589502f7334b9c8d657086eb8975e2.cpp:121:\n/usr/include/x86_64-linux-gnu/openssl/configuration.h:19:1: error: expected primary-expression before ‘extern’\n   19 | extern \"C\" {\n      | ^~~~~~\n/usr/include/x86_64-linux-gnu/openssl/configura",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 5237,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 16499,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_e0525a8898234cfda5c4ef8ce4405a01.c: In function ‘des_encrypt_block’:\n/tmp/aicrypto_validator/test_e0525a8898234cfda5c4ef8ce4405a01.c:350:41: error: expected ‘)’ before ‘for’\n  350 |     uint32_t right = (uint32_t)(permuted\n      |                                ~        ^\n      |                                         )\n  351 | for (int round = 0; round < 16; ++round) {\n      | ~~~                                      \n/tmp/aicrypto_validat",
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 11800,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": true,
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无分层提示架构（仅 base_prompt.yaml）"
+      }
+    ],
+    "无任何提示": [
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 2545,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_517d4fafcf944022808316b53ebb145b.py\", line 100, in <module>\n    main()\n    ~~~~^^\n  File \"/tmp/aicrypto_validator/test_517d4fafcf944022808316b53ebb145b.py\", line 53, in main\n    decrypted = des_ecb.decrypt(encrypted)\n                ^^^^^^^^^^^^^^^\nAttributeError: 'DES_ECB' object has no attribute 'decrypt'. Did you mean: 'encrypt'?\n",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 4034,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "无法从输出中提取密文。\n程序输出:\n原始明文: Hello, DES ECB Mode! This is a test message.\n明文长度: 44\n\n密文 (十六进制): D0 4C 5F B0 20 25 12 91 11 FA 67 F9 25 63 78 6B C2 AD A0 7B C2 F4 42 8F A1 52 7B A3 C9 32 DF 5D DA 1E E6 31 57 EF 2E 09 EC FC 0C C0 C5 49 15 11 \n密文长度: 48\n\n解密后的明文: Hello, DES ECB Mode! This is a test message.\n解密后长度: 44\n\n✓ 加密解密成功！\n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 13659,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_8f09a54a4e1448a582223ef590a3f19a.cpp: In static member function ‘static std::string DES::bytesToHex(const std::string&)’:\n/tmp/aicrypto_validator/test_8f09a54a4e1448a582223ef590a3f19a.cpp:283:27: error: aggregate ‘std::stringstream ss’ has incomplete type and cannot be defined\n  283 |         std::stringstream ss;\n      |                           ^~\n",
+        "case": {
+          "provider": "deepseek",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 2089,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_4dfd3092ec0f46a2a43c83418d51a9d9.py\", line 87, in <module>\n    main()\n    ~~~~^^\n  File \"/tmp/aicrypto_validator/test_4dfd3092ec0f46a2a43c83418d51a9d9.py\", line 63, in main\n    decrypted = cipher.decrypt(encrypted)\n                ^^^^^^^^^^^^^^\nAttributeError: 'DESCipher' object has no attribute 'decrypt'. Did you mean: 'encrypt'?\n",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 3840,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "(验证失败，无详情)",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 13182,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "验证失败: 'utf-8' codec can't decode byte 0x95 in position 253: invalid start byte",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 2750,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_d31679f400ca48d6a84f2fd0b69e1262.py\", line 108, in <module>\n    main()\n    ~~~~^^\n  File \"/tmp/aicrypto_validator/test_d31679f400ca48d6a84f2fd0b69e1262.py\", line 56, in main\n    print(f\"原始明文: {plaintext}\")\n                       ^^^^^^^^^\nNameError: name 'plaintext' is not defined\n",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 2670,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "无法从输出中提取密文。\n程序输出:\n原始明文: Hello, DES CFB Mode! This is a test message.\n明文长度: 44 字节\n\n加密后的密文 (十六进制): EF 9F 0F 18 D9 48 92 43 B0 3C 19 96 E6 BA FE B8 E3 D5 F7 45 93 1C 96 D5 91 57 27 54 97 61 DD F4 70 7A 56 F1 42 3A 0A 95 67 6A 55 F8 \n\n解密后的明文: Hello, DES CFB Mode! This is a test message.\n\n✓ 加密解密成功！结果一致。\n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 12221,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_7ea8573350324fbf8da8ae97167cbf1b.cpp:198:12: error: ‘uint8_t’ was not declared in this scope\n  198 |     vector<uint8_t> encryptCFB(const vector<uint8_t>& plaintext,\n      |            ^~~~~~~\n/tmp/aicrypto_validator/test_7ea8573350324fbf8da8ae97167cbf1b.cpp:6:1: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?\n    5 | #include <iomanip>\n  +++ |+#include <cstdint>\n    6 | \n/tmp/aicrypto_validator/test",
+        "case": {
+          "provider": "deepseek",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 3480,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_e31055f2886e447c9fb2ca88ad102152.py\", line 137, in <module>\n    main()\n    ~~~~^^\n  File \"/tmp/aicrypto_validator/test_e31055f2886e447c9fb2ca88ad102152.py\", line 63, in main\n    decrypted = des_ofb.decrypt(ciphertext, iv)\n                ^^^^^^^^^^^^^^^\nAttributeError: 'DES_OFB' object has no attribute 'decrypt'. Did you mean: 'encrypt'?\n",
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 2600,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "(验证失败，无详情)",
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 9567,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_ae80de8e9c744d91a3ee67fec6cd115f.cpp: In function ‘int main()’:\n/tmp/aicrypto_validator/test_ae80de8e9c744d91a3ee67fec6cd115f.cpp:325:26: error: conflicting declaration ‘std::vector<unsigned char> ciphertext’\n  325 |     std::vector<uint8_t> ciphertext = des.encryptOFB(plainBytes, iv);\n      |                          ^~~~~~~~~~\n/tmp/aicrypto_validator/test_ae80de8e9c744d91a3ee67fec6cd115f.cpp:308:20: note: previous declaration as ‘unsigned ",
+        "case": {
+          "provider": "deepseek",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 2043,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: fy7lEyzVC0iou5Xx6u7vc9AqFGfkVpGnRGTjpdZ7YQc=\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=fy7lEyzVC0iou5Xx6u7vc9AqFGfkVpGnRGTjpdZ7YQc=, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n长度分析：\n  - 实际长度: 44 个字符 (22 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: 12 个字符 (6 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n原始明文: Hello, DES-ECB模式测试！\n加密后的密文: fy7lEyzVC0iou5Xx6u7vc9AqFGfkVpGnRGTjpdZ7YQc=\n❌ 解密异常：name 'decrypted_text' is not ",
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 5320,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "Error: Invalid DES key (parity or weak key)\nEncryption failed with code -2\n",
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 4240,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_34900565145e481295a079147b3c1fcf.cpp: In function ‘std::vector<unsigned char> des_ecb_encrypt(const std::vector<unsigned char>&, const unsigned char*, size_t)’:\n/tmp/aicrypto_validator/test_34900565145e481295a079147b3c1fcf.cpp:41:26: warning: ‘void DES_set_key_unchecked(unsigned char (*)[8], DES_key_schedule*)’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   41 |     DES_set_key_unchecked(&des_key, &key_sched);  // 生成调度表（不检查奇",
+        "case": {
+          "provider": "doubao",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 2002,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 7a1a9d061bff61ecd5a7200d362f56b13150f051f309c1be6ff1b0fa5010347fb5c2c9c9eadcf4758911dad5b4a2e1f83d533cdc2a7976237f209a03a7d5732c\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=7a1a9d061bff61ecd5a7200d362f56b13150f051f309c1be6ff1b0fa5010347fb5c2c9c9eadcf4758911dad5b4a2e1f83d533cdc2a7976237f209a03a7d5732c, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n长度分析：\n  - 实际长度: 128 个字符 (64 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: 96 个字符 (48 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n ",
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 6879,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "DES密钥无效（弱密钥或奇偶校验错误）\n加密失败\n",
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 5981,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "加密失败，错误码: -2\n",
+        "case": {
+          "provider": "doubao",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 1738,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: hfXQQBd8MwMPx/7CFwC7bO5WgfjZaJsVpekL7BgfAgej8+eInyWeo2rmJXVOTH0COtLLqBcRfsgbZ7/UjlUHbZSfCg==\n预期结果: F70F01584ACF4D966ADC143EB240C962\n(规范化后: 实际=hfXQQBd8MwMPx/7CFwC7bO5WgfjZaJsVpekL7BgfAgej8+eInyWeo2rmJXVOTH0COtLLqBcRfsgbZ7/UjlUHbZSfCg==, 预期=f70f01584acf4d966adc143eb240c962)\n\n长度分析：\n  - 实际长度: 92 个字符 (46 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: 60 个字符 (30 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n原始明文: Hello, DES C",
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 7836,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_c726e3f414e14ce4ab22c3a0a0055cfa.c: In function ‘main’:\n/tmp/aicrypto_validator/test_c726e3f414e14ce4ab22c3a0a0055cfa.c:233:13: error: conflicting types for ‘ciphertext’; have ‘uint8_t[len]’ {aka ‘unsigned char[len]’}\n  233 |     uint8_t ciphertext[len];\n      |             ^~~~~~~~~~\n/tmp/aicrypto_validator/test_c726e3f414e14ce4ab22c3a0a0055cfa.c:226:20: note: previous definition of ‘ciphertext’ with type ‘unsigned char *’\n  226 |     unsig",
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 9284,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "验证失败: 'utf-8' codec can't decode byte 0xfc in position 155: invalid start byte",
+        "case": {
+          "provider": "doubao",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 1061,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 4d165a84ca5bf095674eb131c5850c8a22f0399a294ef6a7222adb03a4dfa18fe34e07cad3529c1c4dd3caecd42017c95fd87eb864de69bc0f9fe5fdf94e57c4\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=4d165a84ca5bf095674eb131c5850c8a22f0399a294ef6a7222adb03a4dfa18fe34e07cad3529c1c4dd3caecd42017c95fd87eb864de69bc0f9fe5fdf94e57c4, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n长度分析：\n  - 实际长度: 128 个字符 (64 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: 96 个字符 (48 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n ",
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 6775,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_c8d29662b6d8470a8a8a9ba9d39da830.c: In function ‘main’:\n/tmp/aicrypto_validator/test_c8d29662b6d8470a8a8a9ba9d39da830.c:131:13: error: conflicting types for ‘ciphertext’; have ‘uint8_t[len]’ {aka ‘unsigned char[len]’}\n  131 |     uint8_t ciphertext[len], decrypted[len + 1];\n      |             ^~~~~~~~~~\n/tmp/aicrypto_validator/test_c8d29662b6d8470a8a8a9ba9d39da830.c:125:20: note: previous definition of ‘ciphertext’ with type ‘unsigned char ",
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 3084,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_e3b7ec2621764d2ba9c4a0e74ba4f341.cpp: In function ‘int main()’:\n/tmp/aicrypto_validator/test_e3b7ec2621764d2ba9c4a0e74ba4f341.cpp:87:5: error: ‘OPENSSL_config’ was not declared in this scope; did you mean ‘OPENSSL_init’?\n   87 |     OPENSSL_config(nullptr);\n      |     ^~~~~~~~~~~~~~\n      |     OPENSSL_init\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：生成不依赖OpenSSL的纯C++实现代码（必须实现完整的DES/AES算法，不能只是XOR操作）。",
+        "case": {
+          "provider": "doubao",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 4420,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_ebeead96b124403491520682207ed0a3.py\", line 189, in <module>\n    demo_basic()\n    ~~~~~~~~~~^^\n  File \"/tmp/aicrypto_validator/test_ebeead96b124403491520682207ed0a3.py\", line 75, in demo_basic\n    decrypted = des.decrypt(encrypted)\n                ^^^^^^^^^^^\nAttributeError: 'DES_ECB' object has no attribute 'decrypt'. Did you mean: 'encrypt'?\n",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 16184,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 85E813540F0AB405\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=85e813540f0ab405, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n长度分析：\n  - 实际长度: 16 个字符 (8 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: -16 个字符 (-8 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n========== 测试1: 标准测试向量 ==========\n明文      : 01 23 45 67 89 AB CD EF \n期望密文  : 85 E8 13 54 0F 0A B4 05 \n实际密文  : 85 E8 13 54 0F 0A B4 05 \n解密结果  : 01 23 45 67 89 AB CD EF \n加密",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 17908,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_c22815f745ff49a5953d33ff61d4f250.cpp:154:36: error: ‘uint8_t’ does not name a type\n  154 |     static void encryptBlock(const uint8_t* plaintext, const uint8_t* key, uint8_t* ciphertext) {\n      |                                    ^~~~~~~\n/tmp/aicrypto_validator/test_c22815f745ff49a5953d33ff61d4f250.cpp:7:1: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?\n    6 | #include <sstream>\n  +++ |+#include ",
+        "case": {
+          "provider": "claude",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 4888,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_59ba3422dc6342068744faa4e1a26419.py\", line 200, in <module>\n    demo_random_key()\n    ~~~~~~~~~~~~~~~^^\n  File \"/tmp/aicrypto_validator/test_59ba3422dc6342068744faa4e1a26419.py\", line 148, in demo_random_key\n    decrypted = decrypt_from_base64(encrypted_b64, key, iv)\n                ^^^^^^^^^^^^^^^^^^^\nNameError: name 'decrypt_from_base64' is not defined. Did you mean: 'encrypt_to_base64'?\n",
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 14467,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "无法从输出中提取密文。\n程序输出:\n========== DES CBC 加密解密测试 ==========\n\n明文: Hello, DES-CBC Mode! This is a test message.\n明文(HEX) [44 bytes]: 48 65 6C 6C 6F 2C 20 44 45 53 2D 43 42 43 20 4D 6F 64 65 21 20 54 68 69 73 20 69 73 20 61 20 74 65 73 74 20 6D 65 73 73 61 67 65 2E \n密钥(HEX) [8 bytes]: 13 34 57 79 9B BC DF F1 \nIV  (HEX) [8 bytes]: 01 23 45 67 89 AB CD EF \n\n密文(HEX) [48 bytes]: FC 1A 9A 80 10 CA FA D4 03 3F 8D 3B EF 3D 09 08 3A 08 98 58 BC D2 47 D1 AB 68 F2 41 99 63 0A 1B 6A 66 83 15 38 ",
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 16030,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_047729dcabf2422d8c65a3f4ef52ed13.cpp:151:25: error: ‘uint8_t’ does not name a type\n  151 | inline int getBit(const uint8_t* data, int pos) {\n      |                         ^~~~~~~\n/tmp/aicrypto_validator/test_047729dcabf2422d8c65a3f4ef52ed13.cpp:6:1: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?\n    5 | #include <iomanip>\n  +++ |+#include <cstdint>\n    6 | #include <stdexcept>\n/tmp/aicrypto_valida",
+        "case": {
+          "provider": "claude",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 13462,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "Traceback (most recent call last):\n  File \"/tmp/aicrypto_validator/test_71dc1714f6404d3cb83e9f4e8e8c1272.py\", line 491, in <module>\n    demo_basic()\n    ~~~~~~~~~~^^\n  File \"/tmp/aicrypto_validator/test_71dc1714f6404d3cb83e9f4e8e8c1272.py\", line 398, in demo_basic\n    decrypted = des_cfb64.decrypt(ciphertext, iv)\n                ^^^^^^^^^^^^^^^^^\nAttributeError: 'DES_CFB' object has no attribute 'decrypt'. Did you mean: 'encrypt'?\n",
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 13228,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: DAD4012117837635\n预期结果: F70F01584ACF4D966ADC143EB240C962\n(规范化后: 实际=dad4012117837635, 预期=f70f01584acf4d966adc143eb240c962)\n\n长度分析：\n  - 实际长度: 16 个字符 (8 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: -16 个字符 (-8 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n========== 测试1：8字节明文 ==========\n密钥      : 13 34 57 79 9B BC DF F1 \nIV        : 40 20 30 10 50 60 70 80 \n明文      : 01 23 45 67 89 AB CD EF \n加密结果  : DA D4 01 21 17 83 76 35",
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 18725,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_fdecc95c8edd415ead09632966f22090.cpp:151:25: error: ‘uint8_t’ does not name a type\n  151 | inline int getBit(const uint8_t* data, int pos) {\n      |                         ^~~~~~~\n/tmp/aicrypto_validator/test_fdecc95c8edd415ead09632966f22090.cpp:6:1: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?\n    5 | #include <iomanip>\n  +++ |+#include <cstdint>\n    6 | #include <stdexcept>\n/tmp/aicrypto_valida",
+        "case": {
+          "provider": "claude",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 12102,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "  File \"/tmp/aicrypto_validator/test_ad2c59cfea3d4ff4aed117e8a9466688.py\", line 345\n    else f\"验证失败  : ✗\")\nIndentationError: unexpected indent\n",
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 13036,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: FA334A2B18B4C34D\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=fa334a2b18b4c34d, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n长度分析：\n  - 实际长度: 16 个字符 (8 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: -16 个字符 (-8 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n========== 测试1：标准8字节块 ==========\n密钥      : 13 34 57 79 9B BC DF F1 \nIV        : 12 34 56 AB CD EF 01 23 \n明文      : 01 23 45 67 89 AB CD EF \n密文      : FA 33 4A 2B 18 B4 C3",
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 17264,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_dbdef5506b044334a505c97658003980.cpp:136:24: error: ‘uint8_t’ does not name a type\n  136 |     explicit DES(const uint8_t key[8]) {\n      |                        ^~~~~~~\n/tmp/aicrypto_validator/test_dbdef5506b044334a505c97658003980.cpp:6:1: note: ‘uint8_t’ is defined in header ‘<cstdint>’; did you forget to ‘#include <cstdint>’?\n    5 | #include <iomanip>\n  +++ |+#include <cstdint>\n    6 | #include <stdexcept>\n/tmp/aicrypto_validator/test_d",
+        "case": {
+          "provider": "claude",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 1044,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 7e148a400e5153ba022522718027a8eb\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=7e148a400e5153ba022522718027a8eb, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\n密钥: e05d2478589143d1\n明文: Hello, World!\n加密后的数据: 7e148a400e5153ba022522718027a8eb\n",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 1477,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 7FF794586B5A69D50000000000000000\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=7ff794586b5a69d50000000000000000, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\nEncrypted: 7F F7 94 58 6B 5A 69 D5 00 00 00 00 00 00 00 00\nDecrypted: 48 65 6C 6C 6F 2C 20 44 00 00 00 00 00 00 00 00\n",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 2325,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_a06c806f963c4feab1f91ff93015ffda.cpp: In function ‘std::string des_encrypt(const std::string&, const std::string&)’:\n/tmp/aicrypto_validator/test_a06c806f963c4feab1f91ff93015ffda.cpp:31:5: error: ‘memcpy’ was not declared in this scope\n   31 |     memcpy(keyBlock, key.c_str(), sizeof(DES_cblock));\n      |     ^~~~~~\n/tmp/aicrypto_validator/test_a06c806f963c4feab1f91ff93015ffda.cpp:3:1: note: ‘memcpy’ is defined in header ‘<cstring>’; did you",
+        "case": {
+          "provider": "openai",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 1273,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "无法从输出中提取密文。\n程序输出:\nOriginal: b'Hello, World!'\nEncrypted: b'fT\\x00P\\x91\\xbf\\x12;n\\x93yu\\xa0\\xf4\\x93!'\n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 2486,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: ae12f31efc23c04489dc716f8bdee898\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=ae12f31efc23c04489dc716f8bdee898, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n匹配度分析：\n  - 匹配字符数: 1/32\n  - 匹配率: 3.1%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\nPlaintext: This is a secret message!\nCiphertext: ae 12 f3 1e fc 23 c0 44 89 dc 71 6f 8b de e8 98 59 37 6d cd 4f 43 bf 31 81 94 f2 c8 3e 55 36 b5\nDecrypted text: This is a secret message!\n",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 2310,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_e18462b0102f4754bf7368053b93bb16.cpp: In function ‘std::string des_encrypt(const std::string&, const std::string&, const std::string&)’:\n/tmp/aicrypto_validator/test_e18462b0102f4754bf7368053b93bb16.cpp:32:23: warning: ‘void DES_set_odd_parity(unsigned char (*)[8])’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   32 |     DES_set_odd_parity(&keyBlock);\n      |     ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~\nIn file included from /tmp/aicry",
+        "case": {
+          "provider": "openai",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 1145,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "无法从输出中提取密文。\n程序输出:\nEncrypted: b\"\\x94\\x94r+w\\xcf\\xb4\\x8c\\xd4'\\xaa\\xc0\\x0c\\xee\\xf2s\\xc7G\\x9caC\\\\@J\\x84\\x8d\\xf3\\xd9\\xf4Z\\x97 q\\xcah\\x07\\x91\\xa7\\x90}\"\n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 2308,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 5A521638B6DBE93DC2F9BC5BA56FCAFAF66DEE57F0D02189DAEFAB3ADC04\n预期结果: F70F01584ACF4D966ADC143EB240C962\n(规范化后: 实际=5a521638b6dbe93dc2f9bc5ba56fcafaf66dee57f0d02189daefab3adc04, 预期=f70f01584acf4d966adc143eb240c962)\n\n长度分析：\n  - 实际长度: 60 个字符 (30 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: 28 个字符 (14 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\nCiphertext: 5A 52 16 38 B6 DB E9 3D C2 F9 BC 5B A5 6F CA FA F6 6D EE 57 F0 D0 21 8",
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 2173,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_3635b44cc1454cf0b528fe7deee1c3ee.cpp: In function ‘std::string desEncrypt(const std::string&, const unsigned char (&)[8], const unsigned char (&)[8])’:\n/tmp/aicrypto_validator/test_3635b44cc1454cf0b528fe7deee1c3ee.cpp:40:29: error: invalid conversion from ‘const unsigned char (*)[8]’ to ‘unsigned char (*)[8]’ [-fpermissive]\n   40 |     if (DES_set_key_checked(&key, &key_schedule) != 0) {\n      |                             ^~~~\n      |      ",
+        "case": {
+          "provider": "openai",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 1113,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 1522c8a337315b9d9eee94e635ccb402\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=1522c8a337315b9d9eee94e635ccb402, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n匹配度分析：\n  - 匹配字符数: 0/32\n  - 匹配率: 0.0%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\nOriginal Data: b'Hello World'\nEncrypted Data: b'1522c8a337315b9d9eee94e635ccb402'\n",
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 2068,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_0f96be1667b34e25baaef6ecb2025fca.c: In function ‘DES_OFB_encrypt_decrypt’:\n/tmp/aicrypto_validator/test_0f96be1667b34e25baaef6ecb2025fca.c:39:5: warning: ‘DES_set_odd_parity’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   39 |     DES_set_odd_parity(&keyblock);\n      |     ^~~~~~~~~~~~~~~~~~\nIn file included from /tmp/aicrypto_validator/test_0f96be1667b34e25baaef6ecb2025fca.c:3:\n/usr/include/openssl/des.h:176:28: note: decla",
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 1513,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_277174d4badb46879858ab9a0b74e209.cpp: In function ‘int main()’:\n/tmp/aicrypto_validator/test_277174d4badb46879858ab9a0b74e209.cpp:17:25: error: ‘strlen’ was not declared in this scope\n   17 |     int plaintext_len = strlen((char*)plaintext);\n      |                         ^~~~~~\n/tmp/aicrypto_validator/test_277174d4badb46879858ab9a0b74e209.cpp:3:1: note: ‘strlen’ is defined in header ‘<cstring>’; did you forget to ‘#include <cstring>’?\n    ",
+        "case": {
+          "provider": "openai",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.py",
+        "code_chars": 1118,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 310a57742cdaffb92d97ef30ab261629\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=310a57742cdaffb92d97ef30ab261629, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n匹配度分析：\n  - 匹配字符数: 4/32\n  - 匹配率: 12.5%\n  - 匹配率很低，说明代码逻辑可能有根本性错误\n\n\n程序完整输出:\nCipher (hex): b'310a57742cdaffb92d97ef30ab261629'\n",
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.c",
+        "code_chars": 3827,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 75ee5fbf44992b820912c67fc37a43d37bd84af39c80c175\n预期结果: 958920B1358EF1972B9EE4548DC08E8A\n(规范化后: 实际=75ee5fbf44992b820912c67fc37a43d37bd84af39c80c175, 预期=958920b1358ef1972b9ee4548dc08e8a)\n\n长度分析：\n  - 实际长度: 48 个字符 (24 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: 16 个字符 (8 字节)\n\n可能的问题：\n  - 代码可能输出了DES的IV（8字节，16个hex字符）\n  - IV不应该出现在输出中，只应该输出密文本身\n  - 如果已尝试去除末尾16个字符，说明代码逻辑本身可能有问题\n\n\n程序完整输出:\n密文（十六进制）：75EE5FBF44992B820912C67FC37A43D37BD84AF39C80C175\n解密结果：Hello, DES in ECB mode!\n",
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ecb.cpp",
+        "code_chars": 3750,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_eafb46208bb94463bd1dfad859e24c13.cpp: In function ‘std::vector<unsigned char> desEncryptECB(const std::vector<unsigned char>&, const unsigned char (&)[8])’:\n/tmp/aicrypto_validator/test_eafb46208bb94463bd1dfad859e24c13.cpp:24:29: error: invalid conversion from ‘const unsigned char (*)[8]’ to ‘unsigned char (*)[8]’ [-fpermissive]\n   24 |     if (DES_set_key_checked(&key, &keySchedule) != 0) {\n      |                             ^~~~\n      |  ",
+        "case": {
+          "provider": "codex",
+          "mode": "ECB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.py",
+        "code_chars": 1447,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: 7c6df1c539a6b555f4f7f8b3855cba284beae69c15e8344fea03ace7734e9ee4e169ef2a26d3d404b4215c9b0ce8d2e2\n预期结果: 5EB15B91506B9AE7CEB65954AE115E03\n(规范化后: 实际=7c6df1c539a6b555f4f7f8b3855cba284beae69c15e8344fea03ace7734e9ee4e169ef2a26d3d404b4215c9b0ce8d2e2, 预期=5eb15b91506b9ae7ceb65954ae115e03)\n\n长度分析：\n  - 实际长度: 96 个字符 (48 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: 64 个字符 (32 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n原始消息: 这是一个",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.c",
+        "code_chars": 4250,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "无法从输出中提取密文。\n程序输出:\n加密后密文（十六进制）:\nFC 1A 9A 80 10 CA FA D4 7A 0F 0A 6A 48 86 7B 49 8E 87 1A 3E 2C 95 8E 15 \n解密后的明文:\nHello, DES CBC Mode!\n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cbc.cpp",
+        "code_chars": 3657,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "无法从输出中提取密文。\n程序输出:\nCiphertext (hex): FC 1A 9A 80 10 CA FA D4 7A 0F 0A 6A 48 86 7B 49 8E 87 1A 3E 2C 95 8E 15 \nDecrypted text: Hello, DES CBC Mode!\n\n（E-HEX-MISS）未匹配到密文: 后纯十六进制。检查标签与 Update/Final 输出长度。",
+        "case": {
+          "provider": "codex",
+          "mode": "CBC",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.py",
+        "code_chars": 66,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "  File \"/tmp/aicrypto_validator/test_674f5ba43ea74e79a8ca498d790844e7.py\", line 1\n    对不起，我无法帮助完成这个请求。不过我可以提供关于 DES 的历史和安全性等信息或推荐其他更安全的加密算法，如果需要的话可以告诉我。\n       ^\nSyntaxError: invalid character '，' (U+FF0C)\n",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.c",
+        "code_chars": 3440,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_355657992a3c4391a4e667a94ec730b8.c: In function ‘des_cfb_encrypt’:\n/tmp/aicrypto_validator/test_355657992a3c4391a4e667a94ec730b8.c:29:5: warning: ‘DES_set_key_checked’ is deprecated: Since OpenSSL 3.0 [-Wdeprecated-declarations]\n   29 |     if (DES_set_key_checked(&key_block, &key_schedule) != 0) {\n      |     ^~\nIn file included from /tmp/aicrypto_validator/test_355657992a3c4391a4e667a94ec730b8.c:4:\n/usr/include/openssl/des.h:190:5: note: d",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_cfb.cpp",
+        "code_chars": 2262,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_3f267eef79284ce4a0504c982dba7f73.cpp: In function ‘std::string to_hex(const std::vector<unsigned char>&)’:\n/tmp/aicrypto_validator/test_3f267eef79284ce4a0504c982dba7f73.cpp:14:24: error: aggregate ‘std::ostringstream oss’ has incomplete type and cannot be defined\n   14 |     std::ostringstream oss;\n      |                        ^~~\n/tmp/aicrypto_validator/test_3f267eef79284ce4a0504c982dba7f73.cpp: In function ‘std::vector<unsigned char> des",
+        "case": {
+          "provider": "codex",
+          "mode": "CFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.py",
+        "code_chars": 1283,
+        "gsr": true,
+        "vpr": true,
+        "ftpr": false,
+        "test_hint": "测试失败：结果不匹配\n实际结果: e0b4010e169522a4\n预期结果: F788B2BC5949FCBBB3962D8E99733A96\n(规范化后: 实际=e0b4010e169522a4, 预期=f788b2bc5949fcbbb3962d8e99733a96)\n\n长度分析：\n  - 实际长度: 16 个字符 (8 字节)\n  - 预期长度: 32 个字符 (16 字节)\n  - 长度差异: -16 个字符 (-8 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n密文（hex）: 33f56ea5aad923a5aff3ec9ac9b6ae354c41db9211c26118dcd86343377a87d809c8826cbe8fecdd0b76\n使用的 IV（hex）: e0b4010e169522a4\n",
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "python"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.c",
+        "code_chars": 9389,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_3325ab1f6e6e4334b49667ccacc211b6.c:113:1: error: expected expression before ‘if’\n  113 | if (padding == 0) {\n      | ^~\n/tmp/aicrypto_validator/test_3325ab1f6e6e4334b49667ccacc211b6.c:122:1: error: expected ‘}’ before ‘void’\n  122 | void des_decrypt_block(const uint8_t *ciphertext, const uint8_t subkeys[16][6], uint8_t *plaintext) {\n      | ^~~~\n/tmp/aicrypto_validator/test_3325ab1f6e6e4334b49667ccacc211b6.c:110:5: note: to match this ‘{’\n  ",
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "c"
+        },
+        "variant": "无任何提示"
+      },
+      {
+        "ok": true,
+        "filepath": "generated_code/des_ofb.cpp",
+        "code_chars": 1894,
+        "gsr": true,
+        "vpr": false,
+        "ftpr": false,
+        "validation_hint": "编译失败: /tmp/aicrypto_validator/test_cb91d4225e52425fb4f0cdd632f0ec7a.cpp: In function ‘std::string toHex(const unsigned char*, size_t)’:\n/tmp/aicrypto_validator/test_cb91d4225e52425fb4f0cdd632f0ec7a.cpp:8:24: error: aggregate ‘std::ostringstream oss’ has incomplete type and cannot be defined\n    8 |     std::ostringstream oss;\n      |                        ^~~\n/tmp/aicrypto_validator/test_cb91d4225e52425fb4f0cdd632f0ec7a.cpp: In function ‘int main()’:\n/tmp/aicrypto_validator/",
+        "case": {
+          "provider": "codex",
+          "mode": "OFB",
+          "language": "cpp"
+        },
+        "variant": "无任何提示"
+      }
+    ]
+  },
+  "next_index": 240,
+  "total_tasks": 240,
+  "updated_at": "2026-05-16T01:53:04"
+}

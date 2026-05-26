@@ -1,0 +1,25 @@
+# OpenAI · DES-ECB
+supplement: |
+  **「无法提取密文」：** 若 **`密文:`** 后接的是**题目说明或长句中文**而非 hex，评测**抽不到**，必败。**`密文:` 后只能 0-9a-f**。
+  禁止仅 IP/FP 或无轮函数导致**输出=明文 hex**。**若输出 hex 与明文 `4E6574776F726B205365637572697479` 相同（大小写忽略），即为未加密，评测必败。**
+  **错例：** **`4e6574776f726b200000000000000000`**（前 8 字节为明文、后 8 字节全 **`0`**）= **未对第二块做 `E(K,·)`** 或 **把明文缓冲误当密文打印**；golden 须为 **`958920B1358EF1972B9EE4548DC08E8A`**。
+  **全 `0` 密文 **`00000000000000000000000000000000`**（32 个 0）：** 与 golden **`958920…`** 完全不符 → **未执行有效 `EVP_EncryptUpdate`/`Final` 仍打印零缓冲**、**legacy 未加载**、**`ciphertext_len` 恒 0**；须 **`OSSL_PROVIDER_load` + 检查 Update 返回值 + `ciphertext_len += len`**。
+  **长度错：** 若输出仅 **16 hex（8 字节）**如 **`4e6574776f726b20`**、**`0000000000000000`**，评测报 **-16** → **只把明文前 8 字节当 hex 打印**、**只加密/打印第一块**、**`ciphertext_len==8`**；须 **完整 32 hex** 密文 **`958920B1…`**。
+  **错密文形态：** **`7f2c1f5a00fe5179ffd94aaf00fea015`**、**`00fe5179b47f2c1f00fea0155effd94a`**（字节序/块拼接与 golden **`958920B1…`** 不一致）→ **手搓 DES** 或 **误用 ede/分组**；**须 EVP_des_ecb** + **test_data K/P** + **`set_padding(0)`**。
+  test_data：明文 `4E6574776F726B205365637572697479`、密钥 `57696C6C69616D53` → 密文 **`958920B1358EF1972B9EE4548DC08E8A`**。
+
+c: |
+  **`main` 书写顺序（防 `'ciphertext_len' undeclared` / `'ciphertext' undeclared`）：** 在 **任意** `for (i=0;i<ciphertext_len;i++)` **`printf("%02x", ciphertext[i])`** **之前**，**必须先写**（可与 DES-CBC 同款）：  
+    `int len = 0, ciphertext_len = 0;`  
+    `unsigned char outbuf[256];`  
+    `unsigned char *ciphertext = outbuf;`（或 `malloc` 指针）  
+  再 **`EVP_*`** → **`Update`/`Final` 累加 `ciphertext_len`** → **再** `printf("密文: ");` **再** `for`。**禁止** 循环用 **`ciphertext_len`/`ciphertext`** 却在后方才声明。
+  **`EVP_des_ecb()`** + **`OSSL_PROVIDER_load(NULL, "legacy")`** + **`EVP_CIPHER_CTX_set_padding(ctx, 0)`**（16 字节明文=两整块）。**禁止** `#define 8`、`#define 8 8`。
+  **顺序：** 在 **`EVP_CIPHER_fetch`/`EVP_des_ecb`** 之前 **`OSSL_PROVIDER_load(NULL, "legacy")`**；`EVP_EncryptInit_ex` → **`EVP_EncryptUpdate(ctx, out, &len, plaintext, plaintext_len)`**（**`plaintext_len` 须为 hex 解码后的字节数，本测 16**）→ **`EVP_EncryptFinal_ex`**；**禁止** 未 Update/Final 就打印或 **`ciphertext_len` 恒为 0**（会得到 **全 `0`** 密文，golden 为 **`958920B1…`**）。
+  **`printf("密文: ");`** 后只能 **`for (i=0;i<ciphertext_len;i++) printf("%02x", ciphertext[i])`**，**禁止**在标签后拼**整句说明文**、**禁止** **`for (... plaintext[i]) printf("%02x", plaintext[i])`**（会把 **解码后的明文**打成与 **`TEST_PLAINTEXT` 相同**的 32 hex）、**禁止** `printf("%s", getenv("TEST_PLAINTEXT"))`。
+  **`getenv`+`hex_to_bytes`** 读入；**`fflush(stdout);`**。**禁止**自写 **`des_encrypt_block`**（一律 **EVP**）。
+  **`EncryptUpdate`/`Final` 返回非 1 须 `ERR_print_errors_fp(stderr)` 并中止**，**禁止**仍打印全零当成功。**使用 `ERR_print_errors_fp` 时须 `#include <openssl/err.h>`**。
+  **`out` 缓冲不得与 `plaintext` 同一指针**（原地覆盖易失败）；`malloc(plaintext_len + 16)` 以上，**`memset(out,0,...)` 后若 `ciphertext_len` 仍为 0 禁止打印**。
+  **禁止解密路径：** 评测**只要加密**。不要写 **`EVP_Decrypt*`**、不要 **`void decrypt(...)`**、不要 **`printf` 解密明文**。加密打印完密文后 **`return 0`**，勿再追加解密演示块（小模型易把 `Decrypt*` 写在函数外 → **整文件语法崩溃**）。
+  **`fgets`/`strcspn`：** 目标缓冲区须为 **`char`** 数组，**禁止**对 **`const char *`**（含 `getenv` 返回指针若指向只读区）做逐字节赋值去换行。
+  **高频错密文（必对照）：** **`4e6574776f726b200000000000000000`** = 首块像明文 ASCII、**第二块全 0** → **仅处理了 8 字节或未对第二块 `EVP_EncryptUpdate`**，或误打印明文缓冲；正确 golden **`958920B1358EF1972B9EE4548DC08E8A`**。**两整块 16 字节**必须**一次或两次 Update 全部写入** `out`，**`ciphertext_len` 须为 16** 再打印。

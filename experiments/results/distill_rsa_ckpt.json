@@ -1,0 +1,140 @@
+{
+  "version": 1,
+  "schema": "run_qwen_distillation_ablation",
+  "fingerprint": "c1cc7d4a316f6e15a89f46b7",
+  "fp_payload": {
+    "schema": "run_qwen_distillation_ablation",
+    "config": "/mnt/d/aicrypto-helper/config.yaml",
+    "provider": "qwen_coder_local",
+    "algorithm": "RSA",
+    "grid": [
+      {
+        "algorithm": "RSA",
+        "mode": null,
+        "language": "python"
+      },
+      {
+        "algorithm": "RSA",
+        "mode": null,
+        "language": "c"
+      },
+      {
+        "algorithm": "RSA",
+        "mode": null,
+        "language": "cpp"
+      }
+    ],
+    "limit": 0,
+    "enable_validation": false,
+    "web_batch_single": true,
+    "max_retries": 3,
+    "skip_baseline": false,
+    "skip_distill": false
+  },
+  "results_baseline": [
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.11337259600000493,
+      "filepath": "generated_code/rsa.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "python"
+      },
+      "label": "RSA|RSA|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.12223665700000197,
+      "filepath": "generated_code/rsa.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "c"
+      },
+      "label": "RSA|RSA|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.10911124699998709,
+      "filepath": "generated_code/rsa.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "cpp"
+      },
+      "label": "RSA|RSA|cpp"
+    }
+  ],
+  "results_distill": [
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.09742968000000474,
+      "filepath": "generated_code/rsa.py",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "python"
+      },
+      "label": "RSA|RSA|python"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.1006527119999987,
+      "filepath": "generated_code/rsa.c",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "c"
+      },
+      "label": "RSA|RSA|c"
+    },
+    {
+      "ok": true,
+      "error": null,
+      "gsr": true,
+      "vpr": true,
+      "ftpr": true,
+      "seconds": 0.10312705199999073,
+      "filepath": "generated_code/rsa.cpp",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "generation_ok": true,
+      "history_skip": true,
+      "cell": {
+        "algorithm": "RSA",
+        "language": "cpp"
+      },
+      "label": "RSA|RSA|cpp"
+    }
+  ]
+}

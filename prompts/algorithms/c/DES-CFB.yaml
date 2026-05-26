@@ -1,0 +1,50 @@
+# DES-CFB模式的C语言特定内容
+c_specific: |
+  **【编译铁律】** **禁止** `#define 8`、`#define 8 8` 及带注释的变体；须用 **`#define DES_BLOCK_BYTES 8`** 等合法宏名。
+
+  **【本测 golden】** 默认向量密文须为 **`F70F01584ACF4D966ADC143EB240C962`**（32 hex）。须与 **`EVP_des_cfb8()`**（CFB-8）一致；误用 **`EVP_des_cfb()`**（CFB-64）会得到完全不同的串。
+
+  **使用OpenSSL库的实现要求（C语言）：**
+  1. **`hex_to_bytes`** - 将十六进制字符串转换为字节数组（必须实现！）
+  2. **`main`** - 主函数（必须完整实现！包括：读取环境变量、转换输入、调用OpenSSL函数进行CFB加密、输出密文、return 0）
+  3. **必须使用OpenSSL函数：**
+     - ✅ **正确：包含 `#include <openssl/evp.h>` 和 `#include <openssl/provider.h>`**
+     - ✅ **正确：在main函数开始时加载legacy provider（OpenSSL 3.0需要）：**
+       ```c
+       OSSL_PROVIDER *legacy = OSSL_PROVIDER_load(NULL, "legacy");
+       if (!legacy) {
+           fprintf(stderr, "无法加载legacy provider\n");
+           return 1;
+       }
+       ```
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_des_cfb8()` 获取DES-CFB-8密码对象（标准测试数据使用CFB-8模式，会自动尝试legacy provider）**
+     - ❌ **错误：不要使用 `EVP_des_cfb()`（这是CFB-64模式，与测试数据不匹配）**
+     - ✅ **🚨🚨🚨 输出长度控制（绝对重要！）：必须只输出实际加密的数据长度，不要输出整个缓冲区或IV！**
+       - **正确做法（C）：**
+         ```c
+         int len;
+         int ciphertext_len = 0;
+         unsigned char *ciphertext = malloc(plaintext_len);
+         
+         EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);
+         ciphertext_len = len;
+         EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
+         ciphertext_len += len;  // 总长度 = Update长度 + Final长度
+         
+         // 只输出 ciphertext_len 长度的数据，不要输出IV！
+         printf("密文: ");
+         for (int i = 0; i < ciphertext_len; i++) {  // 使用 ciphertext_len！
+             printf("%02x", ciphertext[i]);
+         }
+         printf("\n");
+         free(ciphertext);
+         ```
+       - **错误做法（绝对禁止）：**
+         - 输出整个缓冲区（`sizeof(ciphertext)`）
+         - 输出IV（IV只用于加密过程，不应该出现在输出中）
+         - 输出额外的填充空间
+       - **关键：`ciphertext_len` 是 `EVP_EncryptUpdate()` 和 `EVP_EncryptFinal_ex()` 返回的长度之和，这是实际加密的数据长度！**
+     - ❌ **错误：不要使用 `DES_set_key()`、`DES_ncbc_encrypt()`（OpenSSL 3.0已弃用）**
+  4. **编译命令：`gcc -o program program.c -lssl -lcrypto`**
+

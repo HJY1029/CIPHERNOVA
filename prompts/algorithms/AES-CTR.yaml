@@ -1,0 +1,52 @@
+# AES-CTR模式特定prompt
+# 注意：AES算法的共同内容已提取到 prompts/algorithms/AES/common.yaml
+# C和C++语言特定的内容已分离到 prompts/algorithms/c/AES-CTR.yaml 和 prompts/algorithms/cpp/AES-CTR.yaml
+# prompt_loader.py会自动加载这些内容
+
+algorithm_specific: |
+  **AES-CTR模式说明：**
+  - CTR（Counter）模式是流密码模式
+  - 将分组密码转换为流密码
+  - 需要初始化向量（IV），通常为12字节（96位），加上4字节计数器（32位）组成16字节的计数器块
+  - 对于AES，每个块大小为16字节（128位）
+  - AES支持128位、192位、256位密钥长度
+  - **🚨🚨🚨 重要：CTR模式使用OpenSSL官方测试数据进行测试！🚨🚨🚨**
+  - **测试数据已包含在test_data.yaml中，使用与AES其他模式相同的明文、密钥和IV**
+  - **预期输出为32字节密文（与明文长度相同，因为CTR是流密码模式）**
+  
+  **实现要求：**
+  - 对于Python：使用 `cryptography` 或 `pycryptodome` 库的 `AES.MODE_CTR`
+  - 对于C/C++：**🚨🚨🚨 必须优先使用OpenSSL库！🚨🚨🚨**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+    - ✅ **必须使用 `EVP_aes_128_ctr()`、`EVP_aes_192_ctr()` 或 `EVP_aes_256_ctr()` 获取AES-CTR密码对象（根据密钥长度选择）**
+    - ✅ **必须从环境变量TEST_IV读取IV，如果不存在则使用全零IV**
+    - ❌ **绝对不要实现完整的AES算法！**
+    - ❌ **绝对不要使用纯C/C++实现！代码会太长，一定会截断！只有在OpenSSL完全不可用时才使用纯实现！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出密文！🚨🚨🚨**
+    - **必须使用 `printf("密文: ");` 或 `std::cout << "密文: ";` 输出密文！**
+    - **必须输出完整的密文，不要截断！**
+    - **🚨🚨🚨 绝对重要：CTR模式是流密码，输出长度必须等于明文长度！🚨🚨🚨**
+      - **🚨🚨🚨 必须使用 `plaintext_len` 作为输出长度，绝对不能使用 `ciphertext_len`！**
+      - **🚨🚨🚨 输出循环必须写成：`for (int i = 0; i < plaintext_len; i++)`，不能使用任何其他变量！**
+      - **🚨🚨🚨 即使 `EVP_EncryptFinal_ex()` 返回非0值，输出长度也必须等于明文长度！**
+      - **🚨🚨🚨 绝对禁止使用 `ciphertext_len`、`len` 或任何其他变量作为输出长度！**
+      - **不要输出整个缓冲区或IV！**
+    - **绝对不能没有输出！程序必须输出密文！**
+
+mode_specific: |
+  **CTR模式实现细节（必须严格遵循）：**
+  
+  **注意：C和C++语言特定的实现要求已分离到以下文件：**
+  - `prompts/algorithms/c/AES-CTR.yaml` - C语言特定内容
+  - `prompts/algorithms/cpp/AES-CTR.yaml` - C++语言特定内容
+  - prompt_loader.py会自动根据语言加载对应的内容
+  
+  **通用实现要求：**
+  - **密钥长度检测：**根据密钥字节长度选择对应的EVP函数
+    - 16字节（128位）→ `EVP_aes_128_ctr()`
+    - 24字节（192位）→ `EVP_aes_192_ctr()`
+    - 32字节（256位）→ `EVP_aes_256_ctr()`
+  - **IV处理：**IV通常为12字节（96位），从环境变量TEST_IV读取，如果不存在则使用全零
+  - **CTR模式：**CTR模式将IV和计数器组合成16字节的计数器块
+  - **测试验证：**CTR模式使用OpenSSL官方测试数据（已包含在test_data.yaml中），生成的代码将通过标准测试进行验证

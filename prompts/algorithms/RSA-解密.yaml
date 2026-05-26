@@ -1,0 +1,60 @@
+# RSA解密特定prompt
+algorithm_specific: |
+  **🚨🚨🚨 必须优先使用OpenSSL库，保持代码简洁！🚨🚨🚨**
+  - **代码长度限制导致纯实现经常截断，必须优先使用OpenSSL库！**
+  - **使用OpenSSL库可以大大减少代码长度，避免因token限制导致的截断问题！**
+  - **必须包含头文件：`#include <openssl/rsa.h>` 和 `#include <openssl/evp.h>`**
+  - **必须使用OpenSSL EVP函数进行解密，不要实现完整的RSA算法！**
+  - **编译命令：C语言 `gcc -o program program.c -lssl -lcrypto`，C++ `g++ -o program program.cpp -lssl -lcrypto`**
+  - **绝对不要实现完整的RSA算法（大数运算、模幂运算等）！**
+  
+  **RSA解密说明：**
+  - RSA是一种非对称加密算法
+  - 使用私钥解密，公钥加密
+  - 解密的数据长度等于密钥长度（2048位密钥解密后得到256字节）
+  
+  **实现要求：**
+  - 对于Python：使用 `cryptography` 或 `pycryptodome` 库的RSA解密功能
+  - 对于C/C++：**🚨🚨🚨 必须优先使用OpenSSL库！🚨🚨🚨**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_PKEY_decrypt_init()`、`EVP_PKEY_decrypt()`**
+    - ✅ **必须使用 `EVP_PKEY_CTX_new()` 创建解密上下文**
+    - ✅ **必须从环境变量读取私钥（TEST_PRIVATE_KEY_N, TEST_PRIVATE_KEY_D）**
+    - ❌ **绝对不要实现完整的RSA算法！**
+    - ❌ **绝对不要使用纯C/C++实现！代码会太长，一定会截断！只有在OpenSSL完全不可用时才使用纯实现！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出明文！🚨🚨🚨**
+    - **必须使用 `printf("明文: ");` 或 `std::cout << "明文: ";` 输出明文！**
+    - **必须输出完整的明文，不要截断！**
+
+mode_specific: |
+  **解密实现细节（必须严格遵循）：**
+  
+  **使用OpenSSL库的实现要求（C/C++语言）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <openssl/rsa.h>`
+     - `#include <openssl/bn.h>`
+     - `#include <stdlib.h>` (C语言) 或 `#include <cstdlib>` (C++)
+     - `#include <stdio.h>` (C语言) 或 `#include <iostream>` (C++)
+     - `#include <string.h>` (C语言) 或 `#include <string>` (C++)
+  
+  2. **必须使用OpenSSL EVP函数：**
+     - ✅ **正确：使用 `EVP_PKEY_CTX_new()` 创建解密上下文**
+     - ✅ **正确：使用 `EVP_PKEY_decrypt_init()` 初始化解密**
+     - ✅ **正确：使用 `EVP_PKEY_decrypt()` 执行解密**
+     - ✅ **正确：使用 `BN_hex2bn()` 从十六进制字符串创建BIGNUM**
+     - ✅ **正确：使用 `RSA_new()` 和 `RSA_set0_key()` 构建RSA私钥**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取密文和私钥（TEST_CIPHERTEXT, TEST_PRIVATE_KEY_N, TEST_PRIVATE_KEY_D）
+     - 将十六进制字符串转换为字节数组
+     - 构建RSA私钥对象
+     - 使用OpenSSL EVP函数进行RSA解密
+     - 输出明文（十六进制格式）
+     - 释放资源并返回0
+  
+  **关键实现细节：**
+  - **私钥构建：**从模数n和私钥指数d构建RSA私钥
+  - **数据长度：**解密的密文长度等于密钥长度
+  - **输出格式：**输出明文（十六进制格式）
+

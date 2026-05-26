@@ -1,0 +1,14 @@
+# OpenAI · AES-128-ECB
+supplement: |
+  禁止全 **0** 密文占位。默认向量下密文须 **64 hex（32 字节）**，以 **`DB727AC6624F3699...`** 开头。**禁止**只输出 **32 hex（16 字节）**（评测报长度差 **-32**）：常见 **`db38437fea2ca08e05761f8c6cd04a81`** — **只加密了前 16B** 或 **`plaintext_len`/`EncryptUpdate` 第三参错了**。
+  **教材/手搓错例：** 若 stdout 出现 **`Expanded Key:`**、**`Round Key`**、以 **`57696c6c69616d53…`**（*WilliamStallings* 式 **16B 密钥**再拼 **手搓扩展**）达 **80 hex** —— **不是密文**；须 **删手搓 `KeyExpansion`/`aes_encrypt` 整段**，**只** `EVP_aes_128_ecb` 后 **唯一一行** **`密文: `** + **64 hex**（**`DB727AC6…` 起**），**禁止**任何其它英文标签行。
+  **运行时 stderr（一律禁止）：** **`key must be exactly 8 bytes (16 hex chars) for DES`**、**`DES key must be exactly 8 bytes`**、**`key must be exactly 8 bytes (16 hex chars)`**、**`Key must be 8 bytes (16 hex)`** —— 本题是 **AES-128-ECB**，**禁止**任何 **`for DES`** / **`DES密钥`** 字样。**`TEST_KEY` = 32 hex → 16 字节**；拷 DES 校验 → 评测 **32 hex** 必挂。
+
+c: |
+  **禁止生成手搓 AES。** **唯一允许：** **`EVP_aes_128_ecb()`** + **`EVP_CIPHER_CTX_set_padding(ctx, 0)`** + **`EVP_EncryptUpdate`/`Final`**。**禁止**自写 **`void Cipher(..., unsigned char w[][4], int Nr)`** 却在 **`main` 里写 **`Cipher(plaintext, ciphertext, w)`**（**少传 `Nr`** → **`too few arguments to function 'Cipher'`**）。**禁止** **`SubBytes`/`ShiftRows`/`MixColumns`/`KeyExpansion`** 教材函数链；题未要求「纯算法」时**一律删光**，只留 **EVP**。**禁止**输出含 **`MixColumns`/`gf_mul`/`AddRoundKey`/`AES_encrypt`** 的源码（→ **`undefined reference`**）；**程序异常退出码 -11** 多为手搓越界——**改为纯 EVP**。
+  **无输出 = 评测失败：** 若评测提示「程序执行成功但没有产生任何输出」= **stdout 从未出现** **`密文:`/`ciphertext:`**；检查是否在 **`printf` 前 `return`**、或 **`if (!getenv(...)) return 1`** 静默退出。**必须**在成功加密路径执行 **`printf("密文: ");`** … **`fflush(stdout);`**。
+  **`getenv("TEST_*")`** → **`EVP_aes_128_ecb()`** → **`printf("密文: ");`** + **与明文等长的密文 hex（本测常 64 hex）** + **`printf("\n"); fflush(stdout); return 0;`**。**stdout 第一行即密文**；**禁止** `printf("Expanded Key:...")`、**`printf` 轮密钥/IV**；**禁止** `scanf`/`getchar`、仅 stderr。
+  **`TEST_PLAINTEXT` 解码字节数 = `plaintext_len`**（常见 **32 字节**），**`EncryptUpdate` 须处理全部 `plaintext_len`**，**`ciphertext_len` 须等于 `plaintext_len`**，**禁止**只处理 **16** 字节导致 **长度减半**。
+  **golden 前缀自检：** 密文须以 **`db727ac6624f3699…`** 起（大小写不限），**禁止**占位全 **`0`**。若得到 **`f1b9d5a4…`**、**`ca75892b…`**、**`b22a7c59…`** 等与 **`DB727AC6…`** 完全不符 → 多为 **`EVP_aes_256_ecb`**、**密钥按 256 位解析**、或 **明文/密钥 hex 解码长度错误**；本测须 **`EVP_aes_128_ecb()`** + **test_data 的 32hex key + 64hex 明文一次 Update**。
+  **`TEST_KEY`：** hex **长度须为 32**，解码后 **`key[16]`** → **`EVP_aes_128_ecb()`**。**禁止** **`if (key_len != 8)`**；须 **`key_len != 16`** 才报错。**禁止** **`fprintf(..., "...for DES")`**、**`...DES...`** 出现在密钥提示里。**若须报错：** **`expect 32 hex (16 bytes) for AES-128 key`**（**勿**写 DES）。
+  **`getenv` 得到 hex 须解码：** 在 **`main` 之前**写 **`static int hex_to_bytes(...){ ... }` 完整实现**。**若另写 **`bytes_to_hex`/`print_hex`**，也必须同文件 **`static` 完整实现**，**禁止**链接 **`undefined reference to hex_to_bytes`/`bytes_to_hex`**。**推荐：** 不用自定义 **`bytes_to_hex`**，直接 **`for(i;i<ciphertext_len;i++) printf("%02x",out[i])`**。

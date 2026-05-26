@@ -1,0 +1,51 @@
+{
+  "title": "不同错误类型的分布与修复效果",
+  "source_note": "**实测聚合**：自 `llm_performance.json`（修改时间 2026-05-08 16:42:08），共扫描 **491** 条性能明细；**实验总体**仅为 **101** 条失败记录（成功记录不参与本表），每条经启发式归入四类之一；表中「数量/占比/修复前后通过率」均在该失败子集上统计。**「修复后通过率」= 观测口径，非分类型修复流水线**：本条已标向量通过，或**同一 model_key 且同一 (算法,模式,语言)** 在**更晚**日志中出现 `test_success===true`，即计已跑通；**不**表示对本类错误执行了专用修复规则。补跑脚本仅增加更晚成功记录。**修复后通过率**（分母=该类失败条数）：按上式计数。 全库 **11** 条 `attempts>1`；其中本条即通过 **4** 条，靠后续成功日志计通过 **7** 条（多轮子集内 **11** / **11** 条计通过）。 失败样本合计 **88** / **101** 条计为「后续已跑通」。「修复前通过率」：分母为**失败样本**；分子为其中本条日志即 `test_success===true` 的条数（多为 **0**；少数仅校验失败）。 非全库首轮成功率（JSON 无首轮字段）。分类为关键词启发式，不等同于论文人工标注子集。",
+  "rows": [
+    {
+      "name": "算法理解",
+      "count": 35,
+      "share_pct": 34.65,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 77.14
+    },
+    {
+      "name": "实现细节",
+      "count": 41,
+      "share_pct": 40.59,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 87.8
+    },
+    {
+      "name": "环境配置",
+      "count": 12,
+      "share_pct": 11.88,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 100.0
+    },
+    {
+      "name": "代码结构",
+      "count": 13,
+      "share_pct": 12.87,
+      "pass_before_pct": 0.0,
+      "pass_after_pct": 100.0
+    }
+  ],
+  "total": {
+    "name": "合计",
+    "count": 101,
+    "share_pct": 100.0,
+    "pass_before_pct": 0.0,
+    "pass_after_pct": 87.13
+  },
+  "_meta": {
+    "performance_json": "/mnt/d/aicrypto-helper/llm_performance.json",
+    "records_total": 491,
+    "failure_records": 101,
+    "failure_rows_resolved": 88,
+    "multi_attempt_records": 11,
+    "multi_direct_test_pass": 4,
+    "multi_resolved_via_later_success": 7,
+    "mtime_local": "2026-05-08 16:42:08"
+  }
+}

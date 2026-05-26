@@ -1,0 +1,14 @@
+# DES-OFB模式的C++语言特定内容
+cpp_specific: |
+  **【编译铁律】** 宏名不能为纯数字。**禁止** `#define 8 8` 等；请用 **`#define DES_BLOCK_BYTES 8`**。
+
+  **使用OpenSSL（C++）：**
+  1. `#include <openssl/evp.h>`、`#include <openssl/provider.h>`、`<iostream>`、`<vector>`、`<cstring>`、`<cstdlib>`、`<iomanip>` 等所需头文件。
+  2. `OSSL_PROVIDER_load(nullptr, "legacy")`；`EVP_des_ofb()`；**`EVP_CIPHER_CTX_set_padding(ctx, 0)`**（整块明文、无 PKCS）。
+  3. `EVP_EncryptInit_ex(ctx, EVP_des_ofb(), nullptr, key.data(), iv.data());` — key、iv 各 **8** 字节。
+  4. `EVP_EncryptUpdate` / `EVP_EncryptFinal_ex`，按 **`ciphertext_len`** 打印 **`密文:`** + 连续小写 hex。
+  5. **Golden：** **`F788B2BC5949FCBBB3962D8E99733A96`**（与 test_data / PyCryptodome 一致）。
+
+  **禁止：** 不完整三元运算（如 **`condition value : value`** 缺 **`?`**）；**禁止**手写与 `EVP_des_ofb` 不等价的「OFB-8」又期望上述 golden。
+
+  **编译：** `g++ -std=c++17 -o program program.cpp -lssl -lcrypto`

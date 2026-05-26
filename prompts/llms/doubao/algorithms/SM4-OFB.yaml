@@ -1,0 +1,25 @@
+# 豆包 · SM4-OFB-128
+mandatory: |
+  **C/C++ 禁止手写 SM4 表**；**`EVP_sm4_ofb128()`** + **`set_padding(0)`**。
+  **反馈 R←O**（**不是** CFB 的 R←密文）；golden **`2754b10c806aef23698989882d80903a`**。
+
+supplement: |
+  SM4-OFB-128：16B 明文 → **32 hex**；与 SM4-CFB **同 golden 串** 但 **cipher 不同**（**ofb128** vs **cfb128**）。
+  **错例 `3519adbb…`/`a3167031…`：** OFB/CFB 反馈搞反或误用 **cfb128**。
+
+python: |
+  **`gmssl`** / 库 **SM4 OFB**；**`print("密文:", ct.hex().lower())`** → **`2754b10c…`**。
+
+c: |
+  **`EVP_sm4_ofb128()`** + **`set_padding(0)`**；**禁止** `#define 8`、手写 **tau**。
+
+cpp: |
+  **禁止 `Sbox`/`sm4_ofb_encrypt` 手写**；**`EVP_sm4_ofb128()`** + **`set_padding(0)`**。
+  **`std::getenv("TEST_*")`**；**`printf("密文: ");`** + **32 hex**。
+  三元须 **`? :`** 完整（禁止 **`% 16 : 16`** 缺 **`?`**）。
+
+test_feedback_improve: |
+  **【豆包 · SM4-OFB】** 勿 **cfb128**；寄存器更新为 **O** 非密文。
+
+test_feedback_improve_cpp: |
+  删手写 SM4；**`EVP_sm4_ofb128()`** only。

@@ -1,0 +1,39 @@
+{
+  "batch": "failing_slots",
+  "distillation_keep": false,
+  "distillation_skip": true,
+  "provider": "qwen_coder_local",
+  "started_at_utc": "2026-05-23T11:03:27.947871+00:00",
+  "failing_slots_total": 1,
+  "force_regen_no_db": 0,
+  "configs_count": 1,
+  "since_used": "2026-05-04",
+  "only_pending": true,
+  "pending_filter_stats": {
+    "input": 1,
+    "pending": 1,
+    "no_record": 1,
+    "retest_fail": 0,
+    "retest_pass_skip": 0,
+    "skip_disabled": 0,
+    "force_regen_no_db": 0
+  },
+  "web_batch": true,
+  "cases": [
+    {
+      "config": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 1617539,
+      "case_id": "sm4-ofb-cpp",
+      "generation_ok": true
+    }
+  ],
+  "finished_at_utc": "2026-05-23T11:03:27.948043+00:00"
+}

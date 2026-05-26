@@ -1,0 +1,231 @@
+{
+  "batch": "failing15",
+  "provider": "qwen_coder_local",
+  "started_at_utc": "2026-05-21T21:32:59.837905+00:00",
+  "failing_slots_total": 15,
+  "configs_count": 15,
+  "since_used": "2026-05-04",
+  "only_pending": true,
+  "pending_filter_stats": {
+    "input": 15,
+    "pending": 15,
+    "no_record": 15,
+    "retest_fail": 0,
+    "retest_pass_skip": 0,
+    "skip_disabled": 0
+  },
+  "web_batch": true,
+  "cases": [
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 16488131,
+      "case_id": "aes-cbc-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 2939625,
+      "case_id": "aes-cbc-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 3023822,
+      "case_id": "aes-cfb-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "success": false,
+      "error": "测试失败：结果不匹配\n实际结果: 34e0e717a1a39500fe52f5730bbf9f0808edb3711eee684fb58580d0268c93b6413fe1abd9b5ded2048b611059ea9919e3c73ab286ac9c7954606ce38410864f\n预期结果: EAC2DD6334E8FA07FDAB477ABA1628A93AFAAAD753B7E05CD59548A2927BDA97\n(规范化后: 实际=34e0e717a1a39500fe52f5730bbf9f0808edb3711eee684fb58580d0268c93b6413fe1abd9b5ded2048b611059ea9919e3c73ab286ac9c7954606ce38410864f, 预期=eac2dd6334e8fa07fdab477aba1628a93afaaad753b7e05cd59548a2927bda97)\n\n长度分析：\n  - 实际长度: 128 个字符 (64 字节)\n  - 预期长度: 64 个字符 (32 字节)\n  - 长度差异: 64 个字符 (32 字节)\n\n可能的问题：\n  - 密文长度不正确，可能是填充、IV或其他问题\n  - 请检查代码是否正确处理了所有明文字节\n  - 请检查代码是否正确输出了所有密文字节\n\n\n程序完整输出:\n34e0e717a1a39500fe52f5730bbf9f0808edb3711eee684fb58580d0268c93b6413fe1abd9b5ded2048b611059ea9919e3c73ab286ac9c7954606ce38410864f\n",
+      "vector_status": "未通过",
+      "vector_detail": "测试失败：结果不匹配\n实际结果: 34e0e717a1a39500fe52f5730bbf9f0808edb3711eee684fb58580d0268c93b6413fe1abd9b5ded2048b611059ea9919e3c73ab286ac9c7954606ce38410864f\n预期结果: EAC2DD6334E8FA07FDAB477ABA1628A93AFAAAD753B7E05CD59548A2927BDA97\n(规范化后: 实际=34e0e717a1a39500fe52f5730bbf9f0808edb3711eee684fb58580d0268c93b6413fe1abd9b5ded2048b611059ea9919e3c73ab286ac9c7954606ce38410864f, 预期=eac2dd6334e8fa07fdab477aba1628a93afaaad753b7e05cd59548a2927bda97)\n\n长度分析：\n  - 实际长度: 128 个字符 (64 字节)\n  - 预期长度: 64 个字符 (32 字节)\n  - 长度差异: 64 个字符",
+      "total_ms": 36533726,
+      "case_id": "aes-cfb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 13272760,
+      "case_id": "aes-ctr-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "CTR",
+        "language": "cpp"
+      },
+      "success": false,
+      "error": "输入内容过长，超过了模型的上下文限制。输入tokens (47680) 超过或等于上下文限制 (32768)。请减少prompt长度或使用支持更大上下文的模型（如gpt-4-turbo，支持128K上下文）。",
+      "vector_status": "—",
+      "vector_detail": "",
+      "total_ms": 20238989,
+      "case_id": "aes-ctr-cpp",
+      "generation_ok": false
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "GCM",
+        "language": "cpp"
+      },
+      "success": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_0f21841490e74a469d88fca08230af08.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_0f21841490e74a469d88fca08230af08.cpp:21:10: error: ‘RAND_bytes’ was not declared in this scope\n   21 |     if (!RAND_bytes(iv, EVP_MAX_IV_LENGTH)) {\n      |          ^~~~~~~~~~\n/tmp/aicrypto_tester/test_0f21841490e74a469d88fca08230af08.cpp:41:49: error: cannot convert ‘size_t*’ {aka ‘long unsigned int*’} to ‘int*’\n   41 |     if (1 != EVP_EncryptUpdate(ctx, ciphertext, &ciphertext_len, plaintext, plaintext_len)) {\n      |                                                 ^~~~~~~~~~~~~~~\n      |                                                 |\n      |                                                 size_t* {aka long unsigned int*}\nIn file included from /tmp/aicrypto_tester/test_0f21841490e74a469d88fca08230af08.cpp:3:\n/usr/include/openssl/evp.h:762:39: note:   initializing argument 3 of ‘int EVP_EncryptUpdate(EVP_CIPHER_CTX*, unsigned char*, int*, const unsigned char*, int)’\n  762 |                                  int *outl, const unsigned char *in, int inl);\n      |                                  ~~~~~^~~~\n/tmp/aicrypto_tester/test_0f21841490e74a469d88fca08230af08.cpp:50:68: error: cannot convert ‘size_t*’ {aka ‘long unsigned int*’} to ‘int*’\n   50 |     if (1 != EVP_EncryptFinal_ex(ctx, ciphertext + ciphertext_len, &tag_len)) {\n      |                                                                    ^~~~~~~~\n      |                                                                    |\n      |                                                                    size_t* {aka long unsigned int*}\n/usr/include/openssl/evp.h:764:41: note:   initializing argument 3 of ‘int EVP_EncryptFinal_ex(EVP_CIPHER_CTX*, unsigned char*, int*)’\n  764 |                                    int *outl);\n      |                                    ~~~~~^~~~\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C++实现代码",
+      "vector_status": "未通过",
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_0f21841490e74a469d88fca08230af08.cpp: In function ‘int main()’:\n/tmp/aicrypto_tester/test_0f21841490e74a469d88fca08230af08.cpp:21:10: error: ‘RAND_bytes’ was not declared in this scope\n   21 |     if (!RAND_bytes(iv, EVP_MAX_IV_LENGTH)) {\n      |          ^~~~~~~~~~\n/tmp/aicrypto_tester/test_0f21841490e74a469d88fca08230af08.cpp:41:49: error: cannot convert ‘size_t*’ {aka ‘long unsigned int*’} to ‘int*’\n   41 |     if (1 != EVP_EncryptUpdate(ctx, ciphertext, &ciphe",
+      "total_ms": 9258589,
+      "case_id": "aes-gcm-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 706929,
+      "case_id": "aes-ofb-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "AES",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 3491105,
+      "case_id": "aes-ofb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1097,
+      "case_id": "sm4-cbc-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "SM4",
+        "mode": "CBC",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "",
+      "total_ms": 6930404,
+      "case_id": "sm4-cbc-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "SM4",
+        "mode": "CFB",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1541,
+      "case_id": "sm4-cfb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "c"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1110,
+      "case_id": "sm4-ecb-c",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "SM4",
+        "mode": "ECB",
+        "language": "cpp"
+      },
+      "success": true,
+      "error": null,
+      "vector_status": "通过",
+      "vector_detail": "历史代码复测通过，未调用 LLM",
+      "total_ms": 1532,
+      "case_id": "sm4-ecb-cpp",
+      "generation_ok": true
+    },
+    {
+      "config": {
+        "algorithm": "SM4",
+        "mode": "OFB",
+        "language": "cpp"
+      },
+      "success": false,
+      "error": "编译失败: /tmp/aicrypto_tester/test_0ab49b6b706a4a1fbfef2af293d609d0.cpp:1:10: fatal error: openssl/sm4.h: No such file or directory\n    1 | #include <openssl/sm4.h>\n      |          ^~~~~~~~~~~~~~~\ncompilation terminated.\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C++实现代码",
+      "vector_status": "未通过",
+      "vector_detail": "编译失败: /tmp/aicrypto_tester/test_0ab49b6b706a4a1fbfef2af293d609d0.cpp:1:10: fatal error: openssl/sm4.h: No such file or directory\n    1 | #include <openssl/sm4.h>\n      |          ^~~~~~~~~~~~~~~\ncompilation terminated.\n\n\n提示：代码使用了OpenSSL库，但系统未安装OpenSSL开发库。\n解决方案：\n1. 安装OpenSSL开发库（Linux: sudo apt-get install libssl-dev, Mac: brew install openssl）\n2. 或者要求LLM生成不依赖OpenSSL的纯C++实现代码",
+      "total_ms": 8317243,
+      "case_id": "sm4-ofb-cpp",
+      "generation_ok": true
+    }
+  ],
+  "finished_at_utc": "2026-05-21T21:32:59.837923+00:00"
+}

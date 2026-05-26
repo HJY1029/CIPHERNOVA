@@ -1,0 +1,61 @@
+# RSA加密特定prompt
+algorithm_specific: |
+  **🚨🚨🚨 必须优先使用OpenSSL库，保持代码简洁！🚨🚨🚨**
+  - **代码长度限制导致纯实现经常截断，必须优先使用OpenSSL库！**
+  - **使用OpenSSL库可以大大减少代码长度，避免因token限制导致的截断问题！**
+  - **必须包含头文件：`#include <openssl/rsa.h>` 和 `#include <openssl/evp.h>`**
+  - **必须使用OpenSSL EVP函数进行加密，不要实现完整的RSA算法！**
+  - **编译命令：C语言 `gcc -o program program.c -lssl -lcrypto`，C++ `g++ -o program program.cpp -lssl -lcrypto`**
+  - **绝对不要实现完整的RSA算法（大数运算、模幂运算等）！**
+  
+  **RSA加密说明：**
+  - RSA是一种非对称加密算法
+  - 使用公钥加密，私钥解密
+  - 加密的数据长度受密钥长度限制（2048位密钥最多加密245字节）
+  - 对于更长的数据，需要使用混合加密（RSA加密对称密钥）
+  
+  **实现要求：**
+  - 对于Python：使用 `cryptography` 或 `pycryptodome` 库的RSA加密功能
+  - 对于C/C++：**🚨🚨🚨 必须优先使用OpenSSL库！🚨🚨🚨**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_PKEY_encrypt_init()`、`EVP_PKEY_encrypt()`**
+    - ✅ **必须使用 `EVP_PKEY_CTX_new()` 创建加密上下文**
+    - ✅ **必须从环境变量读取公钥（TEST_PUBLIC_KEY_N, TEST_PUBLIC_KEY_E）**
+    - ❌ **绝对不要实现完整的RSA算法！**
+    - ❌ **绝对不要使用纯C/C++实现！代码会太长，一定会截断！只有在OpenSSL完全不可用时才使用纯实现！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出密文！🚨🚨🚨**
+    - **必须使用 `printf("密文: ");` 或 `std::cout << "密文: ";` 输出密文！**
+    - **必须输出完整的密文，不要截断！**
+
+mode_specific: |
+  **加密实现细节（必须严格遵循）：**
+  
+  **使用OpenSSL库的实现要求（C/C++语言）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <openssl/rsa.h>`
+     - `#include <openssl/bn.h>`
+     - `#include <stdlib.h>` (C语言) 或 `#include <cstdlib>` (C++)
+     - `#include <stdio.h>` (C语言) 或 `#include <iostream>` (C++)
+     - `#include <string.h>` (C语言) 或 `#include <string>` (C++)
+  
+  2. **必须使用OpenSSL EVP函数：**
+     - ✅ **正确：使用 `EVP_PKEY_CTX_new()` 创建加密上下文**
+     - ✅ **正确：使用 `EVP_PKEY_encrypt_init()` 初始化加密**
+     - ✅ **正确：使用 `EVP_PKEY_encrypt()` 执行加密**
+     - ✅ **正确：使用 `BN_hex2bn()` 从十六进制字符串创建BIGNUM**
+     - ✅ **正确：使用 `RSA_new()` 和 `RSA_set0_key()` 构建RSA公钥**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取明文和公钥（TEST_PLAINTEXT, TEST_PUBLIC_KEY_N, TEST_PUBLIC_KEY_E）
+     - 将十六进制字符串转换为字节数组
+     - 构建RSA公钥对象
+     - 使用OpenSSL EVP函数进行RSA加密
+     - 输出密文（十六进制格式）
+     - 释放资源并返回0
+  
+  **关键实现细节：**
+  - **公钥构建：**从模数n和指数e构建RSA公钥
+  - **数据长度限制：**加密的数据长度受密钥长度限制
+  - **输出格式：**输出密文（十六进制格式）
+

@@ -1,0 +1,95 @@
+# 批量重跑：AES|ctr|cpp（曾超 32K；无 DB 或仍待复测）
+mandatory: |
+  **AES-128-CTR only**：**`EVP_aes_128_ctr()`** + **`set_padding(0)`**。
+  明文 **128 hex** → **64B**；key/iv 各 **32 hex** → **16B**；密文 **128 hex**；前缀 **`874d6191`**。
+  **生成答案 ≤70 行**（日志 **aes-ctr-cpp** prompt 超限）；**只输出骨架**，禁止教程。
+  **禁止：** `des_cfb_*`、`BLOCK_SIZE 8`、`des.h`、手搓大表。
+
+supplement: |
+  **CTR 向量在 test_data.modes.CTR**；勿用默认 CBC 的 64 hex 明文。
+
+c: |
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;
+    strip(ph);strip(kh);strip(ih);
+    if(strlen(ph)!=128||strlen(kh)!=32||strlen(ih)!=32)return 1;
+    unsigned char pt[64],key[16],iv[16],out[64];
+    if(h2b(ph,pt,64)||h2b(kh,key,16)||h2b(ih,iv,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!ctx)return 1;
+    if(!EVP_EncryptInit_ex(ctx,EVP_aes_128_ctr(),NULL,key,iv))return 1;
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;
+    if(!EVP_EncryptUpdate(ctx,out,&o1,pt,64))return 1;
+    if(!EVP_EncryptFinal_ex(ctx,out+o1,&o2))return 1;
+    printf("密文: ");
+    for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+
+cpp: |
+  **【AES|ctr|cpp · 日志 47680 tokens 超限】与下方 c 段逐字相同**（**禁止** `#include <iostream>` / `using namespace std` / 教程注释）：
+  ```cpp
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;
+    strip(ph);strip(kh);strip(ih);
+    if(strlen(ph)!=128||strlen(kh)!=32||strlen(ih)!=32)return 1;
+    unsigned char pt[64],key[16],iv[16],out[64];
+    if(h2b(ph,pt,64)||h2b(kh,key,16)||h2b(ih,iv,16))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    if(!ctx)return 1;
+    if(!EVP_EncryptInit_ex(ctx,EVP_aes_128_ctr(),NULL,key,iv))return 1;
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;
+    if(!EVP_EncryptUpdate(ctx,out,&o1,pt,64))return 1;
+    if(!EVP_EncryptFinal_ex(ctx,out+o1,&o2))return 1;
+    printf("密文: ");
+    for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+  }
+  ```
+
+python: |
+  ```python
+  import os
+  from Crypto.Cipher import AES
+  from Crypto.Util.Counter import Counter
+  k=bytes.fromhex(os.getenv("TEST_KEY","").strip())
+  iv=bytes.fromhex(os.getenv("TEST_IV","").strip())
+  pt=bytes.fromhex(os.getenv("TEST_PLAINTEXT","").strip())
+  ctr=Counter.new(128,initial_value=int.from_bytes(iv,"big"))
+  print("密文:", AES.new(k,AES.MODE_CTR,counter=ctr).encrypt(pt).hex().lower())
+  ```
+
+test_feedback_improve: |
+  **CTR：** **128 hex** 输出；**`874d6191`**
+
+test_feedback_improve_cpp: |
+  **日志 aes-ctr-cpp：** **generation_ok=False·超 32K** → 整文件 **≤65 行**，**仅 stdio+evp.h**；**禁止 iostream/cin/cout**；**`strlen(ph)==128`** + **h2b**；**`EVP_aes_128_ctr`**；输出前缀 **`874d6191`**
+
+test_feedback_improve_c: |
+  **CTR：** **strlen(ph)==128** + **h2b**；**`EVP_aes_128_ctr`**；前缀 **`874d6191`**

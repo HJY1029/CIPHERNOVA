@@ -1,0 +1,16 @@
+supplement: |
+  AES-256-GCM：密钥 64 hex、nonce 12 字节（24 hex）、**AAD 固定 16 字节（32 hex）**，须与 test_data/openssl 向量 **完全一致**。输出 = 密文（16 字节）|| tag（16 字节）→ **64 hex 单行**。
+  **评测为非交互程序**：禁止 `input()` / `getpass` / 「请输入 AAD」等任何 stdin 提示；AAD 必须在源码中写死常量（例如 hex 串 `4D23C3CEC334B49BDB370C437FEC78DE` 解码后传入 `update`）。
+  若 stdout 出现提示语与密文混在同一流，会导致提取错误或 tag 因 AAD 为空而错。
+
+python: |
+  程序结构：`main` 内直接定义 `aad = bytes.fromhex("4D23C3CEC334B49BDB370C437FEC78DE")`（与仓库 test_data 一致），**不要**询问用户。
+  PyCryptodome：`cipher = AES.new(key, AES.MODE_GCM, nonce=nonce); cipher.update(aad); ct, tag = cipher.encrypt_and_digest(plaintext)`，最后 **仅** `print("密文:", (ct+tag).hex())` 一行，前面不要 print 其它说明。
+  cryptography：`AESGCM.encrypt(nonce, data, associated_data)` 须传入 **非空 aad**（与上相同字节）。
+  若前 32 hex 对、后 32 hex 错：几乎必是 AAD 未传入或 tag 未拼接。
+
+c: |
+  EVP_aes_256_gcm()；顺序：Init → **EncryptUpdate 输出到 unenc 缓冲仅处理 AAD**（长度 16）→ EncryptUpdate 明文 → Final → GET_TAG 16 字节。禁止交互输入。
+
+cpp: |
+  与 C 相同；**AAD 写死为向量 hex 解码结果**；Finalize 后取满 16 字节 tag 再 `ct_hex + tag_hex`。禁止跳过 AAD Update；OpenSSL 3 注意 tag 获取 API。

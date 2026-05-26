@@ -1,0 +1,261 @@
+# scripts/run_qwen_batch_failing_slots.py — Qwen 未过槽（9）
+# started_utc: 2026-05-23T03:58:18.451312+00:00
+# provider: qwen_coder_local
+# results_json: /mnt/d/aicrypto-helper/experiments/results/qwen_batch_failing_slots_20260523T035818Z.json
+# failing_slots_total: 9
+# force_regen_no_db: 7
+# configs_count: 8
+# since: 2026-05-04
+# only_pending: True
+# pending_stats: {'input': 2, 'pending': 1, 'no_record': 1, 'retest_fail': 0, 'retest_pass_skip': 1, 'skip_disabled': 0, 'force_regen_no_db': 7}
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-23T07:18:15.544809+00:00
+provider: qwen_coder_local
+case_id: sm4-ofb-cpp
+config: {"algorithm": "SM4", "mode": "OFB", "language": "cpp"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: /tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:4:22: warning: character constant too long for its type
+    4 |     key = key.encode('utf-8')
+      |                      ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:5:34: warning: character constant too long for its type
+    5 |     plaintext = plaintext.encode('utf-8')
+      |                                  ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:7:7: error: invalid
+error:
+编译失败: /tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:4:22: warning: character constant too long for its type
+    4 |     key = key.encode('utf-8')
+      |                      ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:5:34: warning: character constant too long for its type
+    5 |     plaintext = plaintext.encode('utf-8')
+      |                                  ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:7:7: error: invalid preprocessing directive #Convert
+    7 |     # Convert key and plaintext to bytes
+      |       ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:11:7: error: invalid preprocessing directive #Pad
+   11 |     # Pad plaintext to be a multiple of 16 bytes
+      |       ^~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:17:7: error: invalid preprocessing directive #Initialize
+   17 |     # Initialize the ciphertext
+      |       ^~~~~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:20:7: error: invalid preprocessing directive #Perform; did you mean #error?
+   20 |     # Perform encryption
+      |       ^~~~~~~
+      |       error
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:23:53: warning: multi-character character constant [-Wmultichar]
+   23 |         block_int = int.from_bytes(block, byteorder='big')
+      |                                                     ^~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:25:11: error: invalid preprocessing directive #Add
+   25 |         # Add round keys and perform substitution and permutation
+      |           ^~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:30:56: warning: multi-character character constant [-Wmultichar]
+   30 |         ciphertext += block_int.to_bytes(16, byteorder='big')
+      |                                                        ^~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:32:48: warning: character constant too long for its type
+   32 |     return base64.b64encode(ciphertext).decode('utf-8')
+      |                                                ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:35:22: warning: character constant too long for its type
+   35 |     key = key.encode('utf-8')
+      |                      ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:38:7: error: invalid preprocessing directive #Convert
+   38 |     # Convert key and ciphertext to bytes
+      |       ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:42:7: error: invalid preprocessing directive #Initialize
+   42 |     # Initialize the plaintext
+      |       ^~~~~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:45:7: error: invalid preprocessing directive #Perform; did you mean #error?
+   45 |     # Perform decryption
+      |       ^~~~~~~
+      |       error
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:48:53: warning: multi-character character constant [-Wmultichar]
+   48 |         block_int = int.from_bytes(block, byteorder='big')
+      |                                                     ^~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:50:11: error: invalid preprocessing directive #Add
+   50 |         # Add round keys and perform inverse substitution and permutation
+      |           ^~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:55:55: warning: multi-character character constant [-Wmultichar]
+   55 |         plaintext += block_int.to_bytes(16, byteorder='big')
+      |                                                       ^~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:57:7: error: invalid preprocessing directive #Remove
+   57 |     # Remove padding
+      |       ^~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:61:29: warning: character constant too long for its type
+   61 |     return plaintext.decode('utf-8')
+      |                             ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:63:3: error: invalid preprocessing directive #Helper
+   63 | # Helper functions for substitution and permutation
+      |   ^~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:65:7: error: invalid preprocessing directive #Implement
+   65 |     # Implement the SM4 substitution and permutation logic here
+      |       ^~~~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:69:7: error: invalid preprocessing directive #Implement
+   69 |     # Implement the inverse SM4 substitution and permutation logic here
+      |       ^~~~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:72:3: error: invalid preprocessing directive #Example
+   72 | # Example usage
+      |   ^~~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:1:1: error: ‘import’ does not name a type
+    1 | import base64
+      | ^~~~~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:1:1: note: C++20 ‘import’ only available with ‘-fmodules-ts’
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp: In function ‘int main()’:
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:135:1: error: jump to label ‘err’
+  135 | err:
+      | ^~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:122:82: note:   from here
+  122 |     if (key_len != 16 && key_len != 32) { fprintf(stderr, "bad key len\n"); goto err; }
+      |                                                                                  ^~~
+/tmp/aicrypto_tester/test_b7419977cbeb4f3298a6493ffa1715c2.cpp:123:23: note:   crosses initialization of ‘const EVP_CIPHER* cipher’
+  123 |     const EVP_CIPHER *cipher = (key_len == 16) ? EVP_aes_128_ecb() : EVP_aes_256_ecb();
+      |                       ^~~~~~
+
+total_ms: 8995039
+generated_filename: sm4_ofb.cpp
+generated_code:
+```
+import base64
+
+def sm4_encrypt(key, plaintext):
+    key = key.encode('utf-8')
+    plaintext = plaintext.encode('utf-8')
+    
+    # Convert key and plaintext to bytes
+    key_bytes = bytearray(key)
+    plaintext_bytes = bytearray(plaintext)
+    
+    # Pad plaintext to be a multiple of 16 bytes
+    padding_length = 16 - (len(plaintext_bytes) % 16)
+    if padding_length == 0:
+        padding_length = 16
+    plaintext_bytes += bytes([padding_length] * padding_length)
+    
+    # Initialize the ciphertext
+    ciphertext = bytearray()
+    
+    # Perform encryption
+    for i in range(0, len(plaintext_bytes), 16):
+        block = plaintext_bytes[i:i+16]
+        block_int = int.from_bytes(block, byteorder='big')
+        
+        # Add round keys and perform substitution and permutation
+        for j in range(16):
+            block_int ^= key_bytes[j]
+            block_int = sm4_substitute_and_permute(block_int)
+        
+        ciphertext += block_int.to_bytes(16, byteorder='big')
+    
+    return base64.b64encode(ciphertext).decode('utf-8')
+
+def sm4_decrypt(key, ciphertext):
+    key = key.encode('utf-8')
+    ciphertext = base64.b64decode(ciphertext)
+    
+    # Convert key and ciphertext to bytes
+    key_bytes = bytearray(key)
+    ciphertext_bytes = bytearray(ciphertext)
+    
+    # Initialize the plaintext
+    plaintext = bytearray()
+    
+    # Perform decryption
+    for i in range(0, len(ciphertext_bytes), 16):
+        block = ciphertext_bytes[i:i+16]
+        block_int = int.from_bytes(block, byteorder='big')
+        
+        # Add round keys and perform inverse substitution and permutation
+        for j in range(15, -1, -1):
+            block_int = sm4_inverse_substitute_and_permute(block_int)
+            block_int ^= key_bytes[j]
+        
+        plaintext += block_int.to_bytes(16, byteorder='big')
+    
+    # Remove padding
+    padding_length = plaintext[-1]
+    plaintext = plaintext[:-padding_length]
+    
+    return plaintext.decode('utf-8')
+
+# Helper functions for substitution and permutation
+def sm4_substitute_and_permute(block):
+    # Implement the SM4 substitution and permutation logic here
+    pass
+
+def sm4_inverse_substitute_and_permute(block):
+    # Implement the inverse SM4 substitution and permutation logic here
+    pass
+
+# Example usage
+key = "0123456789abcdef"
+plaintext = "Hello, World!"
+ciphertext = sm4_encrypt(key, plaintext)
+decrypted_text = sm4_decrypt(key, ciphertext)
+
+print("Ciphertext:", ciphertext)
+print("Decrypted Text:", decrypted_text)
+
+#include <openssl/evp.h>
+#include <openssl/opensslv.h>
+#include <openssl/provider.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+static int hex_to_bytes(const char *hex, unsigned char *out, int max_out) {
+    int n = 0;
+    if (!hex || !out || max_out <= 0) return 0;
+    while (*hex && n < max_out) {
+        while (*hex == ' ' || *hex == '\t' || *hex == '\r' || *hex == '\n') hex++;
+        if (!hex[0] || !hex[1]) break;
+        char a = hex[0], b = hex[1];
+        int v0 = (a >= '0' && a <= '9') ? a - '0' : (a >= 'a' && a <= 'f') ? 10 + a - 'a' : (a >= 'A' && a <= 'F') ? 10 + a - 'A' : -1;
+        int v1 = (b >= '0' && b <= '9') ? b - '0' : (b >= 'a' && b <= 'f') ? 10 + b - 'a' : (b >= 'A' && b <= 'F') ? 10 + b - 'A' : -1;
+        if (v0 < 0 || v1 < 0) break;
+        out[n++] = (unsigned char)((v0 << 4) | v1);
+        hex += 2;
+    }
+    return n;
+}
+
+
+/* aicrypto: 注入的最小 main —— 模型截断未生成 main 时用于链接与 getenv 评测 */
+int main(void) {
+    const char *pt = getenv("TEST_PLAINTEXT");
+    const char *kh = getenv("TEST_KEY");
+    const char *ivh = getenv("TEST_IV");
+    unsigned char key[64], iv[32], plain[8192], out[8192];
+    int key_len, iv_len, pt_len, len, total = 0;
+    EVP_CIPHER_CTX *ctx = NULL;
+    if (!pt || !kh) { fprintf(stderr, "missing TEST_PLAINTEXT/TEST_KEY\n"); return 1; }
+    key_len = hex_to_bytes(kh, key, (int)sizeof(key));
+    pt_len = hex_to_bytes(pt, plain, (int)sizeof(plain));
+    iv_len = ivh ? hex_to_bytes(ivh, iv, (int)sizeof(iv)) : 0;
+    if (key_len <= 0 || pt_len <= 0) { fprintf(stderr, "hex decode failed\n"); return 1; }
+    ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) { fprintf(stderr, "ctx new failed\n"); return 1; }
+#if OPENSSL_VERSION_NUMBER >= 0x30000000L
+    (void)OSSL_PROVIDER_load(NULL, "legacy");
+#endif
+    if (key_len != 16 && key_len != 32) { fprintf(stderr, "bad key len\n"); goto err; }
+    const EVP_CIPHER *cipher = (key_len == 16) ? EVP_aes_128_ecb() : EVP_aes_256_ecb();
+    if (EVP_EncryptInit_ex(ctx, cipher, NULL, key, NULL) != 1) goto err;
+    if (EVP_CIPHER_CTX_set_padding(ctx, 0) != 1) goto err;
+    if (EVP_EncryptUpdate(ctx, out, &len, plain, pt_len) != 1) goto err;
+    total = len;
+    if (EVP_EncryptFinal_ex(ctx, out + total, &len) != 1) goto err;
+    total += len;
+    printf("密文: ");
+    for (int i = 0; i < total; i++) printf("%02x", out[i]);
+    printf("\n");
+    EVP_CIPHER_CTX_free(ctx);
+    return 0;
+err:
+    fprintf(stderr, "encrypt failed\n");
+    if (ctx) EVP_CIPHER_CTX_free(ctx);
+    return 1;
+}
+```
+--------------------------------------------------------------------------------
+

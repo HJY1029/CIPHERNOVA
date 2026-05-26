@@ -1,0 +1,338 @@
+# scripts/run_qwen_batch_failing_slots.py — Qwen 未过槽（9）
+# started_utc: 2026-05-22T09:59:32.527222+00:00
+# provider: qwen_coder_local
+# results_json: /mnt/d/aicrypto-helper/experiments/results/qwen_batch_failing_slots_20260522T095932Z.json
+# failing_slots_total: 9
+# force_regen_no_db: 7
+# configs_count: 9
+# since: 2026-05-04
+# only_pending: True
+# pending_stats: {'input': 2, 'pending': 2, 'no_record': 2, 'retest_fail': 0, 'retest_pass_skip': 0, 'skip_disabled': 0, 'force_regen_no_db': 7}
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-22T12:50:49.841928+00:00
+provider: qwen_coder_local
+case_id: des-cfb-cpp
+config: {"algorithm": "DES", "mode": "CFB", "language": "cpp"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+代码执行失败: 无法初始化DES-CFB8加密
+
+error:
+代码执行失败: 无法初始化DES-CFB8加密
+
+total_ms: 10557834
+generated_filename: des_cfb.cpp
+generated_code:
+```
+#include <iostream>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <iomanip>
+#include <algorithm>
+#include <cctype>
+#include <cstdint>
+#include <openssl/evp.h>
+
+
+// 将十六进制字符串转换为字节数组
+std::vector<unsigned char> hex_to_bytes(const std::string &hex) {
+    std::vector<unsigned char> bytes;
+    for (size_t i = 0; i + 1 < hex.size(); i += 2) {
+        unsigned int byte_val = 0;
+        std::istringstream iss(hex.substr(i, 2));
+        iss >> std::hex >> byte_val;
+        bytes.push_back(static_cast<unsigned char>(byte_val));
+    }
+    return bytes;
+}
+
+// 将字节数组转换为十六进制字符串
+std::string bytes_to_hex(const unsigned char *data, int len) {
+    std::ostringstream oss;
+    for (int i = 0; i < len; i++) {
+        oss << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(data[i]);
+    }
+    return oss.str();
+}
+
+// 去除字符串中的所有空白字符
+std::string remove_whitespace(const std::string &s) {
+    std::string result;
+    for (char c : s) {
+        if (!std::isspace(static_cast<unsigned char>(c))) {
+            result += c;
+        }
+    }
+    return result;
+}
+
+int main() {
+    // 从环境变量读取明文（十六进制格式）
+    std::string plaintext_hex;
+    const char *env_plaintext = std::getenv("TEST_PLAINTEXT");
+    if (env_plaintext) {
+        plaintext_hex = remove_whitespace(std::string(env_plaintext));
+    }
+    if (plaintext_hex.empty()) {
+        std::cerr << "请设置环境变量 TEST_PLAINTEXT（十六进制格式）" << std::endl;
+        return 1;
+    }
+
+    // 从环境变量读取密钥（十六进制格式，DES需要8字节=16个十六进制字符）
+    std::string key_hex;
+    const char *env_key = std::getenv("TEST_KEY");
+    if (env_key) {
+        key_hex = remove_whitespace(std::string(env_key));
+    }
+    if (key_hex.empty()) {
+        std::cerr << "请设置环境变量 TEST_KEY（十六进制格式，DES需要16个十六进制字符）" << std::endl;
+        return 1;
+    }
+
+    // 从环境变量读取IV（十六进制格式，DES-CFB需要8字节=16个十六进制字符）
+    std::string iv_hex;
+    const char *env_iv = std::getenv("TEST_IV");
+    if (env_iv) {
+        iv_hex = remove_whitespace(std::string(env_iv));
+    }
+
+    // 将十六进制字符串转换为字节数组
+    std::vector<unsigned char> plaintext_bytes = hex_to_bytes(plaintext_hex);
+    std::vector<unsigned char> key_bytes = hex_to_bytes(key_hex);
+
+    // 验证密钥长度（DES需要8字节）
+    if (key_bytes.size() != 8) {
+        std::cerr << "密钥长度错误：DES需要8字节（16个十六进制字符），当前为 " << key_bytes.size() << " 字节" << std::endl;
+        return 1;
+    }
+
+    // 处理IV：如果未提供则使用全零IV（8字节）
+    std::vector<unsigned char> iv_bytes(8, 0);
+    if (!iv_hex.empty()) {
+        iv_bytes = hex_to_bytes(iv_hex);
+        if (iv_bytes.size() != 8) {
+            std::cerr << "IV长度错误：DES-CFB需要8字节（16个十六进制字符），当前为 " << iv_bytes.size() << " 字节" << std::endl;
+            return 1;
+        }
+    }
+
+    // 创建EVP加密上下文
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    if (!ctx) {
+        std::cerr << "无法创建EVP_CIPHER_CTX" << std::endl;
+        return 1;
+    }
+
+    // 初始化DES-CFB8加密（使用CFB模式）
+    if (1 != EVP_EncryptInit_ex(ctx, EVP_des_cfb8(), nullptr, key_bytes.data(), iv_bytes.data())) {
+        std::cerr << "无法初始化DES-CFB8加密" << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+
+    // 加密数据
+    int len = 0;
+    if (1 != EVP_EncryptUpdate(ctx, nullptr, &len, plaintext_bytes.data(), plaintext_bytes.size())) {
+        std::cerr << "加密失败" << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+
+    int ciphertext_len = len;
+    if (1 != EVP_EncryptFinal_ex(ctx, plaintext_bytes.data() + len, &len)) {
+        std::cerr << "加密失败" << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+    ciphertext_len += len;
+
+    // 输出密文
+    std::cout << "密文: " << bytes_to_hex(plaintext_bytes.data(), ciphertext_len) << std::endl;
+
+    // 清理资源
+    EVP_CIPHER_CTX_free(ctx);
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+
+================================================================================
+time_utc: 2026-05-22T22:16:32.545792+00:00
+provider: qwen_coder_local
+case_id: sm4-ofb-cpp
+config: {"algorithm": "SM4", "mode": "OFB", "language": "cpp"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: /tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In function ‘void removeWhitespace(std::string&)’:
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:7:22: error: ‘remove_if’ is not a member of ‘std’; did you mean ‘remove_cv’?
+    7 |     input.erase(std::remove_if(input.begin(), input.end(), [](unsigned char ch) {
+      |                      ^~~~~~~~~
+      |                      remove_cv
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In func
+error:
+编译失败: /tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In function ‘void removeWhitespace(std::string&)’:
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:7:22: error: ‘remove_if’ is not a member of ‘std’; did you mean ‘remove_cv’?
+    7 |     input.erase(std::remove_if(input.begin(), input.end(), [](unsigned char ch) {
+      |                      ^~~~~~~~~
+      |                      remove_cv
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In function ‘bool hexToBytes(const std::string&, std::vector<unsigned char>&)’:
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:46:20: error: ‘hexCharToValue’ was not declared in this scope
+   46 |         int high = hexCharToValue(hex[i]);
+      |                    ^~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp: In function ‘int main()’:
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:92:32: error: conflicting declaration ‘std::vector<unsigned char> ciphertext’
+   92 |     std::vector<unsigned char> ciphertext(plaintextBytes.size());
+      |                                ^~~~~~~~~~
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:58:20: note: previous declaration as ‘unsigned char* ciphertext’
+   58 |     unsigned char *ciphertext = _aicrypto_ct_buf;
+      |                    ^~~~~~~~~~
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:93:9: error: redeclaration of ‘int len’
+   93 |     int len, ciphertext_len;
+      |         ^~~
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:60:9: note: ‘int len’ previously declared here
+   60 |     int len = 0, ciphertext_len = 0;
+      |         ^~~
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:93:14: error: redeclaration of ‘int ciphertext_len’
+   93 |     int len, ciphertext_len;
+      |              ^~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:60:18: note: ‘int ciphertext_len’ previously declared here
+   60 |     int len = 0, ciphertext_len = 0;
+      |                  ^~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:94:43: error: request for member ‘data’ in ‘ciphertext’, which is of non-class type ‘unsigned char*’
+   94 |     if (EVP_EncryptUpdate(ctx, ciphertext.data(), &len, plaintextBytes.data(), plaintextBytes.size()) != 1) {
+      |                                           ^~~~
+/tmp/aicrypto_tester/test_70cb2ffe5d2b464bb34fbae6a5729d8b.cpp:101:45: error: request for member ‘data’ in ‘ciphertext’, which is of non-class type ‘unsigned char*’
+  101 |     if (EVP_EncryptFinal_ex(ctx, ciphertext.data() + len, &len) != 1) {
+      |                                             ^~~~
+
+total_ms: 9168394
+generated_filename: sm4_ofb.cpp
+generated_code:
+```
+#include <iostream>
+#include <string>
+#include <vector>
+#include <openssl/evp.h>
+
+void removeWhitespace(std::string &input) {
+    input.erase(std::remove_if(input.begin(), input.end(), [](unsigned char ch) {
+        return std::isspace(ch) != 0;
+    }), input.end());
+}
+
+bool readEnvOrStdin(const char *envName, std::string &output) {
+    const char *envValue = std::getenv(envName);
+    if (envValue != nullptr) {
+        output.assign(envValue);
+        removeWhitespace(output);
+        return !output.empty();
+    }
+    static bool stdinScanned = false;
+    static std::vector<std::string> stdinTokens;
+    if (!stdinScanned) {
+        stdinScanned = true;
+        std::string line;
+        while (std::getline(std::cin, line)) {
+            removeWhitespace(line);
+            if (!line.empty()) {
+                stdinTokens.push_back(line);
+            }
+        }
+    }
+    if (!stdinTokens.empty()) {
+        output.assign(stdinTokens.front());
+        stdinTokens.erase(stdinTokens.begin());
+        return true;
+    }
+    return false;
+}
+
+bool hexToBytes(const std::string &hex, std::vector<unsigned char> &bytes) {
+    if (hex.size() % 2 != 0) {
+        return false;
+    }
+    bytes.clear();
+    bytes.reserve(hex.size() / 2);
+    for (size_t i = 0; i < hex.size(); i += 2) {
+        int high = hexCharToValue(hex[i]);
+        int low = hexCharToValue(hex[i + 1]);
+        if (high < 0 || low < 0) {
+            return false;
+        }
+        bytes.push_back(static_cast<unsigned char>((high << 4) | static_cast<unsigned char>(low)));
+    }
+    return true;
+}
+
+int main() {
+    unsigned char _aicrypto_ct_buf[1024];
+    unsigned char *ciphertext = _aicrypto_ct_buf;
+
+    int len = 0, ciphertext_len = 0;
+
+    std::string plaintext, key;
+    if (!readEnvOrStdin("PLAINTEXT", plaintext) || !readEnvOrStdin("KEY", key)) {
+        std::cerr << "Failed to read input." << std::endl;
+        return 1;
+    }
+
+    std::vector<unsigned char> plaintextBytes;
+    if (!hexToBytes(plaintext, plaintextBytes)) {
+        std::cerr << "Invalid hex input for plaintext." << std::endl;
+        return 1;
+    }
+
+    std::vector<unsigned char> keyBytes;
+    if (!hexToBytes(key, keyBytes)) {
+        std::cerr << "Invalid hex input for key." << std::endl;
+        return 1;
+    }
+
+    EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+    if (ctx == nullptr) {
+        std::cerr << "Failed to create cipher context." << std::endl;
+        return 1;
+    }
+
+    if (EVP_EncryptInit_ex(ctx, EVP_sm4_ecb(), nullptr, keyBytes.data(), nullptr) != 1) {
+        std::cerr << "Failed to initialize encryption." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+
+    std::vector<unsigned char> ciphertext(plaintextBytes.size());
+    int len, ciphertext_len;
+    if (EVP_EncryptUpdate(ctx, ciphertext.data(), &len, plaintextBytes.data(), plaintextBytes.size()) != 1) {
+        std::cerr << "Failed to encrypt data." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+    ciphertext_len = len;
+
+    if (EVP_EncryptFinal_ex(ctx, ciphertext.data() + len, &len) != 1) {
+        std::cerr << "Failed to finalize encryption." << std::endl;
+        EVP_CIPHER_CTX_free(ctx);
+        return 1;
+    }
+    ciphertext_len += len;
+
+    EVP_CIPHER_CTX_free(ctx);
+
+    for (int i = 0; i < ciphertext_len; ++i) {
+        printf("%02x", static_cast<unsigned int>(ciphertext[i]));
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+

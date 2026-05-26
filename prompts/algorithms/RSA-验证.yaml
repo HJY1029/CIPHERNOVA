@@ -1,0 +1,62 @@
+# RSA验证特定prompt
+algorithm_specific: |
+  **🚨🚨🚨 必须优先使用OpenSSL库，保持代码简洁！🚨🚨🚨**
+  - **代码长度限制导致纯实现经常截断，必须优先使用OpenSSL库！**
+  - **使用OpenSSL库可以大大减少代码长度，避免因token限制导致的截断问题！**
+  - **必须包含头文件：`#include <openssl/rsa.h>` 和 `#include <openssl/evp.h>`**
+  - **必须使用OpenSSL EVP函数进行验证，不要实现完整的RSA算法！**
+  - **编译命令：C语言 `gcc -o program program.c -lssl -lcrypto`，C++ `g++ -o program program.cpp -lssl -lcrypto`**
+  - **绝对不要实现完整的RSA算法（大数运算、模幂运算等）！**
+  
+  **RSA验证说明：**
+  - RSA数字签名验证使用公钥验证签名
+  - 通常先对消息进行哈希（如SHA-256），然后验证签名
+  - 验证结果返回成功或失败
+  
+  **实现要求：**
+  - 对于Python：使用 `cryptography` 或 `pycryptodome` 库的RSA验证功能
+  - 对于C/C++：**🚨🚨🚨 必须优先使用OpenSSL库！🚨🚨🚨**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_DigestVerifyInit()`、`EVP_DigestVerifyUpdate()`、`EVP_DigestVerifyFinal()`**
+    - ✅ **必须使用 `EVP_PKEY_CTX_new()` 创建验证上下文**
+    - ✅ **必须从环境变量读取公钥（TEST_PUBLIC_KEY_N, TEST_PUBLIC_KEY_E）和签名（TEST_SIGNATURE）**
+    - ❌ **绝对不要实现完整的RSA算法！**
+    - ❌ **绝对不要使用纯C/C++实现！代码会太长，一定会截断！只有在OpenSSL完全不可用时才使用纯实现！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出验证结果！🚨🚨🚨**
+    - **必须输出验证结果（成功或失败）**
+
+mode_specific: |
+  **验证实现细节（必须严格遵循）：**
+  
+  **使用OpenSSL库的实现要求（C/C++语言）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <openssl/rsa.h>`
+     - `#include <openssl/bn.h>`
+     - `#include <openssl/sha.h>`
+     - `#include <stdlib.h>` (C语言) 或 `#include <cstdlib>` (C++)
+     - `#include <stdio.h>` (C语言) 或 `#include <iostream>` (C++)
+     - `#include <string.h>` (C语言) 或 `#include <string>` (C++)
+  
+  2. **必须使用OpenSSL EVP函数：**
+     - ✅ **正确：使用 `EVP_MD_CTX_new()` 创建消息摘要上下文**
+     - ✅ **正确：使用 `EVP_DigestVerifyInit()` 初始化验证**
+     - ✅ **正确：使用 `EVP_DigestVerifyUpdate()` 更新消息**
+     - ✅ **正确：使用 `EVP_DigestVerifyFinal()` 完成验证**
+     - ✅ **正确：使用 `BN_hex2bn()` 从十六进制字符串创建BIGNUM**
+     - ✅ **正确：使用 `RSA_new()` 和 `RSA_set0_key()` 构建RSA公钥**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取消息、公钥和签名（TEST_PLAINTEXT, TEST_PUBLIC_KEY_N, TEST_PUBLIC_KEY_E, TEST_SIGNATURE）
+     - 将十六进制字符串转换为字节数组
+     - 构建RSA公钥对象
+     - 使用OpenSSL EVP函数进行RSA验证（通常使用SHA-256哈希）
+     - 输出验证结果（成功或失败）
+     - 释放资源并返回0
+  
+  **关键实现细节：**
+  - **公钥构建：**从模数n和指数e构建RSA公钥
+  - **哈希算法：**通常使用SHA-256进行消息哈希
+  - **验证结果：**返回1表示验证成功，0表示验证失败
+  - **输出格式：**输出验证结果（"验证成功"或"验证失败"）
+

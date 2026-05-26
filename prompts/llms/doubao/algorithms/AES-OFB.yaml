@@ -1,0 +1,41 @@
+# 豆包 · AES-128-OFB（test_data：反馈为 AES 输出块）
+mandatory: |
+  **仅 EVP：** **`EVP_aes_128_ofb()`** + **`set_padding(0)`**；**禁止** 手写 `aes_ofb_encrypt`（易缺 `?` → **`expression cannot be used as a function`**）。
+  **禁止** 整页 AES S盒、**`cfb8`/`cfb128`**、**`des.h`**。
+  golden 前缀 **`ea0b8fb8`**（**64 hex**）。
+
+supplement: |
+  AES-128-OFB：明文 **32 字节** → **64 hex** 密文。
+  **自测 golden：** **`EA0B8FB83A7EE32B2EA6995768424EC2864696B095F418FDE8848B72CA0D8130`**。
+  **批量 aes-ofb-cpp：** 编译错 **`(plaintext_len - i) : AES_BLOCK_SIZE` 缺 `?`**，或密文 **`4192b9e4…`** = 手写 OFB 错。
+
+python: |
+  **`AES.new(key, AES.MODE_OFB, iv=iv)`**（勿 CFB/segment_size）。
+  **`print("密文:", ct.hex().lower())`**（**`ea0b8fb8…`**）。
+
+c: |
+  **`EVP_aes_128_ofb()`** + **`set_padding(0)`**；一次 Update 全长明文。
+  **`printf("密文: ");`** + hex + **`fflush(stdout)`**。
+
+cpp: |
+  **【批量 20260519】禁止 `sbox[]`/`aes_ofb_encrypt`/残缺三元 `(cond) (a) : b`。仅 ≤90 行 EVP：**
+  ```cpp
+  EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+  EVP_EncryptInit_ex(ctx, EVP_aes_128_ofb(), NULL, key, iv);
+  EVP_CIPHER_CTX_set_padding(ctx, 0);
+  unsigned char out[64]; int outl=0, fin=0;
+  EVP_EncryptUpdate(ctx, out, &outl, pt, pt_len);
+  EVP_EncryptFinal_ex(ctx, out+outl, &fin);
+  EVP_CIPHER_CTX_free(ctx);
+  ```
+  **`std::getenv("TEST_*")`**；**`printf("密文: ");`** + **`ea0b8fb8…`**。
+
+test_feedback_improve: |
+  **【豆包 · AES-OFB】** 编译 **`cannot be used as a function`** → 删手写函数，改 **EVP 单路径**。
+  密文非 **`ea0b8fb8…`** → **`EVP_aes_128_ofb()`**，勿 **cfb8**。
+
+test_feedback_improve_c: |
+  仅 **`EVP_aes_128_ofb()`**。
+
+test_feedback_improve_cpp: |
+  删 **`aes_ofb_encrypt`** 与 AES 表；**`EVP_aes_128_ofb()`** + **`密文:`**。

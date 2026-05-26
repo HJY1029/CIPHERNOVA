@@ -1,0 +1,14 @@
+# Codex / CloseAI — DES-CFB
+# 合并时置前；针对批次中 `pkcs7_pad` 前 `expected expression before 'int'`（多为上一函数花括号未闭合）。
+supplement: |
+  **【置顶 · Codex】本题用 `EVP_des_cfb8()` + legacy + `set_padding(0)` 即可对齐 golden；勿在同一文件里再堆 **`pkcs7_pad`** + 手写 DES 辅助函数。**
+
+c: |
+  **编译零分典型 1：** 上一函数末尾**缺 `}`**，下一行以 **`int pkcs7_pad(...)`** 开头 → **`expected expression before 'int'`**。—— **删除手写 `pkcs7_pad` 与多余辅助函数**，CFB 评测路径下 **`EncryptUpdate` 覆盖整段 `plaintext` 即可**，**无须 PKCS7**（与 OpenAI 段一致时以 **`EVP_des_cfb8`** 为准）。
+  **编译零分典型 2：** 超大文件后半 **`expected '}' before 'static'`** —— 多为手搓密钥编排半途截断；**禁止** `generate_subkeys`/`PC2` 等，**整文件只允许 EVP**。
+  **整文件唯一加密：** **`EVP_des_cfb8()`**；**禁止** `des_encrypt_block`、**禁止**在 `main` 前输出未完稿的 **`uint8_t **`/`size_t *`** 长篇。
+  **`main`：** **`getenv("TEST_*")`** → **hex 解码** → **`OSSL_PROVIDER_load`** → **`EVP_des_cfb8` + Update/Final** → **`printf("密文: ");`** + hex。**`fflush(stdout); return 0;`**
+  **禁止 `#define 8`**；**禁止** Python 语法（**`and`**）混入 C。
+
+cpp: |
+  与 C：**仅用 `EVP_des_cfb8()`**；**必须**完整 **`int main()`**；**禁止**夹带未闭合大括号的长辅助函数链。

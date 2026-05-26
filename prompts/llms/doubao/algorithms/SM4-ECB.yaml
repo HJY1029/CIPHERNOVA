@@ -1,0 +1,15 @@
+# 豆包 · SM4-ECB
+supplement: |
+  SM4：块 **16 字节**；密钥 **32 hex**；test_data 下明文与密钥均为 `0123456789ABCDEFFEDCBA9876543210` 时，ECB 密文 **`681EDF34D206965E86B3E94F536E4246`**。
+
+python: |
+  **SM4-ECB**；**`print("密文:", ct.hex())`**；golden **`681EDF34D206965E86B3E94F536E4246`**。
+
+c: |
+  **禁止** `#define 8 8`（块长用 `SM4_BLOCK 16`）。
+  **`EVP_sm4_ecb()`** + **`set_padding(0)`**；**`printf("密文: ");`** + **32 hex**。
+  `malloc` 大小 ≥ 明文长；手写轮函数勿越界。
+
+cpp: |
+  **`EVP_sm4_ecb()`** + **`set_padding(0)`**；**禁止** `#define 8`。
+  **`printf("密文: ");`** + golden **`681EDF34…`**。

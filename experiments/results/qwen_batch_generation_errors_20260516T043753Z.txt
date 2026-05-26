@@ -1,0 +1,140 @@
+# scripts/run_full_llm_matrix.py — 批量生成失败记录
+# started_utc: 2026-05-16T04:37:53.486668+00:00
+# results_json: /mnt/d/aicrypto-helper/experiments/results/full_matrix_20260516T043753Z.json
+# configs_per_provider: 45
+# providers: ['qwen_coder_local']
+# 以下仅包含 success=False 的条目。
+
+================================================================================
+time_utc: 2026-05-16T08:55:52.051934+00:00
+provider: qwen_coder_local
+case_id: des-cbc-c
+config: {"algorithm": "DES", "mode": "CBC", "language": "c"}
+success: False
+generation_ok: True
+vector_status: 未通过
+vector_detail:
+编译失败: /tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c: In function ‘des_encrypt’:
+/tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c:25:5: error: unknown type name ‘DES_key_schedule’
+   25 |     DES_key_schedule key_schedule;
+      |     ^~~~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c:26:5: warning: implicit declaration of function ‘DES_set_key_unchecked’ [-Wimplicit-function-declaration]
+   26 |     DES_set_key_unchecked((DES_cblock *)key, &k
+error:
+编译失败: /tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c: In function ‘des_encrypt’:
+/tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c:25:5: error: unknown type name ‘DES_key_schedule’
+   25 |     DES_key_schedule key_schedule;
+      |     ^~~~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c:26:5: warning: implicit declaration of function ‘DES_set_key_unchecked’ [-Wimplicit-function-declaration]
+   26 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);
+      |     ^~~~~~~~~~~~~~~~~~~~~
+/tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c:26:28: error: ‘DES_cblock’ undeclared (first use in this function)
+   26 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);
+      |                            ^~~~~~~~~~
+/tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c:26:28: note: each undeclared identifier is reported only once for each function it appears in
+/tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c:26:40: error: expected expression before ‘)’ token
+   26 |     DES_set_key_unchecked((DES_cblock *)key, &key_schedule);
+      |                                        ^
+/tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c:27:5: warning: implicit declaration of function ‘DES_ecb_encrypt’; did you mean ‘des_encrypt’? [-Wimplicit-function-declaration]
+   27 |     DES_ecb_encrypt((DES_cblock *)plaintext, (DES_cblock *)ciphertext, &key_schedule, DES_ENCRYPT);
+      |     ^~~~~~~~~~~~~~~
+      |     des_encrypt
+/tmp/aicrypto_tester/test_a20f6b574a6c414b94c16eb28cd8e2bc.c:27:34: error: expected expression before ‘)’ token
+   27 |     DES_ecb_encrypt((DES_cblock *)plaintext, (DES_cblock *)ciphertext, &key_schedule, DES_ENCRYPT);
+      |                                  ^
+
+total_ms: 14132779
+generated_filename: des_cbc.c
+generated_code:
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define DES_KEY_SIZE 8
+#define DES_BLOCK_SIZE 8
+
+void hex_to_bytes(const char *hex, unsigned char *bytes, size_t len) {
+    for (size_t i = 0; i < len; i++) {
+        bytes[i] = (hex[2*i] >= '0' && hex[2*i] <= '9') ? hex[2*i] - '0' : toupper(hex[2*i]) - 'A' + 10;
+        bytes[i] <<= 4;
+        bytes[i] |= (hex[2*i+1] >= '0' && hex[2*i+1] <= '9') ? hex[2*i+1] - '0' : toupper(hex[2*i+1]) - 'A' + 10;
+    }
+}
+
+void bytes_to_hex(const unsigned char *bytes, size_t len, char *hex) {
+    for (size_t i = 0; i < len; i++) {
+        hex[i*2] = (bytes[i] >> 4) >= 10 ? 'A' + (bytes[i] >> 4) - 10 : '0' + (bytes[i] >> 4);
+        hex[i*2+1] = (bytes[i] & 0x0F) >= 10 ? 'A' + (bytes[i] & 0x0F) - 10 : '0' + (bytes[i] & 0x0F);
+    }
+}
+
+void des_encrypt(const unsigned char *key, const unsigned char *plaintext, unsigned char *ciphertext) {
+    DES_key_schedule key_schedule;
+    DES_set_key_unchecked((DES_cblock *)key, &key_schedule);
+    DES_ecb_encrypt((DES_cblock *)plaintext, (DES_cblock *)ciphertext, &key_schedule, DES_ENCRYPT);
+}
+
+int main() {
+    char plaintext_hex[2*DES_BLOCK_SIZE + 1];
+    char key_hex[2*DES_KEY_SIZE + 1];
+    char iv_hex[2*DES_BLOCK_SIZE + 1];
+
+    if (getenv("TEST_PLAINTEXT") != NULL) {
+        strncpy(plaintext_hex, getenv("TEST_PLAINTEXT"), sizeof(plaintext_hex));
+    } else {
+        printf("请输入明文（十六进制字符串）：");
+        fgets(plaintext_hex, sizeof(plaintext_hex), stdin);
+        plaintext_hex[strcspn(plaintext_hex, "\n")] = '\0';
+    }
+
+    if (getenv("TEST_KEY") != NULL) {
+        strncpy(key_hex, getenv("TEST_KEY"), sizeof(key_hex));
+    } else {
+        printf("请输入密钥（十六进制字符串）：");
+        fgets(key_hex, sizeof(key_hex), stdin);
+        key_hex[strcspn(key_hex, "\n")] = '\0';
+    }
+
+    if (getenv("TEST_IV") != NULL) {
+        strncpy(iv_hex, getenv("TEST_IV"), sizeof(iv_hex));
+    } else {
+        iv_hex[0] = '\0';
+    }
+
+    size_t plaintext_len = strlen(plaintext_hex);
+    size_t key_len = strlen(key_hex);
+    size_t iv_len = strlen(iv_hex);
+
+    if (plaintext_len % 2 != 0 || key_len != 2*DES_KEY_SIZE || iv_len != 2*DES_BLOCK_SIZE) {
+        fprintf(stderr, "输入格式错误\n");
+        return 1;
+    }
+
+    unsigned char plaintext[DES_BLOCK_SIZE];
+    unsigned char key[DES_KEY_SIZE];
+    unsigned char iv[DES_BLOCK_SIZE];
+
+    hex_to_bytes(plaintext_hex, plaintext, DES_BLOCK_SIZE);
+    hex_to_bytes(key_hex, key, DES_KEY_SIZE);
+
+    if (iv_len > 0) {
+        hex_to_bytes(iv_hex, iv, DES_BLOCK_SIZE);
+    } else {
+        memset(iv, 0, DES_BLOCK_SIZE);
+    }
+
+    unsigned char ciphertext[DES_BLOCK_SIZE];
+    des_encrypt(key, plaintext, ciphertext);
+
+    char ciphertext_hex[2*DES_BLOCK_SIZE + 1];
+    bytes_to_hex(ciphertext, DES_BLOCK_SIZE, ciphertext_hex);
+
+    printf("密文: %s\n", ciphertext_hex);
+
+    return 0;
+}
+```
+--------------------------------------------------------------------------------
+

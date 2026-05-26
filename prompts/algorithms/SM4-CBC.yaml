@@ -1,0 +1,57 @@
+# SM4-CBC模式特定prompt
+# 注意：C和C++语言特定的内容已分离到 prompts/algorithms/c/SM4-CBC.yaml 和 prompts/algorithms/cpp/SM4-CBC.yaml
+# prompt_loader.py会自动加载这些内容
+
+algorithm_specific: |
+  **SM4-CBC模式说明：**
+  - CBC（Cipher Block Chaining）模式是常用的分组密码模式
+  - 每个明文块与前一个密文块异或后再加密
+  - 需要初始化向量（IV），长度为16字节（128位）
+  - 对于SM4，每个块大小为16字节（128位）
+  - SM4密钥必须为16字节（128位）
+  
+  **实现要求：**
+  - 对于Python：使用 `gmssl`：`CryptSM4()` → **`set_key(key, sm4.SM4_ENCRYPT)`** → **`crypt_cbc(iv, plaintext)`**（**禁止** `SM4_CBC` 常量；**不是** `encrypt_cbc`）
+  - 对于C/C++：**如果OpenSSL支持SM4，使用OpenSSL库！**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+    - ✅ **必须使用 `EVP_sm4_cbc()` 获取SM4-CBC密码对象**
+    - ✅ **必须从环境变量TEST_IV读取IV，如果不存在则使用全零IV**
+    - ❌ **绝对不要实现完整的SM4算法！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出密文！🚨🚨🚨**
+    - **必须使用 `print("密文: ")` 或 `printf("密文: ");` 或 `std::cout << "密文: ";` 输出密文！**
+    - **必须输出完整的密文，不要截断！**
+    - **重要：只输出实际加密的数据长度，不要输出整个缓冲区或IV！**
+
+mode_specific: |
+  **CBC模式实现细节（必须严格遵循）：**
+  
+  **注意：C和C++语言特定的实现要求已分离到以下文件：**
+  - `prompts/algorithms/c/SM4-CBC.yaml` - C语言特定内容
+  - `prompts/algorithms/cpp/SM4-CBC.yaml` - C++语言特定内容
+  - prompt_loader.py会自动根据语言加载对应的内容
+  
+  **Python实现要求（使用gmssl库）：**
+  1. **必须导入库：**
+     - `from gmssl import sm4`
+     - `import binascii`
+  
+  2. **必须使用gmssl库函数（与 pip 包 `gmssl` 一致）：**
+     - ✅ **正确：`crypt_sm4 = sm4.CryptSM4()`**
+     - ✅ **正确：`crypt_sm4.set_key(key, sm4.SM4_ENCRYPT)`**（第二参数**仅** `SM4_ENCRYPT` / `SM4_DECRYPT`）
+     - ✅ **正确：`ciphertext = crypt_sm4.crypt_cbc(iv, plaintext)`**
+     - ❌ **错误：`set_key(key, sm4.SM4_CBC)`、`encrypt_cbc()` — 均不存在或会报错**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取明文、密钥和IV（TEST_PLAINTEXT, TEST_KEY, TEST_IV）
+     - 将十六进制字符串转换为字节数组
+     - 如果TEST_IV不存在，使用全零IV（16字节）
+     - 使用gmssl库进行SM4-CBC加密
+     - 输出密文（十六进制格式，不包含IV）
+     - 返回0
+  
+  **通用实现要求：**
+  - **密钥长度：**SM4密钥必须为16字节（128位）
+  - **块大小：**SM4块大小为16字节（128位）
+  - **IV处理：**IV必须为16字节，从环境变量TEST_IV读取，如果不存在则使用全零
+  - **PKCS#7填充：**OpenSSL EVP会自动处理填充

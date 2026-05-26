@@ -1,0 +1,45 @@
+# DES算法共同内容
+# 这些内容在所有DES模式中都会使用
+
+algorithm_common: |
+  **🚨🚨🚨 必须优先使用OpenSSL库，保持代码简洁！🚨🚨🚨**
+  - **代码长度限制导致纯实现经常截断，必须优先使用OpenSSL库！**
+  - **使用OpenSSL库可以大大减少代码长度，避免因token限制导致的截断问题！**
+  - **必须包含头文件：`#include <openssl/evp.h>` 和 `#include <openssl/provider.h>`（OpenSSL 3.0需要）**
+  - **必须使用OpenSSL EVP函数进行加密，不要实现完整的DES算法！**
+  - **编译命令：C语言 `gcc -o program program.c -lssl -lcrypto`，C++ `g++ -o program program.cpp -lssl -lcrypto`**
+  - **绝对不要实现permute、generate_subkeys、feistel_function等函数（如果使用OpenSSL）！**
+  
+  **OpenSSL 3.0 legacy provider支持：**
+  - **OpenSSL 3.0默认不支持DES算法（DES被认为是弱算法）**
+  - **如果使用OpenSSL 3.0，需要在代码中加载legacy provider：**
+    ```c
+    #include <openssl/provider.h>
+    OSSL_PROVIDER *legacy = OSSL_PROVIDER_load(NULL, "legacy");
+    ```
+  - **如果遇到错误"0308010C"或"unsupported algorithm"，先尝试加载legacy provider，而不是立即切换到纯实现！**
+  
+  **🚨🚨🚨 最严重警告：代码完整性要求 🚨🚨🚨**
+  - **代码绝对不能在任何地方截断！这是最严重的问题！**
+  - **所有表达式必须完整，包括复杂的位运算表达式！**
+  - **绝对不能有：`int col = (expanded_right[i / 6] >> (7 - ((i %` 这样的不完整表达式！**
+  - **所有括号必须匹配，所有表达式必须有完整的运算符和操作数！**
+  - **所有语句必须完整，包括for循环、while循环、if语句、变量声明、函数调用等！**
+  - **所有函数必须有完整的实现，包括函数体、所有语句和闭合的大括号！**
+  - **main函数必须完整，包括所有代码和return语句！**
+  - **如果代码太长，必须生成完整的代码，不能因为长度限制而截断！**
+  
+  **实现要求：**
+  - 对于Python：使用 `pycryptodome` 库的 `DES.MODE_*`
+  - 对于C/C++：**🚨🚨🚨 必须优先使用OpenSSL库！🚨🚨🚨**
+    - ✅ **必须使用OpenSSL EVP接口：`EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+    - ✅ **必须加载legacy provider（OpenSSL 3.0需要）：`OSSL_PROVIDER_load(NULL, "legacy")`**
+    - ❌ **绝对不要实现完整的DES算法（permute、generate_subkeys、feistel_function等）！**
+    - ❌ **绝对不要使用纯C/C++实现！代码会太长，一定会截断！只有在OpenSSL完全不可用时才使用纯实现！**
+    - ❌ **绝对禁止使用占位符、TODO、FIXME、注释掉的代码或空函数体！**
+  - **🚨🚨🚨 必须输出密文！🚨🚨🚨**
+    - **必须使用 `printf("密文: ");` 或 `std::cout << "密文: ";` 输出密文！**
+    - **必须输出完整的密文，不要截断！**
+    - **重要：只输出实际加密的数据长度（使用 `ciphertext_len`），不要输出整个缓冲区或额外的IV！**
+    - **绝对不能没有输出！程序必须输出密文！**
+

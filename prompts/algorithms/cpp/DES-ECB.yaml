@@ -1,0 +1,44 @@
+# DES-ECB模式的C++语言特定内容
+cpp_specific: |
+  **使用OpenSSL库的实现要求（C++语言）：**
+  1. **`hex_to_bytes`** - 将十六进制字符串转换为字节数组（必须实现！）
+  2. **`main`** - 主函数（必须完整实现！包括：读取环境变量、转换输入、调用OpenSSL函数进行ECB加密、输出密文、return 0）
+  3. **必须使用OpenSSL 3.0兼容的EVP接口（不能使用已弃用的DES_*函数）：**
+     - ✅ **正确：包含 `#include <openssl/evp.h>` 和 `#include <openssl/provider.h>`**
+     - ✅ **正确：在main函数开始时加载legacy provider（OpenSSL 3.0需要）：**
+       ```cpp
+       OSSL_PROVIDER *legacy = OSSL_PROVIDER_load(nullptr, "legacy");
+       if (!legacy) {
+           std::cerr << "无法加载legacy provider" << std::endl;
+           return 1;
+       }
+       ```
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_des_ecb()` 获取DES-ECB密码对象（会自动尝试legacy provider）**
+     - ✅ **🚨🚨🚨 输出长度控制（绝对重要！）：必须只输出实际加密的数据长度，不要输出整个缓冲区！**
+       - **正确示例（C++）：**
+         ```cpp
+         int len;
+         int ciphertext_len = 0;
+         unsigned char ciphertext[plaintext_len + 8];  // 预留填充空间
+         
+         EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);
+         ciphertext_len = len;  // 第一次加密的长度
+         
+         EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
+         ciphertext_len += len;  // 总长度 = Update长度 + Final长度
+         
+         // 只输出 ciphertext_len 长度的数据！
+         std::cout << "密文: ";
+         for (int i = 0; i < ciphertext_len; i++) {  // 使用 ciphertext_len，不是数组大小！
+             std::cout << std::hex << std::setfill('0') << std::setw(2) << static_cast<int>(ciphertext[i]);
+         }
+         std::cout << std::endl;
+         ```
+       - **错误示例（绝对禁止）：**
+         - `for (int i = 0; i < ciphertext.size(); i++) { ... }`（会输出整个缓冲区）
+         - `for (int i = 0; i < sizeof(ciphertext); i++) { ... }`（会输出整个缓冲区）
+         - **关键：`ciphertext_len` 是 `EVP_EncryptUpdate()` 和 `EVP_EncryptFinal_ex()` 返回的长度之和，这是实际加密的数据长度！**
+     - ❌ **错误：不要使用 `DES_set_key_checked()`、`DES_ncbc_encrypt()`（OpenSSL 3.0已弃用）**
+  4. **编译命令：`g++ -o program program.cpp -lssl -lcrypto`**
+

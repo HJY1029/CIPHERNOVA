@@ -1,0 +1,68 @@
+# AES-GCM模式的C语言特定内容
+c_specific: |
+  **🚨🚨🚨 重要：GCM模式使用OpenSSL官方测试数据进行测试！🚨🚨🚨**
+  **测试数据已包含在test_data.yaml中，本向量预期为 16 字节密文 + 16 字节 tag = 32 字节（64 个 hex），且必须通过 `TEST_AAD` 参与 GHASH 才能得到正确 tag！**
+  
+  **使用OpenSSL库的实现要求（C语言）：**
+  1. **必须包含头文件：**
+     - `#include <openssl/evp.h>`
+     - `#include <stdlib.h>`
+     - `#include <stdio.h>`
+     - `#include <string.h>`
+  
+  2. **必须使用OpenSSL EVP函数：**
+     - ✅ **正确：使用 `EVP_aes_128_gcm()`、`EVP_aes_192_gcm()` 或 `EVP_aes_256_gcm()`（根据密钥长度选择）**
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_CIPHER_CTX_new()` 和 `EVP_CIPHER_CTX_free()`**
+     - ✅ **正确：使用 `EVP_CIPHER_CTX_ctrl()` 设置IV长度（通常为12字节）和认证标签长度（通常为16字节）**
+  
+  3. **main函数必须完整实现：**
+     - 从环境变量读取明文、密钥、IV、**TEST_AAD**（TEST_PLAINTEXT, TEST_KEY, TEST_IV, TEST_AAD）
+     - 将十六进制字符串转换为字节数组
+     - **如果环境变量不存在，应该使用默认值或报错，但代码必须能够编译和运行**
+     - 如果TEST_IV不存在，使用全零IV（12字节，GCM推荐长度）
+     - 根据密钥长度选择正确的EVP函数（128位、192位或256位）
+     - 使用OpenSSL EVP函数进行GCM模式加密
+     - 获取认证标签（Authentication Tag）
+     - 输出密文和认证标签（十六进制格式，不包含IV）
+     - 释放资源并返回0
+  4. **🚨🚨🚨 重要：GCM模式使用OpenSSL官方测试数据！🚨🚨🚨**
+     - **测试数据已包含在test_data.yaml中，使用与AES其他模式相同的明文、密钥和IV**
+     - **GCM模式使用IV的前12字节作为nonce（`iv[:12]`）**
+     - **预期输出：16 字节密文 + 16 字节认证标签 = 32 字节（64 hex）**
+     - **确保代码能够正确读取环境变量，如果环境变量不存在，应该使用合理的默认值或给出明确的错误提示**
+  
+  **关键实现细节（C语言）：**
+  - **密钥长度检测：**根据密钥字节长度选择对应的EVP函数
+    - 16字节（128位）→ `EVP_aes_128_gcm()`
+    - 24字节（192位）→ `EVP_aes_192_gcm()`
+    - 32字节（256位）→ `EVP_aes_256_gcm()`
+  - **IV/nonce：**本仓库 OpenSSL 向量的 `TEST_IV` 为 **12 字节**（24 hex）。若 IV 更长，仅用前 12 字节作 nonce；若更短勿截断错误。
+  - **认证标签：**GCM模式会生成认证标签，通常为16字节（128位）
+  - **🚨🚨🚨 输出长度控制（绝对重要！）：**必须只输出实际加密的数据长度和认证标签，不要输出整个缓冲区或IV！
+    - ✅ **正确做法（C，须含 AAD）：** 明文 Update **之前**执行：
+      `EVP_EncryptUpdate(ctx, NULL, &len, aad, aad_len);`
+      ```c
+      int len = 0, chunk = 0;
+      int ciphertext_len = 0;
+      unsigned char *ciphertext = malloc(plaintext_len + EVP_MAX_BLOCK_LENGTH);
+      unsigned char tag[16];
+      /* 假设已从 getenv("TEST_AAD") 解码得到 aad[], aad_len（本向量 16 字节） */
+      if (!EVP_EncryptUpdate(ctx, NULL, &len, aad, aad_len)) { /* error */ }
+      if (!EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len)) { /* error */ }
+      ciphertext_len = len;
+      if (!EVP_EncryptFinal_ex(ctx, ciphertext + ciphertext_len, &chunk)) { /* error */ }
+      ciphertext_len += chunk;
+      if (!EVP_CIPHER_CTX_ctrl(ctx, EVP_CTRL_GCM_GET_TAG, 16, tag)) { /* error */ }
+      printf("密文: ");
+      for (int i = 0; i < ciphertext_len; i++) printf("%02x", ciphertext[i]);
+      for (int i = 0; i < 16; i++) printf("%02x", tag[i]);
+      printf("\n");
+      free(ciphertext);
+      ```
+    - ❌ **错误做法（绝对禁止）：**
+      - 输出整个缓冲区（`sizeof(ciphertext)`）
+      - 输出IV（IV只用于加密过程，不应该出现在输出中）
+      - 输出额外的填充空间
+    - **关键：`ciphertext_len` 是 `EVP_EncryptUpdate()` 和 `EVP_EncryptFinal_ex()` 返回的长度之和，这是实际加密的数据长度！**
+

@@ -1,0 +1,81 @@
+# 批量 9 槽之无 DB：DES|ofb|c、DES|ofb|cpp
+generate_pin_c: |
+  **DES|ofb|c（无 DB）：** 只提交下方 **c:** fenced 源码；**`EVP_des_ofb()`**（**禁止 cfb**）；**h2b**；若输出 **`4e657477…`**=未加密；golden **`f788b2bc`**。
+
+generate_pin_cpp: |
+  **DES|ofb|cpp（无 DB）：** 同 **c:** 骨架；**`EVP_des_ofb()`**；golden **`f788b2bc`**（≠ CFB **`f70f`**）。
+
+mandatory: |
+  **DES-OFB only**：**`EVP_des_ofb()`** + **legacy** + **`set_padding(0)`**。
+  **golden：`f788b2bc…`**（≠ CFB **`f70f…`**）。
+  **禁止：** **`des_cfb*`**、**`DES_cfb64_*`**、缺 **ctype**、无 **`密文:`** 标签。
+
+supplement: |
+  **`des-ofb-c`：** 输出 **`4e657477…`** = 只打了明文 ASCII hex，未加密。
+  **日志 des-ofb-c（2026-05-13）：** 实际 **`f70f0158…`** = 写成 **CFB**（**des_cfb_encrypt/openssl/des.h`**），非 OFB；须 **`EVP_des_ofb`**，golden **`f788b2bc`**。
+
+python: |
+  **`DES.new(k,DES.MODE_OFB,iv)`**（无 segment_size）；**`print("密文:", ct.hex().lower())`**
+
+c: |
+  **【DES|ofb|c】照抄骨架（cipher=`EVP_des_ofb()`）：**
+  ```c
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  #include <openssl/provider.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    OSSL_PROVIDER_load(NULL,"legacy");
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;strip(ph);strip(kh);strip(ih);
+    unsigned char pt[16],key[8],iv[8],out[32];
+    if(strlen(ph)!=32||strlen(kh)!=16||strlen(ih)!=16)return 1;
+    if(h2b(ph,pt,16)||h2b(kh,key,8)||h2b(ih,iv,8))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    EVP_EncryptInit_ex(ctx,EVP_des_ofb(),NULL,key,iv);
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;EVP_EncryptUpdate(ctx,out,&o1,pt,16);EVP_EncryptFinal_ex(ctx,out+o1,&o2);
+    printf("密文: ");for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);printf("\n");
+    EVP_CIPHER_CTX_free(ctx);return 0;}
+  ```
+
+cpp: |
+  **【DES|ofb|cpp · 无 DB 落库】与 c 段相同：**
+  ```cpp
+  #include <stdio.h>
+  #include <stdlib.h>
+  #include <string.h>
+  #include <ctype.h>
+  #include <openssl/evp.h>
+  #include <openssl/provider.h>
+  static void strip(char*s){char*d=s;while(*s){if(!isspace((unsigned char)*s))*d++=*s;s++;}*d=0;}
+  static int h2b(const char*h,unsigned char*b,int n){
+    for(int i=0;i<n;i++){unsigned v;if(sscanf(h+2*i,"%2x",&v)!=1)return -1;b[i]=(unsigned char)v;}return 0;}
+  int main(void){
+    OSSL_PROVIDER_load(NULL,"legacy");
+    char *ph=getenv("TEST_PLAINTEXT"),*kh=getenv("TEST_KEY"),*ih=getenv("TEST_IV");
+    if(!ph||!kh||!ih)return 1;strip(ph);strip(kh);strip(ih);
+    unsigned char pt[16],key[8],iv[8],out[32];
+    if(strlen(ph)!=32||strlen(kh)!=16||strlen(ih)!=16)return 1;
+    if(h2b(ph,pt,16)||h2b(kh,key,8)||h2b(ih,iv,8))return 1;
+    EVP_CIPHER_CTX*ctx=EVP_CIPHER_CTX_new();
+    EVP_EncryptInit_ex(ctx,EVP_des_ofb(),NULL,key,iv);
+    EVP_CIPHER_CTX_set_padding(ctx,0);
+    int o1=0,o2=0;EVP_EncryptUpdate(ctx,out,&o1,pt,16);EVP_EncryptFinal_ex(ctx,out+o1,&o2);
+    printf("密文: ");for(int i=0;i<o1+o2;i++)printf("%02x",out[i]);printf("\n");
+    EVP_CIPHER_CTX_free(ctx);return 0;}
+  ```
+
+test_feedback_improve: |
+  **DES-OFB：** **`EVP_des_ofb`**（删 cfb）；golden **`f788b2bc`**（≠ CFB **`f70f`**）
+
+test_feedback_improve_c: |
+  **无 DB · des-ofb-c · 日志：** 若输出 **`f70f0158…`** → 误写 **CFB**，删 **des_cfb*/des.h**；照抄 **c:** **`EVP_des_ofb`** 骨架；**`4e657477…`**=未加密；golden **`f788b2bc`**；**`密文:`**
+
+test_feedback_improve_cpp: |
+  **无 DB · des-ofb-cpp · 日志：** 同 **c:**；**禁止 des_cfb_encrypt**；若 **`f70f…`** 改 **ofb**；golden **`f788b2bc`**（≠ CFB **`f70f`**）；**`printf("密文: ");`**

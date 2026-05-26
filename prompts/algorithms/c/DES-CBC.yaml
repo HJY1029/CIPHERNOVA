@@ -1,0 +1,57 @@
+# DES-CBC模式的C语言特定内容
+c_specific: |
+  **【编译铁律】** **禁止** `#define 8 8`；块大小请 **`#define DES_BLOCK_BYTES 8`**。
+
+  **【本测 golden / 与 test_data 一致】** 默认向量下密文须为 **32 个 hex（16 字节）**，即 **`5EB15B91506B9AE7CEB65954AE115E03`**。若你得到 **48+ hex** 或长度与明文+整块填充不符，多为 **未关填充** 或 **多输出了 IV/缓冲零**。
+
+  **使用OpenSSL库的实现要求（C语言）：**
+  1. **`hex_to_bytes`** - 将十六进制字符串转换为字节数组（必须实现！）
+  2. **`main`** - 主函数（必须完整实现！包括：读取环境变量、转换输入、调用OpenSSL函数进行CBC加密、输出密文、return 0）
+  3. **必须使用OpenSSL函数：**
+     - ✅ **正确：包含 `#include <openssl/evp.h>` 和 `#include <openssl/provider.h>`**
+     - ✅ **正确：在main函数开始时加载legacy provider（OpenSSL 3.0需要）：**
+       ```c
+       OSSL_PROVIDER *legacy = OSSL_PROVIDER_load(NULL, "legacy");
+       if (!legacy) {
+           fprintf(stderr, "无法加载legacy provider\n");
+           return 1;
+       }
+       ```
+     - ✅ **正确：使用 `EVP_EncryptInit_ex()`、`EVP_EncryptUpdate()`、`EVP_EncryptFinal_ex()`**
+     - ✅ **正确：使用 `EVP_des_cbc()` 获取DES-CBC密码对象（会自动尝试legacy provider）**
+     - 🚨 **必须：在第一次 `EVP_EncryptUpdate` 之前** `EVP_CIPHER_CTX_set_padding(ctx, 0);` **本测明文长度已为 8 字节整数倍，期望无 PKCS 填充的密文长度与明文等长；若使用默认填充会多 8 字节导致 golden 永不对。**
+     - ✅ **重要：只输出实际加密的数据长度（使用 `ciphertext_len`），不要输出整个缓冲区或额外的IV！**
+     - ❌ **错误：不要使用 `DES_set_key()`、`DES_ncbc_encrypt()`（OpenSSL 3.0已弃用）**
+  4. **编译命令：`gcc -o program program.c -lssl -lcrypto`**
+  
+  **输出长度控制（C语言）：**
+  - ✅ **正确示例（C，与本测无填充一致）：**
+    ```c
+    int len;
+    int ciphertext_len = 0;
+    unsigned char *ciphertext = malloc(plaintext_len + 8);
+    /* EVP_EncryptInit_ex(ctx, EVP_des_cbc(), ...); 之后、Update 之前： */
+    EVP_CIPHER_CTX_set_padding(ctx, 0);
+    
+    EVP_EncryptUpdate(ctx, ciphertext, &len, plaintext, plaintext_len);
+    ciphertext_len = len;  // 第一次加密的长度
+    
+    EVP_EncryptFinal_ex(ctx, ciphertext + len, &len);
+    ciphertext_len += len;  // 总长度 = Update长度 + Final长度
+    
+    // 只输出 ciphertext_len 长度的数据，不要输出IV！
+    printf("密文: ");
+    for (int i = 0; i < ciphertext_len; i++) {  // 使用 ciphertext_len，不是数组大小！
+        printf("%02x", ciphertext[i]);
+    }
+    printf("\n");
+    free(ciphertext);
+    ```
+  - ❌ **错误示例（绝对禁止）：**
+    - `for (int i = 0; i < ciphertext.size(); i++) { ... }`（C语言没有vector.size()）
+    - `for (int i = 0; i < padded_len; i++) { ... }`（会输出填充后的长度，可能包含未使用的空间）
+    - `for (int i = 0; i < plaintext.size() + 8; i++) { ... }`（会输出额外的8字节）
+    - `for (int i = 0; i < sizeof(ciphertext); i++) { ... }`（会输出整个缓冲区）
+    - **绝对不要输出IV！**IV只用于加密过程，不应该出现在输出中！
+    - **关键：`ciphertext_len` 是 `EVP_EncryptUpdate()` 和 `EVP_EncryptFinal_ex()` 返回的长度之和，这是实际加密的数据长度！**
+

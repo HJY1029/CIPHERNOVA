@@ -1,0 +1,138 @@
+{
+  "summary": {
+    "files_total": 12,
+    "samples_nonempty_extract": 12,
+    "markdown_fence_agreement_pct": 100.0,
+    "plain_text_path_agreement_pct": 91.67,
+    "full_nonempty_extract_pct": 100.0,
+    "avg_time_ms": {
+      "markdown_fence": 0.08,
+      "plain_after_strip_fences": 1.01,
+      "full_extract_code": 0.06,
+      "paper_overall_approx": 0.06
+    },
+    "note": "启发式修复包含在 extract_code 全文路径中；论文表中「启发式提取」与「整体」在此脚本中与全文 extract_code 时间与一致率对应。"
+  },
+  "detail": [
+    {
+      "file": "builtin:python_markdown_fence",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.130899999930989,
+      "t_plain_ms": 0.451600004453212,
+      "t_full_ms": 0.10489999840501696,
+      "ref_len": 194
+    },
+    {
+      "file": "builtin:python_plain_mixed",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.07380000170087442,
+      "t_plain_ms": 0.4078999991179444,
+      "t_full_ms": 0.07529999857069924,
+      "ref_len": 112
+    },
+    {
+      "file": "builtin:c_markdown_fence",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.07590000313939527,
+      "t_plain_ms": 1.5723000033176504,
+      "t_full_ms": 0.04649999755201861,
+      "ref_len": 152
+    },
+    {
+      "file": "builtin:cpp_markdown_fence",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.048000001697801054,
+      "t_plain_ms": 1.7308999958913773,
+      "t_full_ms": 0.04440000338945538,
+      "ref_len": 143
+    },
+    {
+      "file": "builtin:python_fence_language_tag",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.07870000263210386,
+      "t_plain_ms": 0.3053999971598387,
+      "t_full_ms": 0.05539999983739108,
+      "ref_len": 31
+    },
+    {
+      "file": "builtin:python_gmssl_stub",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.22140000510262325,
+      "t_plain_ms": 0.8101999992504716,
+      "t_full_ms": 0.10070000280393288,
+      "ref_len": 114
+    },
+    {
+      "file": "builtin:python_pycryptodome_aes",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.0689999942551367,
+      "t_plain_ms": 0.20699999731732532,
+      "t_full_ms": 0.06349999603116885,
+      "ref_len": 91
+    },
+    {
+      "file": "builtin:python_triple_quoted",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.04739999712910503,
+      "t_plain_ms": 0.22599999647354707,
+      "t_full_ms": 0.04529999569058418,
+      "ref_len": 24
+    },
+    {
+      "file": "builtin:c_openssl_minimal",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.02890000178012997,
+      "t_plain_ms": 1.539900003990624,
+      "t_full_ms": 0.03229999856557697,
+      "ref_len": 59
+    },
+    {
+      "file": "builtin:c_uint8_snippet",
+      "md_match": true,
+      "plain_match": false,
+      "full_nonempty": true,
+      "t_md_ms": 0.03510000533424318,
+      "t_plain_ms": 1.6083999944385141,
+      "t_full_ms": 0.03199999628122896,
+      "ref_len": 37
+    },
+    {
+      "file": "builtin:cpp_iostream_min",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.05750000127591193,
+      "t_plain_ms": 1.6008999955374748,
+      "t_full_ms": 0.030999995942693204,
+      "ref_len": 60
+    },
+    {
+      "file": "builtin:cpp_vector_stub",
+      "md_match": true,
+      "plain_match": true,
+      "full_nonempty": true,
+      "t_md_ms": 0.07200000254670158,
+      "t_plain_ms": 1.6872999985935166,
+      "t_full_ms": 0.07050000567687675,
+      "ref_len": 65
+    }
+  ]
+}
