@@ -4,7 +4,6 @@
 
 Hierarchical prompts plus test feedback to help users without a cryptography background generate runnable **DES / AES / RSA / SM4** code in **Python, C, and C++**. Supports cloud models (DeepSeek, OpenAI, Claude, Doubao) and local Qwen, with a **Web UI**, CLI, and paper reproduction scripts.
 
-Paper sources: `ICICS模版/ciphernova_icics.tex` (Chinese), `ICICS模版/ciphernova_icics_en.tex` (English).
 
 ---
 
