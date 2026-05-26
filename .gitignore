@@ -40,8 +40,7 @@ ENV/
 .env
 .env.local
 
-# 生成的代码
-generated_code/
+# 生成的代码（generated_code/ 已纳入版本库供复现）
 *.pyc
 *.pyo
 
@@ -60,11 +59,8 @@ external/
 # 可选：系统 OpenSSL 源码树（评测用系统 libssl-dev，非仓库必需）
 openssl/
 
-# 本地实验数据与密钥
-code_history.db
-code_history.json
+# 本地实验数据与密钥（code_history.db / code_history.json 已纳入版本库）
 code_history.json.backup
-*.db
 llm_performance.json
 **/extraction_from_history.json
 evaluation_results/
